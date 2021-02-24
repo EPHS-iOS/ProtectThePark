@@ -142,12 +142,13 @@ class GameScene: SKScene {
       let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
       
       // Create the actions
-        let firstMove = SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.80),
-                                     duration: TimeInterval(actualDuration))
-            
-        let secondMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.80), duration: TimeInterval(actualDuration/2))
+        let firstMove = SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.82),duration: TimeInterval(actualDuration))
+        let secondMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.82), duration: TimeInterval(actualDuration))
+        let thirdMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.35), duration: TimeInterval(actualDuration))
+        let fourthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.35), duration: TimeInterval(actualDuration))
+        let fifthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/5), duration: TimeInterval(actualDuration))
       let finalAction = SKAction.removeFromParent()
-      goose.run(SKAction.sequence([firstMove,secondMove, finalAction]))
+      goose.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
     }
     
     override func update(_ currentTime: TimeInterval) {
