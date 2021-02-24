@@ -1,7 +1,8 @@
 //
 //  GameScene.swift
+
 //  Test
-//Randy?
+//
 //  Created by Team DUCK on 2/18/21.
 
 import SpriteKit
@@ -171,11 +172,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         goose.physicsBody?.contactTestBitMask = PhysicsCategory.detection | PhysicsCategory.projectile
         
       // Determine where to spawn the monster along the Y axis
-      let actualY = random(min: goose.size.height/2, max: size.height - goose.size.height/2)
+     // let actualY = random(min: goose.size.height/2, max: size.height - goose.size.height/2)
       
       // Position the monster slightly off-screen along the right edge,
       // and along a random position along the Y axis as calculated above
-      goose.position = CGPoint(x: size.width + goose.size.width/2, y: 0)
+
+        goose.position = CGPoint(x: self.frame.width/8.75, y: self.frame.height/1.05)
       
       // Add the monster to the scene
       addChild(goose)
@@ -185,10 +187,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       //let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
       
       // Create the actions
-      let actionMove = SKAction.move(to: CGPoint(x: -goose.size.width/2, y: actualY),
-                                     duration: TimeInterval(5))
-      let actionMoveDone = SKAction.removeFromParent()
-      goose.run(SKAction.sequence([actionMove, actionMoveDone]))
+
+        let firstMove = SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.82),duration: TimeInterval(actualDuration))
+        let secondMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.82), duration: TimeInterval(actualDuration))
+        let thirdMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.35), duration: TimeInterval(actualDuration))
+        let fourthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.35), duration: TimeInterval(actualDuration))
+        let fifthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/5), duration: TimeInterval(actualDuration))
+      let finalAction = SKAction.removeFromParent()
+      goose.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
         
     }
     
