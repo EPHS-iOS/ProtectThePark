@@ -3,20 +3,6 @@
 //  Duck
 //
 //  Created by Randy Thai on 2/18/21.
-// Hello world
-// I am a genius
-// hola
-
-
-//If you can see this, quack like a duck
-//If you can't see this, die like a goose.
-//Only Ben can see this
-
-//Another funny witty joke
-
-//The quick lazy dog jumped over the brown fox
-
-//Da do do do de da da da 
 import SpriteKit
 import GameplayKit
 import UIKit
@@ -142,11 +128,11 @@ class GameScene: SKScene {
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
       
       // Determine where to spawn the monster along the Y axis
-      let actualY = random(min: goose.size.height/2, max: size.height - goose.size.height/2)
+     // let actualY = random(min: goose.size.height/2, max: size.height - goose.size.height/2)
       
       // Position the monster slightly off-screen along the right edge,
       // and along a random position along the Y axis as calculated above
-      goose.position = CGPoint(x: size.width + goose.size.width/2, y: actualY)
+        goose.position = CGPoint(x: self.frame.width/8.75, y: self.frame.height/1.05)
       
       // Add the monster to the scene
       addChild(goose)
@@ -156,10 +142,12 @@ class GameScene: SKScene {
       let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
       
       // Create the actions
-      let actionMove = SKAction.move(to: CGPoint(x: -goose.size.width/2, y: actualY),
+        let firstMove = SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.80),
                                      duration: TimeInterval(actualDuration))
-      let actionMoveDone = SKAction.removeFromParent()
-      goose.run(SKAction.sequence([actionMove, actionMoveDone]))
+            
+        let secondMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.80), duration: TimeInterval(actualDuration/2))
+      let finalAction = SKAction.removeFromParent()
+      goose.run(SKAction.sequence([firstMove,secondMove, finalAction]))
     }
     
     override func update(_ currentTime: TimeInterval) {
