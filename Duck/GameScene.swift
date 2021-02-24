@@ -49,10 +49,11 @@ struct PhysicsCategory {
 
 class GameScene: SKScene, SKPhysicsContactDelegate{
     var duckIDX = 0
-    
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     
     override func didMove(to view: SKView) {
+        
+        physicsWorld.contactDelegate = self
         
         //Map
         currentMap.position = CGPoint(x: self.frame.width/2, y: self.frame.height/2)
@@ -122,6 +123,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func addDuck(loc: CGPoint) {
+        physicsWorld.contactDelegate = self
         if(duckIDX >= 5){ //Max amount of Ducks = 5
             print("Max Amount of Duck Reached")
             return
@@ -134,22 +136,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         duck.name = "Duck\(duckIDX)"
         duck.zPosition = 1
         duckIDX+=1
-        print(duck.name)
         
         // Detection Circle to detect Geese that are close
         let detectionCircle = SKShapeNode(circleOfRadius: 100)
+        detectionCircle.physicsBody = SKPhysicsBody(circleOfRadius: 100)
         detectionCircle.position = CGPoint(x: duck.position.x - 2, y: duck.position.y + 15)
         detectionCircle.fillColor = .blue
+        detectionCircle.physicsBody?.affectedByGravity = false
         detectionCircle.name = "DetectionCircle"
-        detectionCircle.zPosition = 0
-        detectionCircle.alpha = 0.2
+        detectionCircle.alpha = 0.1
         detectionCircle.physicsBody?.usesPreciseCollisionDetection = true
+        detectionCircle.physicsBody?.isDynamic = false
         //Collisions:
         detectionCircle.physicsBody?.categoryBitMask = PhysicsCategory.detection
-        detectionCircle.physicsBody?.collisionBitMask = PhysicsCategory.enemy
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
-        
-        print(detectionCircle.name)
         
         addChild(detectionCircle)
         addChild(duck)
@@ -157,13 +157,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     func addGoose() {  // Goose Spawner
       
+        physicsWorld.contactDelegate = self
+        
       // Create sprite
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
+        goose.physicsBody = SKPhysicsBody(rectangleOf: goose.size)
         goose.physicsBody?.usesPreciseCollisionDetection = true
         goose.name = "enemy"
         
         goose.physicsBody?.categoryBitMask = PhysicsCategory.enemy
-        goose.physicsBody?.collisionBitMask = PhysicsCategory.detection | PhysicsCategory.projectile
+        goose.physicsBody?.collisionBitMask = PhysicsCategory.projectile
         goose.physicsBody?.contactTestBitMask = PhysicsCategory.detection | PhysicsCategory.projectile
         
       // Determine where to spawn the monster along the Y axis
@@ -188,15 +191,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
     }
     
+    //Collision Handler
+    func detectionHandler(obj: SKShapeNode, thing: SKSpriteNode){
+        thing.removeFromParent()
+    }
+    
     func didBegin(_ contact: SKPhysicsContact) {
-        if(contact.bodyA.node?.name == "map") || (contact.bodyB.node?.name == "map"){
+        let firstBody = contact.bodyA
+        let secondBody = contact.bodyB
+        
+        if (firstBody.categoryBitMask == PhysicsCategory.enemy) && (secondBody.categoryBitMask == PhysicsCategory.detection) {
+            detectionHandler(obj: secondBody.node as! SKShapeNode, thing: firstBody.node as! SKSpriteNode)
+        }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.detection) {
+            detectionHandler(obj: firstBody.node as! SKShapeNode, thing: secondBody.node as! SKSpriteNode)
+        }else{
             return
         }
-        
-        let firstBody = contact.bodyA.node as! SKSpriteNode
-        let secondBody = contact.bodyB.node as! SKSpriteNode
-        
-        //if firstBody.name = "enemy"
         
     }
     
