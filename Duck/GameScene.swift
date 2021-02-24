@@ -39,20 +39,13 @@ extension CGPoint {
     return self / length()
   }
 }
+
 class GameScene: SKScene {
-    
-    //References to Sprites
-    var duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
-    var duckHand = SKSpriteNode(imageNamed: "BasicDuckHand")
+    var duckIDX = 0
     
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     
     override func didMove(to view: SKView) {
-        
-        //Duck defaults
-        duck.position = CGPoint(x: self.frame.width/2, y: self.frame.height/2)
-        duck.size = CGSize(width: 100, height: 110)
-        addChild(duck)
         
         //Map
         currentMap.position = CGPoint(x: self.frame.width/2, y: self.frame.height/2)
@@ -72,16 +65,14 @@ class GameScene: SKScene {
     
     //Touch recognition
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //for touch in touches {
-           // let location = touch.location(in: self)
+        for touch in touches {
+            let location = touch.location(in: self)
+            addDuck(loc: location)
             
-            //duck.run(SKAction.moveTo(x: location.x, duration: 0.1))
-            //duck.run(SKAction.moveTo(y: location.y, duration: 0.1))
-            
-        //}
+        }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+   /* override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
       // 1 - Choose one of the touches to work with
       guard let touch = touches.first else {
         return
@@ -95,8 +86,6 @@ class GameScene: SKScene {
       
       // 3 - Determine offset of location to projectile
       let offset = touchLocation - projectile.position
-      
-    
       
       // 5 - OK to add now - you've double checked position
       addChild(projectile)
@@ -114,7 +103,8 @@ class GameScene: SKScene {
       let actionMove = SKAction.move(to: realDest, duration: 2.0)
       let actionMoveDone = SKAction.removeFromParent()
       projectile.run(SKAction.sequence([actionMove, actionMoveDone]))
-    }
+    } */
+    
     func random() -> CGFloat {
       return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
     }
@@ -123,7 +113,17 @@ class GameScene: SKScene {
       return random() * (max - min) + min
     }
     
-    func addGoose() {
+    func addDuck(loc: CGPoint) {
+        let duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
+        duck.position = loc
+        duck.size = CGSize(width: 100, height: 110)
+        duck.name = "Duck\(duckIDX)"
+        duckIDX+=1
+        print(duck.name)
+        addChild(duck)
+    }
+    
+    func addGoose() {  // Goose Spawner
       
       // Create sprite
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
