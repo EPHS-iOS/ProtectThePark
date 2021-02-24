@@ -10,6 +10,7 @@
 
 //If you can see this, quack like a duck
 //If you can't see this, die like a goose.
+//Only Ben can see this
 
 //Another funny witty joke
 import SpriteKit
