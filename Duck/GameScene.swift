@@ -2,16 +2,8 @@
 //  GameScene.swift
 //  Duck
 //
-//  Created by Randy Thai on 2/18/21.
-// Hello world
-// I am a genius
-// hola
+//  Created by Team DUCK on 2/18/21.
 
-
-//If you can see this, quack like a duck
-//If you can't see this, die like a goose.
-
-//Another funny witty joke
 import SpriteKit
 import GameplayKit
 import UIKit
