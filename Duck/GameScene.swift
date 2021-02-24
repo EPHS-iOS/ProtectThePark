@@ -161,7 +161,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
       // Create sprite
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
-        goose.physicsBody = SKPhysicsBody(rectangleOf: goose.size)
+        goose.size = CGSize(width: 100, height: 110)
+        goose.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 100))
         goose.physicsBody?.usesPreciseCollisionDetection = true
         goose.name = "enemy"
         
@@ -174,18 +175,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       
       // Position the monster slightly off-screen along the right edge,
       // and along a random position along the Y axis as calculated above
-      goose.position = CGPoint(x: size.width + goose.size.width/2, y: actualY)
+      goose.position = CGPoint(x: size.width + goose.size.width/2, y: 0)
       
       // Add the monster to the scene
       addChild(goose)
-        goose.size = CGSize(width: 100, height: 110)
+        
       
       // Determine speed of the monster
-      let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
+      //let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
       
       // Create the actions
       let actionMove = SKAction.move(to: CGPoint(x: -goose.size.width/2, y: actualY),
-                                     duration: TimeInterval(actualDuration))
+                                     duration: TimeInterval(5))
       let actionMoveDone = SKAction.removeFromParent()
       goose.run(SKAction.sequence([actionMove, actionMoveDone]))
         
@@ -194,6 +195,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     //Collision Handler
     func detectionHandler(obj: SKShapeNode, thing: SKSpriteNode){
         thing.removeFromParent()
+        print("Detected")
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
