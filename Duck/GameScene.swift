@@ -114,12 +114,30 @@ class GameScene: SKScene {
     }
     
     func addDuck(loc: CGPoint) {
+        if(duckIDX >= 5){ //Max amount of Ducks = 5
+            print("Max Amount of Duck Reached")
+            return
+        }
+        
+        //Makes a duck
         let duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
         duck.position = loc
         duck.size = CGSize(width: 100, height: 110)
         duck.name = "Duck\(duckIDX)"
+        duck.zPosition = 1
         duckIDX+=1
         print(duck.name)
+        
+        // Detection Circle to detect Geese that are close
+        let detectionCircle = SKShapeNode(circleOfRadius: 100)
+        detectionCircle.position = CGPoint(x: duck.position.x - 2, y: duck.position.y + 15)
+        detectionCircle.fillColor = .blue
+        detectionCircle.name = "DetectionCircle_\(duck.name)"
+        detectionCircle.zPosition = 0
+        detectionCircle.alpha = 0.2
+        print(detectionCircle.name)
+        
+        addChild(detectionCircle)
         addChild(duck)
     }
     
@@ -147,6 +165,7 @@ class GameScene: SKScene {
                                      duration: TimeInterval(actualDuration))
       let actionMoveDone = SKAction.removeFromParent()
       goose.run(SKAction.sequence([actionMove, actionMoveDone]))
+        
     }
     
     override func update(_ currentTime: TimeInterval) {
