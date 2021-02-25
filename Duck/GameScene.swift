@@ -1,6 +1,4 @@
-//
 //  GameScene.swift
-
 //  Test
 //
 //  Created by Team DUCK on 2/18/21.
@@ -77,43 +75,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
+            
+            //Adds a duck to the location where you tapped (temporary).
             addDuck(loc: location)
             
         }
     }
-    
-   /* override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-      // 1 - Choose one of the touches to work with
-      guard let touch = touches.first else {
-        return
-      }
-      let touchLocation = touch.location(in: self)
-      
-      // 2 - Set up initial location of projectile
-      let projectile = SKSpriteNode(imageNamed: "Breadcrumb")
-      projectile.position = duck.position
-        projectile.size = CGSize(width: 40, height: 40)
-      
-      // 3 - Determine offset of location to projectile
-      let offset = touchLocation - projectile.position
-      
-      // 5 - OK to add now - you've double checked position
-      addChild(projectile)
-      
-      // 6 - Get the direction of where to shoot
-      let direction = offset.normalized()
-      
-      // 7 - Make it shoot far enough to be guaranteed off screen
-      let shootAmount = direction * 1000
-      
-      // 8 - Add the shoot amount to the current position
-      let realDest = shootAmount + projectile.position
-      
-      // 9 - Create the actions
-      let actionMove = SKAction.move(to: realDest, duration: 2.0)
-      let actionMoveDone = SKAction.removeFromParent()
-      projectile.run(SKAction.sequence([actionMove, actionMoveDone]))
-    } */
     
     func random() -> CGFloat {
       return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
@@ -140,7 +107,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         // Detection Circle to detect Geese that are close
         let detectionCircle = SKShapeNode(circleOfRadius: 100)
-        detectionCircle.physicsBody = SKPhysicsBody(circleOfRadius: 100)
+        detectionCircle.physicsBody = SKPhysicsBody(circleOfRadius: 50)
         detectionCircle.position = CGPoint(x: duck.position.x - 2, y: duck.position.y + 15)
         detectionCircle.fillColor = .blue
         detectionCircle.physicsBody?.affectedByGravity = false
@@ -162,8 +129,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
       // Create sprite
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
-        goose.size = CGSize(width: 100, height: 110)
-        goose.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 100))
+        goose.size = CGSize(width: 60, height: 60)
+        goose.physicsBody = SKPhysicsBody(circleOfRadius: 60)
+        
         goose.physicsBody?.usesPreciseCollisionDetection = true
         goose.name = "enemy"
         
@@ -172,7 +140,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         goose.physicsBody?.contactTestBitMask = PhysicsCategory.detection | PhysicsCategory.projectile
         
       // Determine where to spawn the monster along the Y axis
-     // let actualY = random(min: goose.size.height/2, max: size.height - goose.size.height/2)
+      //let actualY = random(min: goose.size.height/2, max: size.height - goose.size.height/2)
       
       // Position the monster slightly off-screen along the right edge,
       // and along a random position along the Y axis as calculated above
@@ -184,10 +152,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
       
       // Determine speed of the monster
-      //let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
+      let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
       
       // Create the actions
-
         let firstMove = SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.82),duration: TimeInterval(actualDuration))
         let secondMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.82), duration: TimeInterval(actualDuration))
         let thirdMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.35), duration: TimeInterval(actualDuration))
