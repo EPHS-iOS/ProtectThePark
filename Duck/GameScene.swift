@@ -129,7 +129,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
       // Create sprite
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
-        goose.size = CGSize(width: 60, height: 60)
+        goose.size = CGSize(width: 58, height: 70)
         goose.physicsBody = SKPhysicsBody(circleOfRadius: 60)
         
         goose.physicsBody?.usesPreciseCollisionDetection = true
@@ -149,7 +149,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       
       // Add the monster to the scene
       addChild(goose)
-        
       
       // Determine speed of the monster
       let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
