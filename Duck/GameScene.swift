@@ -1,6 +1,5 @@
-//
 //  GameScene.swift
-//  Duck
+//  Test
 //
 //  Created by Team DUCK on 2/18/21.
 
@@ -39,82 +38,59 @@ extension CGPoint {
     return self / length()
   }
 }
-class GameScene: SKScene {
-    
-    //References to Sprites
-    var duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
-    var duckHand = SKSpriteNode(imageNamed: "BasicDuckHand")
-    
+
+//For specific detections
+struct PhysicsCategory {
+    static let enemy : UInt32 = 0b1
+    static let projectile : UInt32 = 0b10
+    static let detection : UInt32 = 0b11
+    static let none : UInt32 = 0b100
+}
+
+class GameScene: SKScene, SKPhysicsContactDelegate{
+    var duckIDX = 0
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
+    var portal = SKSpriteNode(imageNamed:"portal")
+    var remainingLives = 10
     
     override func didMove(to view: SKView) {
         
-        //Duck defaults
-        duck.position = CGPoint(x: self.frame.width/2, y: self.frame.height/2)
-        duck.size = CGSize(width: 100, height: 110)
-        addChild(duck)
+        physicsWorld.contactDelegate = self
         
         //Map
         currentMap.position = CGPoint(x: self.frame.width/2, y: self.frame.height/2)
         currentMap.size = CGSize(width: self.frame.width, height: self.frame.height)
+        currentMap.name = "map"
         currentMap.zPosition = -1
+        
+       
         
         addChild(currentMap)
         
-        run(SKAction.repeatForever(
-              SKAction.sequence([
-                SKAction.run(addGoose),
-                SKAction.wait(forDuration: 1.0)
-                ])
-            ))
-        }
+        portal.position = CGPoint(x: self.frame.width/8.75, y: self.frame.height/1.05)
+        portal.zPosition = 0
+        portal.size = CGSize(width: 100, height: 110)
         
+        addChild(portal)
+        
+        
+        run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose),SKAction.wait(forDuration: 1.0)]), count: 10))
+        
+        }
+    
+    
     
     //Touch recognition
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //for touch in touches {
-           // let location = touch.location(in: self)
+        for touch in touches {
+            let location = touch.location(in: self)
             
-            //duck.run(SKAction.moveTo(x: location.x, duration: 0.1))
-            //duck.run(SKAction.moveTo(y: location.y, duration: 0.1))
+            //Adds a duck to the location where you tapped (temporary).
+            addDuck(loc: location)
             
-        //}
+        }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-      // 1 - Choose one of the touches to work with
-      guard let touch = touches.first else {
-        return
-      }
-      let touchLocation = touch.location(in: self)
-      
-      // 2 - Set up initial location of projectile
-      let projectile = SKSpriteNode(imageNamed: "Breadcrumb")
-      projectile.position = duck.position
-        projectile.size = CGSize(width: 40, height: 40)
-      
-      // 3 - Determine offset of location to projectile
-      let offset = touchLocation - projectile.position
-      
-    
-      
-      // 5 - OK to add now - you've double checked position
-      addChild(projectile)
-      
-      // 6 - Get the direction of where to shoot
-      let direction = offset.normalized()
-      
-      // 7 - Make it shoot far enough to be guaranteed off screen
-      let shootAmount = direction * 1000
-      
-      // 8 - Add the shoot amount to the current position
-      let realDest = shootAmount + projectile.position
-      
-      // 9 - Create the actions
-      let actionMove = SKAction.move(to: realDest, duration: 2.0)
-      let actionMoveDone = SKAction.removeFromParent()
-      projectile.run(SKAction.sequence([actionMove, actionMoveDone]))
-    }
     func random() -> CGFloat {
       return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
     }
@@ -123,30 +99,103 @@ class GameScene: SKScene {
       return random() * (max - min) + min
     }
     
-    func addGoose() {
+    func addDuck(loc: CGPoint) {
+        physicsWorld.contactDelegate = self
+        if(duckIDX >= 5){ //Max amount of Ducks = 5
+            print("Max Amount of Duck Reached")
+            return
+        }
+        
+        //Makes a duck
+        let duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
+        duck.position = loc
+        duck.size = CGSize(width: 100, height: 110)
+        duck.name = "Duck\(duckIDX)"
+        duck.zPosition = 1
+        duckIDX+=1
+        
+        // Detection Circle to detect Geese that are close
+        let detectionCircle = SKShapeNode(circleOfRadius: 100)
+        detectionCircle.physicsBody = SKPhysicsBody(circleOfRadius: 50)
+        detectionCircle.position = CGPoint(x: duck.position.x - 2, y: duck.position.y + 15)
+        detectionCircle.fillColor = .blue
+        detectionCircle.physicsBody?.affectedByGravity = false
+        detectionCircle.name = "DetectionCircle"
+        detectionCircle.alpha = 0.1
+        detectionCircle.physicsBody?.usesPreciseCollisionDetection = true
+        detectionCircle.physicsBody?.isDynamic = true
+        //Collisions:
+        detectionCircle.physicsBody?.categoryBitMask = PhysicsCategory.detection
+        detectionCircle.physicsBody?.collisionBitMask = PhysicsCategory.none
+        detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
+        
+        addChild(detectionCircle)
+        addChild(duck)
+    }
+    
+    func addGoose() {  // Goose Spawner
       
+        physicsWorld.contactDelegate = self
+        
       // Create sprite
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
-      
+        goose.size = CGSize(width: 58, height: 70)
+        goose.physicsBody = SKPhysicsBody(circleOfRadius: 60)
+        goose.zPosition = 1
+        
+        goose.physicsBody?.usesPreciseCollisionDetection = true
+        goose.name = "enemy"
+        goose.physicsBody?.isDynamic = false
+
+        goose.physicsBody?.categoryBitMask = PhysicsCategory.enemy
+        goose.physicsBody?.collisionBitMask = PhysicsCategory.none
+        goose.physicsBody?.contactTestBitMask = PhysicsCategory.detection | PhysicsCategory.projectile
+        
+        
+        
       // Determine where to spawn the monster along the Y axis
-      let actualY = random(min: goose.size.height/2, max: size.height - goose.size.height/2)
+      //let actualY = random(min: goose.size.height/2, max: size.height - goose.size.height/2)
       
       // Position the monster slightly off-screen along the right edge,
       // and along a random position along the Y axis as calculated above
-      goose.position = CGPoint(x: size.width + goose.size.width/2, y: actualY)
+
+        goose.position = CGPoint(x: self.frame.width/8.75, y: self.frame.height/1.05)
       
       // Add the monster to the scene
       addChild(goose)
-        goose.size = CGSize(width: 100, height: 110)
       
-      // Determine speed of the monster
-      let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
+      // Determine speed of the geese. Bigger number = faster
+        let actualDuration = 0.9
       
       // Create the actions
-      let actionMove = SKAction.move(to: CGPoint(x: -goose.size.width/2, y: actualY),
-                                     duration: TimeInterval(actualDuration))
-      let actionMoveDone = SKAction.removeFromParent()
-      goose.run(SKAction.sequence([actionMove, actionMoveDone]))
+        let firstMove = SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.82),duration: TimeInterval((320.0/250.0)/actualDuration))
+        let secondMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.82), duration: TimeInterval((250.0/250.0)/actualDuration))
+        let thirdMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.35), duration: TimeInterval((245.0/250.0)/actualDuration))
+        let fourthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.35), duration: TimeInterval((685.0/250.0)/actualDuration))
+        let fifthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/5), duration: TimeInterval((320.0/250.0)/actualDuration))
+      let finalAction = SKAction.removeFromParent()
+      goose.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
+        
+    }
+    
+    //Collision Handler
+    func detectionHandler(obj: SKShapeNode, thing: SKSpriteNode){
+        thing.removeFromParent()
+        print("Detected")
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        let firstBody = contact.bodyA
+        let secondBody = contact.bodyB
+        
+        if (firstBody.categoryBitMask == PhysicsCategory.enemy) && (secondBody.categoryBitMask == PhysicsCategory.detection) {
+            detectionHandler(obj: secondBody.node as! SKShapeNode, thing: firstBody.node as! SKSpriteNode)
+        }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.detection) {
+            detectionHandler(obj: firstBody.node as! SKShapeNode, thing: secondBody.node as! SKSpriteNode)
+        }else{
+            return
+        }
+        
     }
     
     override func update(_ currentTime: TimeInterval) {
