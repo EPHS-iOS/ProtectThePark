@@ -50,6 +50,8 @@ struct PhysicsCategory {
 class GameScene: SKScene, SKPhysicsContactDelegate{
     var duckIDX = 0
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
+    var portal = SKSpriteNode(imageNamed:"portal")
+    var remainingLives = 10
     
     override func didMove(to view: SKView) {
         
@@ -61,16 +63,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         currentMap.name = "map"
         currentMap.zPosition = -1
         
+       
+        
         addChild(currentMap)
         
-        run(SKAction.repeatForever(
-              SKAction.sequence([
-                SKAction.run(addGoose),
-                SKAction.wait(forDuration: 1.0)
-                ])
-            ))
-        }
+        portal.position = CGPoint(x: self.frame.width/8.75, y: self.frame.height/1.05)
+        portal.zPosition = 0
+        portal.size = CGSize(width: 100, height: 110)
         
+        addChild(portal)
+        
+        
+        run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose),SKAction.wait(forDuration: 1.0)]), count: 10))
+        
+        }
+    
+    
     
     //Touch recognition
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -133,14 +141,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
         goose.size = CGSize(width: 58, height: 70)
         goose.physicsBody = SKPhysicsBody(circleOfRadius: 60)
+        goose.zPosition = 1
         
         goose.physicsBody?.usesPreciseCollisionDetection = true
         goose.name = "enemy"
         goose.physicsBody?.isDynamic = false
-        
+
         goose.physicsBody?.categoryBitMask = PhysicsCategory.enemy
         goose.physicsBody?.collisionBitMask = PhysicsCategory.none
         goose.physicsBody?.contactTestBitMask = PhysicsCategory.detection | PhysicsCategory.projectile
+        
+        
         
       // Determine where to spawn the monster along the Y axis
       //let actualY = random(min: goose.size.height/2, max: size.height - goose.size.height/2)
@@ -153,15 +164,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       // Add the monster to the scene
       addChild(goose)
       
-      // Determine speed of the monster
-      let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
+      // Determine speed of the geese. Bigger number = faster
+        let actualDuration = 0.9
       
       // Create the actions
-        let firstMove = SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.82),duration: TimeInterval(actualDuration))
-        let secondMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.82), duration: TimeInterval(actualDuration))
-        let thirdMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.35), duration: TimeInterval(actualDuration))
-        let fourthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.35), duration: TimeInterval(actualDuration))
-        let fifthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/5), duration: TimeInterval(actualDuration))
+        let firstMove = SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.82),duration: TimeInterval((320.0/250.0)/actualDuration))
+        let secondMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.82), duration: TimeInterval((250.0/250.0)/actualDuration))
+        let thirdMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.35), duration: TimeInterval((245.0/250.0)/actualDuration))
+        let fourthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.35), duration: TimeInterval((685.0/250.0)/actualDuration))
+        let fifthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/5), duration: TimeInterval((320.0/250.0)/actualDuration))
       let finalAction = SKAction.removeFromParent()
       goose.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
         
