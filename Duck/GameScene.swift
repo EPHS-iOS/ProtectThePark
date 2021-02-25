@@ -50,6 +50,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var duckIDX = 0
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"portal")
+    var remainingLives = 10
     
     override func didMove(to view: SKView) {
         
@@ -70,14 +71,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         portal.size = CGSize(width: 100, height: 110)
         
         addChild(portal)
-        run(SKAction.repeatForever(
-              SKAction.sequence([
-                SKAction.run(addGoose),
-                SKAction.wait(forDuration: 1.0)
-                ])
-            ))
-        }
         
+        
+        run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose),SKAction.wait(forDuration: 1.0)]), count: 10))
+        
+        }
+    
+    
     
     //Touch recognition
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
