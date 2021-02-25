@@ -44,6 +44,7 @@ struct PhysicsCategory {
     static let enemy : UInt32 = 0b1
     static let projectile : UInt32 = 0b10
     static let detection : UInt32 = 0b11
+    static let none : UInt32 = 0b100
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate{
@@ -114,9 +115,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         detectionCircle.name = "DetectionCircle"
         detectionCircle.alpha = 0.1
         detectionCircle.physicsBody?.usesPreciseCollisionDetection = true
-        detectionCircle.physicsBody?.isDynamic = false
+        detectionCircle.physicsBody?.isDynamic = true
         //Collisions:
         detectionCircle.physicsBody?.categoryBitMask = PhysicsCategory.detection
+        detectionCircle.physicsBody?.collisionBitMask = PhysicsCategory.none
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
         addChild(detectionCircle)
@@ -134,9 +136,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         goose.physicsBody?.usesPreciseCollisionDetection = true
         goose.name = "enemy"
+        goose.physicsBody?.isDynamic = false
         
         goose.physicsBody?.categoryBitMask = PhysicsCategory.enemy
-        goose.physicsBody?.collisionBitMask = PhysicsCategory.projectile
+        goose.physicsBody?.collisionBitMask = PhysicsCategory.none
         goose.physicsBody?.contactTestBitMask = PhysicsCategory.detection | PhysicsCategory.projectile
         
       // Determine where to spawn the monster along the Y axis
