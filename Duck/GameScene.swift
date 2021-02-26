@@ -75,6 +75,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         currentMap.name = "map"
         currentMap.zPosition = -1
         
+       
         
         addChild(currentMap)
         
@@ -89,7 +90,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: 1.0)]), count: 10))
         
         }
-        
+    
+    
     
     //Touch recognition
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -157,10 +159,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         goose.physicsBody?.usesPreciseCollisionDetection = true
         goose.name = "enemy"
         goose.physicsBody?.isDynamic = false
-        
+
         goose.physicsBody?.categoryBitMask = PhysicsCategory.enemy
         goose.physicsBody?.collisionBitMask = PhysicsCategory.none
         goose.physicsBody?.contactTestBitMask = PhysicsCategory.detection | PhysicsCategory.projectile
+        
+        
         
       // Determine where to spawn the monster along the Y axis
       //let actualY = random(min: goose.size.height/2, max: size.height - goose.size.height/2)
