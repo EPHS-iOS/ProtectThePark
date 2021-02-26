@@ -1,5 +1,4 @@
 //  GameScene.swift
-//  Test
 //
 //  Created by Team DUCK on 2/18/21.
 //This is a change to the code
@@ -75,8 +74,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         currentMap.name = "map"
         currentMap.zPosition = -1
         
-       
-        
         addChild(currentMap)
         
         portal.position = CGPoint(x: self.frame.width/8.75, y: self.frame.height/1.05)
@@ -90,9 +87,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: 1.0)]), count: 10))
         
         }
-    
-    
-    
+     
     //Touch recognition
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
@@ -131,7 +126,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let detectionCircle = SKShapeNode(circleOfRadius: 100)
         detectionCircle.physicsBody = SKPhysicsBody(circleOfRadius: 50)
         detectionCircle.position = CGPoint(x: duck.position.x - 2, y: duck.position.y + 15)
-        detectionCircle.fillColor = .blue
+        detectionCircle.fillColor = .cyan
         detectionCircle.physicsBody?.affectedByGravity = false
         detectionCircle.name = "DetectionCircle"
         detectionCircle.alpha = 0.1
@@ -153,7 +148,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       // Create sprite
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
         goose.size = CGSize(width: 58, height: 70)
-        goose.physicsBody = SKPhysicsBody(circleOfRadius: 60)
+        goose.physicsBody = SKPhysicsBody(circleOfRadius: 70)
         goose.zPosition = 1
         
         goose.physicsBody?.usesPreciseCollisionDetection = true
@@ -176,7 +171,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       
       // Add the monster to the scene
       addChild(goose)
-      
+        
       // Determine speed of the geese. Bigger number = faster
         let actualDuration = 0.9
       
@@ -194,10 +189,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
     }
     
-    //Collision Handler
+    //Used for the detection circle to indicate whether or not a goose has entered the "bread" zone
     func detectionHandler(obj: SKShapeNode, thing: SKSpriteNode){
         thing.removeFromParent()
         print("Detected")
+    }
+    
+    //Used to actually deal damage to the goose if the breadcrumbs collide with a goose.
+    func collisionHandler(proj: SKSpriteNode, enemy: SKSpriteNode){
+        print("Deal Damage")
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
