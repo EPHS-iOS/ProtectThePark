@@ -2,6 +2,9 @@
 //  Test
 //
 //  Created by Team DUCK on 2/18/21.
+//This is a change to the code
+
+
 
 import SpriteKit
 import GameplayKit
@@ -51,17 +54,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var duckIDX = 0
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"portal")
-    var remainingLives = 10
+    public var remainingLives = 10
+    public var label = SKLabelNode()
     
     override func didMove(to view: SKView) {
         
         physicsWorld.contactDelegate = self
         
+        label.text = "Remaining Lives:  " + String(remainingLives)
+        label.zPosition = 2
+        label.position = CGPoint(x: self.frame.width/1.2, y:self.frame.height/1.1)
+        label.fontSize = CGFloat(20)
+        
+        
+        
+        addChild(label)
         //Map
         currentMap.position = CGPoint(x: self.frame.width/2, y: self.frame.height/2)
         currentMap.size = CGSize(width: self.frame.width, height: self.frame.height)
         currentMap.name = "map"
         currentMap.zPosition = -1
+        
         
         addChild(currentMap)
         
@@ -72,7 +85,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         addChild(portal)
         
         
-        run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose),SKAction.wait(forDuration: 1.0)]), count: 10))
+        
+        run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: 1.0)]), count: 10))
         
         }
         
@@ -168,7 +182,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let thirdMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.35), duration: TimeInterval((245.0/250.0)/actualDuration))
         let fourthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.35), duration: TimeInterval((685.0/250.0)/actualDuration))
         let fifthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/5), duration: TimeInterval((320.0/250.0)/actualDuration))
-      let finalAction = SKAction.removeFromParent()
+        let finalAction = SKAction.sequence(
+            [SKAction.run {self.remainingLives -= 1},
+             SKAction.run{self.label.text = "Remaining Lives:  " + String(self.remainingLives)},
+             SKAction.removeFromParent()])
       goose.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
         
     }
@@ -196,4 +213,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
     }
+    
+   
 }
