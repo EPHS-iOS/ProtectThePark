@@ -58,6 +58,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     public var healthLabel = SKLabelNode()
     public var currentMoney = 100
     public var moneyLabel = SKLabelNode()
+    //How much 1 duck costs and how much money you get per goose
     var duckCost = 100
     var gooseReward = 50
     
@@ -196,11 +197,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let actualDuration = 0.9
       
       // Create the actions
-        let firstMove = SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.82),duration: TimeInterval((320.0/250.0)/actualDuration))
-        let secondMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.82), duration: TimeInterval((250.0/250.0)/actualDuration))
-        let thirdMove = SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.35), duration: TimeInterval((245.0/250.0)/actualDuration))
-        let fourthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.35), duration: TimeInterval((685.0/250.0)/actualDuration))
+        let firstMove = SKAction.sequence([
+            SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.82),duration: TimeInterval((320.0/250.0)/actualDuration)),
+            SKAction.run {goose.zRotation = CGFloat(Double.pi/2.0)}
+        ])
+            
+           
+        
+        let secondMove = SKAction.sequence([
+            SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.82), duration: TimeInterval((250.0/250.0)/actualDuration)),
+            SKAction.run {goose.zRotation = CGFloat(Double.pi)}])
+        
+        
+        let thirdMove = SKAction.sequence([
+            SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.30), duration: TimeInterval((245.0/250.0)/actualDuration)),
+            SKAction.run {goose.zRotation = CGFloat(Double.pi/2.0)}])
+        
+        
+        let fourthMove = SKAction.sequence([
+                                            SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.30), duration: TimeInterval((685.0/250.0)/actualDuration)),
+            SKAction.run {goose.zRotation = CGFloat(Double.pi * 0)}])
+        
+        
         let fifthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/5), duration: TimeInterval((320.0/250.0)/actualDuration))
+        
+        
         let finalAction = SKAction.sequence(
             [SKAction.run {self.remainingLives -= 1},
              SKAction.run{self.healthLabel.text = "Remaining Lives:  " + String(self.remainingLives)},
