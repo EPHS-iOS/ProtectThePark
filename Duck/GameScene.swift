@@ -51,12 +51,15 @@ struct PhysicsCategory {
 
 class GameScene: SKScene, SKPhysicsContactDelegate{
     var duckIDX = 0
+    
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"portal")
     public var remainingLives = 10
     public var healthLabel = SKLabelNode()
     public var currentMoney = 100
     public var moneyLabel = SKLabelNode()
+    var duckCost = 100
+    var gooseReward = 50
     
     override func didMove(to view: SKView) {
         
@@ -66,14 +69,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         healthLabel.zPosition = 2
         healthLabel.position = CGPoint(x: self.frame.width/1.2, y:self.frame.height/1.1)
         healthLabel.fontSize = CGFloat(20)
+        healthLabel.fontColor = .black
         addChild(healthLabel)
         
         
         //Label for current money supply
         moneyLabel.text = "$: " + String(currentMoney)
         moneyLabel.zPosition = 2
-        moneyLabel.position = CGPoint(x: self.frame.width/1.2, y: self.frame.height/6.5)
+        moneyLabel.position = CGPoint(x: self.frame.width/1.7, y: self.frame.height/1.1)
         moneyLabel.fontSize = CGFloat(20)
+        moneyLabel.fontColor = .black
         addChild(moneyLabel)
     
         //Map
@@ -92,7 +97,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         
         
-        run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: 5.0)]), count: 10))
+        run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: 2.5)]), count: 10))
         
         }
      
@@ -122,8 +127,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             print("Max Amount of Duck Reached")
             return
         }
-        if (self.currentMoney >= 100) {
-            self.currentMoney -= 100
+        //Only allows a duck to be placed if player has enough money, and subtracts that money from their total
+        if (self.currentMoney >= duckCost) {
+            self.currentMoney -= duckCost
             self.moneyLabel.text = "$: " + String(self.currentMoney)
         } else {
             return
@@ -206,7 +212,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     //Used for the detection circle to indicate whether or not a goose has entered the "bread" zone
     func detectionHandler(obj: SKShapeNode, thing: SKSpriteNode){
         thing.removeFromParent()
-        self.currentMoney += 50
+        self.currentMoney += gooseReward
         self.moneyLabel.text = "$: " + String(self.currentMoney)
         print("Detected")
     }
