@@ -1,9 +1,6 @@
 //  GameScene.swift
 //
 //  Created by Team DUCK on 2/18/21.
-//This is a change to the code
-
-
 
 import SpriteKit
 import GameplayKit
@@ -88,8 +85,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         addChild(portal)
         
         
-        
-        run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: 1.0)]), count: 10))
+        run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose),SKAction.wait(forDuration: 1.0)]), count: 10))
         
         }
      
@@ -235,6 +231,4 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
     }
-    
-   
 }
