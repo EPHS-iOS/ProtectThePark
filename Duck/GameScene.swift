@@ -1,9 +1,6 @@
 //  GameScene.swift
 //
 //  Created by Team DUCK on 2/18/21.
-//This is a change to the code
-
-
 
 import SpriteKit
 import GameplayKit
@@ -62,6 +59,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var duckCost = 100
     var gooseReward = 50
     
+    //Stores Information on Ducks
+    var duckLocs = [(SKSpriteNode,SKShapeNode)]()
+    //Stores Information about Detection Circles
+    var detectionLocs: [SKShapeNode] = []
+    
     override func didMove(to view: SKView) {
         
         physicsWorld.contactDelegate = self
@@ -96,9 +98,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         addChild(portal)
         
-        
-        
+ 
         run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: 2.5)]), count: 10))
+
         
         }
      
@@ -107,11 +109,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         for touch in touches {
             
             let location = touch.location(in: self)
-            launchBreadcrumb(startPoint: CGPoint(x: self.frame.width/2.0, y: self.frame.height/2.0), endPoint: location)
-           // addDuck(loc: location)
+            //launchBreadcrumb(startPoint: CGPoint(x: self.frame.width/2.0, y: self.frame.height/2.0), endPoint: location)
+            addDuck(loc: location)
             
             //Adds a duck to the location where you tapped (temporary).
             
+            
+            //Checks if there is a duck at where you tapped.
+            for duck in duckLocs {
+                if location.x >= duck.0.position.x - 10 && location.x <= duck.0.position.x + 10 && location.y >= duck.0.position.y - 10 && location.y <= duck.0.position.y + 10 {
+                    print("Duck at this location: \(duck.0.position)")
+                    if(duck.1.alpha > 0){
+                        duck.1.alpha = 0
+                    }else{
+                        duck.1.alpha = 0.1
+                    }
+                }
+            }
             
         }
     }
@@ -127,7 +141,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     func addDuck(loc: CGPoint) {
         physicsWorld.contactDelegate = self
         if(duckIDX >= 5){ //Max amount of Ducks = 5
-            print("Max Amount of Duck Reached")
             return
         }
         //Only allows a duck to be placed if player has enough money, and subtracts that money from their total
@@ -151,7 +164,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         detectionCircle.position = CGPoint(x: duck.position.x - 2, y: duck.position.y + 15)
         detectionCircle.fillColor = .cyan
         detectionCircle.physicsBody?.affectedByGravity = false
-        detectionCircle.name = "DetectionCircle"
+        detectionCircle.name = "DetectionCircle\(duckIDX)"
         detectionCircle.alpha = 0.1
         detectionCircle.physicsBody?.usesPreciseCollisionDetection = true
         detectionCircle.physicsBody?.isDynamic = true
@@ -160,6 +173,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         detectionCircle.physicsBody?.collisionBitMask = PhysicsCategory.none
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
+        //Adds duck to current list of ducks
+        duckLocs.append((duck, detectionCircle))
         addChild(detectionCircle)
         addChild(duck)
     }
@@ -291,6 +306,4 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
     }
-    
-   
 }
