@@ -1,41 +1,52 @@
 {
   "images" : [
     {
+      "filename" : "5359155A-D1CA-43F2-AAC0-935E243826B3_4_5005_c-1.jpeg",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
+      "filename" : "5359155A-D1CA-43F2-AAC0-935E243826B3_4_5005_c-2.jpeg",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
+      "filename" : "AppIcon29x29@2x-2.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
+      "filename" : "AppIcon29x29@2x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
+
+      "filename" : "AppIcon40x40@2x-1.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
+
+      "filename" : "AppIcon40x40@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
+
+      "filename" : "AppIcon40x40@3x-1.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
+      "filename" : "AppIcon60x60@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
@@ -46,6 +57,7 @@
       "size" : "20x20"
     },
     {
+      "filename" : "5359155A-D1CA-43F2-AAC0-935E243826B3_4_5005_c-3.jpeg",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "20x20"
@@ -56,16 +68,20 @@
       "size" : "29x29"
     },
     {
+      "filename" : "AppIcon29x29@2x-3.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
+      "filename" : "5359155A-D1CA-43F2-AAC0-935E243826B3_4_5005_c-4.jpeg",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "40x40"
     },
     {
+
+      "filename" : "AppIcon40x40@2x.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "40x40"
@@ -86,6 +102,7 @@
       "size" : "83.5x83.5"
     },
     {
+      "filename" : "Duck icon try 3.jpg",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
