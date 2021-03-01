@@ -105,8 +105,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     //Touch recognition
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
+            
             let location = touch.location(in: self)
-            addDuck(loc: location)
+            launchBreadcrumb(startPoint: CGPoint(x: self.frame.width/2.0, y: self.frame.height/2.0), endPoint: location)
+           // addDuck(loc: location)
             
             //Adds a duck to the location where you tapped (temporary).
             
@@ -177,7 +179,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         goose.physicsBody?.isDynamic = false
 
         goose.physicsBody?.categoryBitMask = PhysicsCategory.enemy
-        goose.physicsBody?.collisionBitMask = PhysicsCategory.none
+        goose.physicsBody?.collisionBitMask = PhysicsCategory.projectile
         goose.physicsBody?.contactTestBitMask = PhysicsCategory.detection | PhysicsCategory.projectile
         
         
@@ -194,32 +196,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       addChild(goose)
         
       // Determine speed of the geese. Bigger number = faster
-        let actualDuration = 0.9
+        let gooseSpeed = 0.9
       
       // Create the actions
         let firstMove = SKAction.sequence([
-            SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.82),duration: TimeInterval((320.0/250.0)/actualDuration)),
+            SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.82),duration: TimeInterval((320.0/250.0)/gooseSpeed)),
             SKAction.run {goose.zRotation = CGFloat(Double.pi/2.0)}
         ])
             
            
         
         let secondMove = SKAction.sequence([
-            SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.82), duration: TimeInterval((250.0/250.0)/actualDuration)),
+            SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.82), duration: TimeInterval((250.0/250.0)/gooseSpeed)),
             SKAction.run {goose.zRotation = CGFloat(Double.pi)}])
         
         
         let thirdMove = SKAction.sequence([
-            SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.30), duration: TimeInterval((245.0/250.0)/actualDuration)),
+            SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.30), duration: TimeInterval((245.0/250.0)/gooseSpeed)),
             SKAction.run {goose.zRotation = CGFloat(Double.pi/2.0)}])
         
         
         let fourthMove = SKAction.sequence([
-                                            SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.30), duration: TimeInterval((685.0/250.0)/actualDuration)),
+                                            SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.30), duration: TimeInterval((685.0/250.0)/gooseSpeed)),
             SKAction.run {goose.zRotation = CGFloat(Double.pi * 0)}])
         
         
-        let fifthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/5), duration: TimeInterval((320.0/250.0)/actualDuration))
+        let fifthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/5), duration: TimeInterval((320.0/250.0)/gooseSpeed))
         
         
         let finalAction = SKAction.sequence(
@@ -240,7 +242,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //Used to actually deal damage to the goose if the breadcrumbs collide with a goose.
     func collisionHandler(proj: SKSpriteNode, enemy: SKSpriteNode){
-        print("Deal Damage")
+        enemy.removeFromParent()
+        self.currentMoney += gooseReward
+        self.moneyLabel.text = "$: " + String(self.currentMoney)
+    }
+    
+    func launchBreadcrumb (startPoint: CGPoint, endPoint: CGPoint) {
+        let crumb = SKSpriteNode (imageNamed: "Breadcrumb")
+        crumb.size = CGSize(width: 30, height: 30)
+        crumb.position = startPoint
+        crumb.zPosition = 1
+        crumb.name = "projectile"
+        crumb.physicsBody = SKPhysicsBody(circleOfRadius: 30)
+        crumb.physicsBody?.usesPreciseCollisionDetection = true
+        crumb.physicsBody?.affectedByGravity = false
+        crumb.physicsBody?.isDynamic = true
+       
+        crumb.physicsBody?.categoryBitMask = PhysicsCategory.projectile
+        crumb.physicsBody?.collisionBitMask = PhysicsCategory.enemy
+        crumb.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
+        
+        let rotation = CGFloat (random(min: 0, max: CGFloat( 2.0 * Double.pi)))
+        
+        crumb.zRotation = rotation
+        addChild(crumb)
+          
+        crumb.run(SKAction.sequence([SKAction.move(to: endPoint, duration: 0.2), SKAction.removeFromParent()]))
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -251,6 +278,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             detectionHandler(obj: secondBody.node as! SKShapeNode, thing: firstBody.node as! SKSpriteNode)
         }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.detection) {
             detectionHandler(obj: firstBody.node as! SKShapeNode, thing: secondBody.node as! SKSpriteNode)
+        }else if (firstBody.categoryBitMask == PhysicsCategory.enemy) && (secondBody.categoryBitMask == PhysicsCategory.projectile) {
+            collisionHandler(proj: secondBody.node as! SKSpriteNode, enemy: firstBody.node as! SKSpriteNode)
+        }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.projectile) {
+            collisionHandler(proj: firstBody.node as! SKSpriteNode, enemy: secondBody.node as! SKSpriteNode)
         }else{
             return
         }
