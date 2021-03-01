@@ -107,8 +107,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         for touch in touches {
             
             let location = touch.location(in: self)
-            //launchBreadcrumb(startPoint: CGPoint(x: self.frame.width/2.0, y: self.frame.height/2.0), endPoint: location)
-            addDuck(loc: location)
+            launchBreadcrumb(startPoint: CGPoint(x: self.frame.width/2.0, y: self.frame.height/2.0), endPoint: location)
+           // addDuck(loc: location)
             
             //Adds a duck to the location where you tapped (temporary).
             
@@ -250,6 +250,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         crumb.size = CGSize(width: 30, height: 30)
         crumb.position = startPoint
         crumb.zPosition = 2
+        crumb.name = "projectile"
+        crumb.physicsBody = SKPhysicsBody(circleOfRadius: 30)
+        crumb.physicsBody?.usesPreciseCollisionDetection = true
+        crumb.physicsBody?.affectedByGravity = false
+        crumb.physicsBody?.isDynamic = false
+       
+        crumb.physicsBody?.categoryBitMask = PhysicsCategory.projectile
+        crumb.physicsBody?.collisionBitMask = PhysicsCategory.none
+        crumb.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
+        
         let rotation = CGFloat (random(min: 0, max: CGFloat( 2.0 * Double.pi)))
         
         crumb.zRotation = rotation
@@ -265,6 +275,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         if (firstBody.categoryBitMask == PhysicsCategory.enemy) && (secondBody.categoryBitMask == PhysicsCategory.detection) {
             detectionHandler(obj: secondBody.node as! SKShapeNode, thing: firstBody.node as! SKSpriteNode)
         }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.detection) {
+            detectionHandler(obj: firstBody.node as! SKShapeNode, thing: secondBody.node as! SKSpriteNode)
+        }else if (firstBody.categoryBitMask == PhysicsCategory.enemy) && (secondBody.categoryBitMask == PhysicsCategory.projectile) {
+            detectionHandler(obj: secondBody.node as! SKShapeNode, thing: firstBody.node as! SKSpriteNode)
+        }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.projectile) {
             detectionHandler(obj: firstBody.node as! SKShapeNode, thing: secondBody.node as! SKSpriteNode)
         }else{
             return
