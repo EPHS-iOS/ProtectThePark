@@ -179,7 +179,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         goose.physicsBody?.isDynamic = false
 
         goose.physicsBody?.categoryBitMask = PhysicsCategory.enemy
-        goose.physicsBody?.collisionBitMask = PhysicsCategory.none
+        goose.physicsBody?.collisionBitMask = PhysicsCategory.projectile
         goose.physicsBody?.contactTestBitMask = PhysicsCategory.detection | PhysicsCategory.projectile
         
         
@@ -242,22 +242,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //Used to actually deal damage to the goose if the breadcrumbs collide with a goose.
     func collisionHandler(proj: SKSpriteNode, enemy: SKSpriteNode){
-        print("Deal Damage")
+        enemy.removeFromParent()
+        self.currentMoney += gooseReward
+        self.moneyLabel.text = "$: " + String(self.currentMoney)
     }
     
     func launchBreadcrumb (startPoint: CGPoint, endPoint: CGPoint) {
         let crumb = SKSpriteNode (imageNamed: "Breadcrumb")
         crumb.size = CGSize(width: 30, height: 30)
         crumb.position = startPoint
-        crumb.zPosition = 2
+        crumb.zPosition = 1
         crumb.name = "projectile"
         crumb.physicsBody = SKPhysicsBody(circleOfRadius: 30)
         crumb.physicsBody?.usesPreciseCollisionDetection = true
         crumb.physicsBody?.affectedByGravity = false
-        crumb.physicsBody?.isDynamic = false
+        crumb.physicsBody?.isDynamic = true
        
         crumb.physicsBody?.categoryBitMask = PhysicsCategory.projectile
-        crumb.physicsBody?.collisionBitMask = PhysicsCategory.none
+        crumb.physicsBody?.collisionBitMask = PhysicsCategory.enemy
         crumb.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
         let rotation = CGFloat (random(min: 0, max: CGFloat( 2.0 * Double.pi)))
@@ -277,9 +279,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.detection) {
             detectionHandler(obj: firstBody.node as! SKShapeNode, thing: secondBody.node as! SKSpriteNode)
         }else if (firstBody.categoryBitMask == PhysicsCategory.enemy) && (secondBody.categoryBitMask == PhysicsCategory.projectile) {
-            detectionHandler(obj: secondBody.node as! SKShapeNode, thing: firstBody.node as! SKSpriteNode)
+            collisionHandler(proj: secondBody.node as! SKSpriteNode, enemy: firstBody.node as! SKSpriteNode)
         }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.projectile) {
-            detectionHandler(obj: firstBody.node as! SKShapeNode, thing: secondBody.node as! SKSpriteNode)
+            collisionHandler(proj: firstBody.node as! SKSpriteNode, enemy: secondBody.node as! SKSpriteNode)
         }else{
             return
         }
