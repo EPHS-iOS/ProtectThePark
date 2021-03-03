@@ -101,7 +101,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         addChild(portal)
         
  
-        run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: 2.5)]), count: 10))
+        run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: 2.5)]), count: 100))
 
         
         }
@@ -132,7 +132,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func random() -> CGFloat {
-      return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+      return CGFloat(Float(arc4random()) / 4294967296)
     }
 
     func random(min: CGFloat, max: CGFloat) -> CGFloat {
@@ -157,7 +157,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         duck.size = CGSize(width: 100, height: 110)
         duck.name = "Duck\(duckIDX)"
         duck.zPosition = 1
-        duckIDX+=1
+        
         
         // Detection Circle to detect Geese that are close
         let detectionCircle = SKShapeNode(circleOfRadius: 100)
@@ -174,6 +174,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         detectionCircle.physicsBody?.collisionBitMask = PhysicsCategory.none
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
+        duckIDX+=1
         //Adds duck to current list of ducks
         duckLocs.append((duck, detectionCircle))
         addChild(detectionCircle)
@@ -199,16 +200,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         goose.physicsBody?.contactTestBitMask = PhysicsCategory.detection | PhysicsCategory.projectile
         
         
-        
-      // Determine where to spawn the monster along the Y axis
-      //let actualY = random(min: goose.size.height/2, max: size.height - goose.size.height/2)
-      
-      // Position the monster slightly off-screen along the right edge,
-      // and along a random position along the Y axis as calculated above
+    
 
         goose.position = CGPoint(x: self.frame.width/8.75, y: self.frame.height/1.05)
       
-      // Add the monster to the scene
+      // Add the goose to the scene
       addChild(goose)
         
       // Determine speed of the geese. Bigger number = faster
@@ -253,9 +249,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     //Used for the detection circle to indicate whether or not a goose has entered the "bread" zone
     //NOTE: This is where you can get the geese's position as well ("thing" is the reference to the goose)
     func detectionHandler(obj: SKShapeNode, thing: SKSpriteNode){
-        thing.removeFromParent()
-        self.currentMoney += gooseReward
-        self.moneyLabel.text = "$: " + String(self.currentMoney)
+        let circleID  = (obj.name!.replacingOccurrences(of: "DetectionCircle", with: "Duck"))
+        let spinningDuck = childNode(withName: circleID)!
+        let distanceX = spinningDuck.position.x - thing.position.x
+        let distanceY = spinningDuck.position.y - thing.position.y
+        if distanceY >= 0 {
+            spinningDuck.zRotation = CGFloat(2 * Double.pi - atan(Double(distanceX/distanceY))) //If duck is above or equal to goose
+        } else {
+            spinningDuck.zRotation = CGFloat(Double.pi - atan(Double(distanceX/distanceY))) //If duck is below goose
+        }
         launchBreadcrumb(startPoint: obj.position, endPoint: thing.position)
     }
     
