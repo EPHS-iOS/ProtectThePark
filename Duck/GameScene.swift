@@ -262,7 +262,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     //Used to actually deal damage to the goose if the breadcrumbs collide with a goose.
-    func collisionHandler(proj: SKSpriteNode, enemy: SKSpriteNode){
+    func collisionHandler(proj: SKSpriteNode, enemy: SKSpriteNode) {
         enemy.removeFromParent()
         self.currentMoney += gooseReward
         self.moneyLabel.text = "$: " + String(self.currentMoney)
@@ -274,7 +274,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         crumb.position = startPoint
         crumb.zPosition = 1
         crumb.name = "projectile"
-        crumb.physicsBody = SKPhysicsBody(circleOfRadius: 30)
+        crumb.physicsBody = SKPhysicsBody(circleOfRadius: 1)
         crumb.physicsBody?.usesPreciseCollisionDetection = true
         crumb.physicsBody?.affectedByGravity = false
         crumb.physicsBody?.isDynamic = true
