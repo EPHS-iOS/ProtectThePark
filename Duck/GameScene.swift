@@ -101,7 +101,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         addChild(portal)
         
  
-        run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: 2.5)]), count: 100))
+        run(firstWave())
 
         
         }
@@ -208,7 +208,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       addChild(goose)
         
       // Determine speed of the geese. Bigger number = faster
-        let gooseSpeed = 0.9
+        let gooseSpeed = 5.0
       
       // Create the actions
 
@@ -240,7 +240,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let finalAction = SKAction.sequence(
             [SKAction.run {self.remainingLives -= 1},
              SKAction.run{self.healthLabel.text = "Remaining Lives:  " + String(self.remainingLives)},
-             SKAction.removeFromParent()])
+             SKAction.removeFromParent(),
+             SKAction.run {
+                if self.remainingLives <= 0 {
+                    let gameOverScene = SKScene(fileNamed: "GameOver")
+                    self.view?.presentScene(gameOverScene)
+                    
+                }
+             }
+            ])
 
       goose.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
         
@@ -307,6 +315,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             return
         }
         
+    }
+    //Adds a series of geese with number "amt" and waits for "speed" seconds between each goose
+    public func gooseSeries(amt: Int, speed: Double) -> SKAction {
+        SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: speed)]), count: amt)
+    }
+    
+    func firstWave() -> SKAction{
+        SKAction.sequence([
+            gooseSeries(amt: 10, speed: 0.3),
+            gooseSeries(amt: 15, speed: 1.0),
+            gooseSeries(amt: 20, speed: 0.5)
+        ])
     }
     
     override func update(_ currentTime: TimeInterval) {
