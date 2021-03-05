@@ -51,6 +51,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"portal")
+
     public var remainingLives = 10
     public var healthLabel = SKLabelNode()
     public var currentMoney = 100
@@ -67,6 +68,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     override func didMove(to view: SKView) {
         
         physicsWorld.contactDelegate = self
+
         //Label for the lives remaining
         healthLabel.text = "Remaining Lives:  " + String(remainingLives)
         healthLabel.zPosition = 2
@@ -109,7 +111,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         for touch in touches {
             
             let location = touch.location(in: self)
-            //launchBreadcrumb(startPoint: CGPoint(x: self.frame.width/2.0, y: self.frame.height/2.0), endPoint: location)
             addDuck(loc: location)
             
             //Adds a duck to the location where you tapped (temporary).
@@ -117,7 +118,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             
             //Checks if there is a duck at where you tapped.
             for duck in duckLocs {
-                if location.x >= duck.0.position.x - 10 && location.x <= duck.0.position.x + 10 && location.y >= duck.0.position.y - 10 && location.y <= duck.0.position.y + 10 {
+                if location.x >= duck.0.position.x - 20 && location.x <= duck.0.position.x + 20 && location.y >= duck.0.position.y - 20 && location.y <= duck.0.position.y + 20 {
                     print("Duck at this location: \(duck.0.position)")
                     if(duck.1.alpha > 0){
                         duck.1.alpha = 0
@@ -214,6 +215,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let gooseSpeed = 0.9
       
       // Create the actions
+
         let firstMove = SKAction.sequence([
             SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.82),duration: TimeInterval((320.0/250.0)/gooseSpeed)),
             SKAction.run {goose.zRotation = CGFloat(Double.pi/2.0)}
@@ -243,16 +245,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             [SKAction.run {self.remainingLives -= 1},
              SKAction.run{self.healthLabel.text = "Remaining Lives:  " + String(self.remainingLives)},
              SKAction.removeFromParent()])
+
       goose.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
         
     }
     
     //Used for the detection circle to indicate whether or not a goose has entered the "bread" zone
+    //NOTE: This is where you can get the geese's position as well ("thing" is the reference to the goose)
     func detectionHandler(obj: SKShapeNode, thing: SKSpriteNode){
         thing.removeFromParent()
         self.currentMoney += gooseReward
         self.moneyLabel.text = "$: " + String(self.currentMoney)
-        print("Detected")
+        launchBreadcrumb(startPoint: obj.position, endPoint: thing.position)
     }
     
     //Used to actually deal damage to the goose if the breadcrumbs collide with a goose.
