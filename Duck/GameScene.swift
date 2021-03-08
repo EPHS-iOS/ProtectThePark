@@ -50,14 +50,13 @@ struct Nests {
     let loc : CGPoint
     let name : String
     let sprite : SKSpriteNode
-    let isOccupied : Bool
     let nestNumber : Int
 }
 
 struct Buttons {
     let loc : CGPoint
     let sprite: SKSpriteNode
-    let isPresent : Bool
+    var isPresent : Bool
     let parentButton : String
     let name : String
 }
@@ -68,7 +67,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var duckIDX = 0
     //Unique Nest Identifier
     var nestIDX = 0
-    var buttonIDX = 0
     
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"portal")
@@ -86,7 +84,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     //Stored in a swift lock-key system
     var duckLocs = [(SKSpriteNode,SKShapeNode)]()
     
-    //An array of all the buttons CURRENTLY on the screen
+    //An array of all the buttons
     var currentButtons: [Buttons] = []
     
     //An array of all the nests CURRENTLY on the screen
@@ -113,6 +111,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
 
         //Adding nest to appropriate spots
         addNest(location: CGPoint(x: self.frame.width/2 - 358, y: self.frame.height/2 - 150))
+        addNest(location: CGPoint(x: self.frame.width/2, y: self.frame.height/2))
         
         //Label for the lives remaining
         healthLabel.text = "Remaining Lives:  " + String(remainingLives)
@@ -167,69 +166,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
     }
     
-    func showOptions(location : CGPoint, nn: String) {
-        var idx = 0
-        let posScale: CGFloat = 60 //Lower the number, lower the position
-        let heightScale: CGFloat = 25 //Lower the number, the bigger the sprite
-        var createdButton = false //Checks whether or not this is the first time you create the button
-        if(currentButtons.count <= 0) {
-            let buttonInfo = Buttons(loc: location, sprite: SKSpriteNode(imageNamed: "Breadcrumb"), isPresent: true, parentButton: nn, name: "Button\(buttonIDX)")
-            
-            let button = buttonInfo.sprite
-            button.position = CGPoint(x: buttonInfo.loc.x, y: buttonInfo.loc.y + posScale)
-            button.size = CGSize(width: button.size.width/(self.frame.width/heightScale), height: button.size.height/(self.frame.width/heightScale))
-            button.zPosition = 3
-            button.alpha = 0.9
+    func showOptions(nn: SKSpriteNode) {
         
-            buttonIDX+=1
-            currentButtons.append(buttonInfo)
-            addChild(button)
-            createdButton = true
-        }
-        for button in currentButtons {
-            if (button.parentButton == nn && button.isPresent == false) && (createdButton == false){
-                print(1)
-                
-                let buttonInfo = Buttons(loc: location, sprite: SKSpriteNode(imageNamed: "Breadcrumb"), isPresent: true, parentButton: nn, name: "Button\(buttonIDX)")
-                
-                let button = buttonInfo.sprite
-                button.position = CGPoint(x: buttonInfo.loc.x, y: buttonInfo.loc.y + posScale)
-                button.size = CGSize(width: button.size.width/(self.frame.width/heightScale), height: button.size.height/(self.frame.width/heightScale))
-                button.zPosition = 3
-                button.alpha = 0.9
-                button.name = buttonInfo.name
-            
-                buttonIDX+=1
-                currentButtons.append(buttonInfo)
-                addChild(button)
-                
-                return
-            } else if button.isPresent && createdButton == false {
-                print("falsed")
-                currentButtons.remove(at: idx)
-                button.sprite.removeFromParent()
-                return
+        if nn.name?.suffix(1) == "0" {
+            for button in currentButtons{
+                if button.name.suffix(1) == "0"{
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    nn.name = nn.name! + "true"
+                }
             }
-            idx+=1
+        } else if nn.name?.suffix(4) == "true" {
+            print("Duck is already there!")
         }
-        
-        
+
     }
-    
-    //Make a button function:
-    /*
-     let buttonInfo = Buttons(loc: location, sprite: SKSpriteNode(imageNamed: "Breadcrumb"), didPress: true, parentButton: nn, name: "Button\(buttonIDX)")
-     
-     let button = buttonInfo.sprite
-     button.position = buttonInfo.loc
-     button.size = CGSize(width: button.size.width/(self.frame.width/20), height: button.size.height/(self.frame.width/20))
-     button.zPosition = 3
-     button.alpha = 0.9
- 
-     buttonIDX+=1
-     currentButtons.append(buttonInfo)
-     addChild(button)
-     */
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
@@ -243,12 +198,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     
                     if node.contains(location){
                         node.alpha = 0.5
-                        self.showOptions(location: node.position, nn: node.name!)
+                        self.showOptions(nn: node as! SKSpriteNode)
                     }
                     
-                } else if node.name?.prefix(6) == "Button" {
-                    if node.contains(location) {
-                        node.alpha = 0.5
+                } else if node.name?.prefix(6) == "Option" {
+                    if node.contains(touch.location(in: self)){
+                        
+                        if node.alpha == 0 {
+                            print("Button does not exist yet...")
+                            return
+                            
+                        }
+                        
+                        if node.name == "Option0" {
+                            self.addDuck(loc: CGPoint(x: node.position.x + 5, y: node.position.y - 75))
+                            node.alpha = 0
+                        }
+                        
                     }
                 }
                 
@@ -260,7 +226,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     print("Duck at this location: \(duck.0.position)")
                     if(duck.1.alpha > 0){
                         duck.1.alpha = 0
-                    }else{
+                    } else {
                         duck.1.alpha = 0.1
                     }
                 }
@@ -277,10 +243,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     if node.contains(touch.location(in: self)){
                         node.alpha = 1
                     }
-                } else if node.name?.prefix(5) == "Button" {
-                    if node.contains(touch.location(in: self)){
-                        node.alpha = 1
-                    }
                 }
                 
             })
@@ -290,20 +252,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     /* -------------------- ADD FUNCTIONS -------------------- */
  
     func addNest(location: CGPoint) {
-        //Store Information in the struct
-        let nestInfo = Nests(loc: location, name: "Nest\(nestIDX)", sprite: SKSpriteNode(imageNamed: "Nest"), isOccupied: false, nestNumber: nestIDX)
-        currentNests.append(nestInfo)
+        let posScale = CGFloat(60)
         
         //Make the actual nest
-        let nest = nestInfo.sprite
-        nest.position = nestInfo.loc
-        nest.name = nestInfo.name
+        let nest = SKSpriteNode(imageNamed: "Nest")
+        nest.position = location
+        nest.name = "Nest\(nestIDX)"
         nest.size = CGSize(width: nest.size.width/(self.frame.width/45), height: nest.size.height/(self.frame.width/45))
         nest.zPosition = 2
         
+        //Add the buttons for upgrades or ducks at a specified location above the nest.
+        addOptions(loc: CGPoint(x: nest.position.x, y: nest.position.y + posScale),pB: nest.name!, id: "Option\(nest.name!.suffix(1))");
         
         addChild(nest)
+        currentNests.append(Nests(loc: nest.position, name: nest.name!, sprite: nest, nestNumber: nestIDX))
         nestIDX += 1
+    }
+    
+    func addOptions(loc: CGPoint, pB: String, id: String){
+        print("id: " + id)
+        let heightScale = CGFloat(25)
+        
+        let option = SKSpriteNode(imageNamed: "Breadcrumb")
+        option.name = id
+        option.position = loc
+        option.zPosition = 2
+        option.alpha = 0
+        option.size = CGSize(width: option.size.width/(self.frame.width/heightScale), height: option.size.height/(self.frame.width/heightScale))
+        
+        addChild(option)
+        currentButtons.append(Buttons(loc: option.position, sprite: option, isPresent: true, parentButton: pB, name: option.name!))
+        
     }
     
     func addDuck(loc: CGPoint) {
