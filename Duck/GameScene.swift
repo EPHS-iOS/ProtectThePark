@@ -146,7 +146,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         addChild(portal)
  
-        run(SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: 2.5)]), count: 10))
+        run(firstWave())
 
         }
     
@@ -317,6 +317,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 
             })
         }
+    func random() -> CGFloat {
+      return CGFloat(Float(arc4random()) / 4294967296)
+
     }
     
     /* -------------------- ADD FUNCTIONS -------------------- */
@@ -388,6 +391,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         detectionCircle.physicsBody?.collisionBitMask = PhysicsCategory.none
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
+        duckIDX+=1
         //Adds duck to current list of ducks
         duckLocs.append((duck, detectionCircle))
         addChild(detectionCircle)
@@ -414,7 +418,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
 
         goose.position = CGPoint(x: self.frame.width/8.75, y: self.frame.height/1.05)
       
-      // Add the monster to the scene
+      // Add the goose to the scene
       addChild(goose)
         
       // Determine speed of the geese. Bigger number = faster
@@ -435,8 +439,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.30), duration: TimeInterval((245.0/250.0)/gooseSpeed)),
             SKAction.run {goose.zRotation = CGFloat(Double.pi/2.0)}])
         
-        let fourthMove = SKAction.sequence([
-                                            SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.30), duration: TimeInterval((685.0/250.0)/gooseSpeed)),
+        let fourthMove = SKAction.sequence([ SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.30), duration: TimeInterval((685.0/250.0)/gooseSpeed)),
             SKAction.run {goose.zRotation = CGFloat(Double.pi * 0)}])
         
         let fifthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/5), duration: TimeInterval((320.0/250.0)/gooseSpeed))
@@ -444,12 +447,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let finalAction = SKAction.sequence(
             [SKAction.run {self.remainingLives -= 1},
              SKAction.run{self.healthLabel.text = "Remaining Lives:  " + String(self.remainingLives)},
-             SKAction.removeFromParent()])
+             SKAction.removeFromParent(),
+             SKAction.run {
+                if self.remainingLives <= 0 {
+                    let gameOverScene = SKScene(fileNamed: "GameOver")
+                    self.view?.presentScene(gameOverScene)
+                    
+                }
+             }
+            ])
 
       goose.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
         
     }
     
+
     /* -------------------- ACTIONS -------------------- */
     func launchBreadcrumb (startPoint: CGPoint, endPoint: CGPoint) {
         let crumb = SKSpriteNode (imageNamed: "Breadcrumb")
@@ -457,7 +469,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         crumb.position = startPoint
         crumb.zPosition = 1
         crumb.name = "projectile"
-        crumb.physicsBody = SKPhysicsBody(circleOfRadius: 30)
+        crumb.physicsBody = SKPhysicsBody(circleOfRadius: 1)
         crumb.physicsBody?.usesPreciseCollisionDetection = true
         crumb.physicsBody?.affectedByGravity = false
         crumb.physicsBody?.isDynamic = true
@@ -475,21 +487,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     /* -------------------- HANDLERS -------------------- */
-    
-    //Used for the detection circle to indicate whether or not a goose has entered the "bread" zone
+     //Used for the detection circle to indicate whether or not a goose has entered the "bread" zone
     //NOTE: This is where you can get the geese's position as well ("thing" is the reference to the goose)
     func detectionHandler(obj: SKShapeNode, thing: SKSpriteNode){
-        thing.removeFromParent()
-        self.currentMoney += gooseReward
-        self.moneyLabel.text = "$: " + String(self.currentMoney)
+        let circleID  = (obj.name!.replacingOccurrences(of: "DetectionCircle", with: "Duck"))
+        let spinningDuck = childNode(withName: circleID)!
+        let distanceX = spinningDuck.position.x - thing.position.x
+        let distanceY = spinningDuck.position.y - thing.position.y
+        if distanceY >= 0 {
+            spinningDuck.zRotation = CGFloat(2 * Double.pi - atan(Double(distanceX/distanceY))) //If duck is above or equal to goose
+        } else {
+            spinningDuck.zRotation = CGFloat(Double.pi - atan(Double(distanceX/distanceY))) //If duck is below goose
+        }
         launchBreadcrumb(startPoint: obj.position, endPoint: thing.position)
     }
     
     //Used to actually deal damage to the goose if the breadcrumbs collide with a goose.
-    func collisionHandler(proj: SKSpriteNode, enemy: SKSpriteNode){
+    func collisionHandler(proj: SKSpriteNode, enemy: SKSpriteNode) {
         enemy.removeFromParent()
+        proj.removeFromParent()
         self.currentMoney += gooseReward
         self.moneyLabel.text = "$: " + String(self.currentMoney)
     }
+      
+    //Adds a series of geese with number "amt" and waits for "speed" seconds between each goose
+    public func gooseSeries(amt: Int, speed: Double) -> SKAction {
+        SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: speed)]), count: amt)
+    }
     
+    func firstWave() -> SKAction{
+        SKAction.sequence([
+            gooseSeries(amt: 10, speed: 1.5),
+            gooseSeries(amt: 15, speed: 1.0),
+            gooseSeries(amt: 20, speed: 0.5)
+        ])
+    }
 }
