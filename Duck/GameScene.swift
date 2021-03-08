@@ -110,8 +110,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         physicsWorld.contactDelegate = self
 
         //Adding nest to appropriate spots
-        addNest(location: CGPoint(x: self.frame.width/2 - 358, y: self.frame.height/2 - 150))
-        addNest(location: CGPoint(x: self.frame.width/2, y: self.frame.height/2))
+        addNest(location: CGPoint(x: self.frame.width/2 - 358, y: self.frame.height/2 - 140))
+        addNest(location: CGPoint(x: self.frame.width/2 - 265, y: self.frame.height/2 + 20))
+        addNest(location: CGPoint(x: self.frame.width/2 - 90, y: self.frame.height/2 - 35))
+        addNest(location: CGPoint(x: self.frame.width/2 + 45, y: self.frame.height/2 + 25))
+        addNest(location: CGPoint(x: self.frame.width/2 + 300, y: self.frame.height/2 + 25))
         
         //Label for the lives remaining
         healthLabel.text = "Remaining Lives:  " + String(remainingLives)
@@ -168,6 +171,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     func showOptions(nn: SKSpriteNode) {
         
+        if currentMoney < 100 {
+            print("Could not purchase duck: Insufficient Costs")
+            return
+        }
+        
+        if nn.name?.suffix(4) == "true" {
+            print("Could not purchase duck: Duck is already there!")
+        }
+        
         if nn.name?.suffix(1) == "0" {
             for button in currentButtons{
                 if button.name.suffix(1) == "0"{
@@ -180,8 +192,54 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     nn.name = nn.name! + "true"
                 }
             }
-        } else if nn.name?.suffix(4) == "true" {
-            print("Duck is already there!")
+        } else if nn.name?.suffix(1) == "1" {
+            for button in currentButtons{
+                if button.name.suffix(1) == "1"{
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    nn.name = nn.name! + "true"
+                }
+            }
+        } else if nn.name?.suffix(1) == "2" {
+            for button in currentButtons{
+                if button.name.suffix(1) == "2"{
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    nn.name = nn.name! + "true"
+                }
+            }
+        } else if nn.name?.suffix(1) == "3" {
+            for button in currentButtons{
+                if button.name.suffix(1) == "3"{
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    nn.name = nn.name! + "true"
+                }
+            }
+        } else if nn.name?.suffix(1) == "4" {
+            for button in currentButtons{
+                if button.name.suffix(1) == "4"{
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    nn.name = nn.name! + "true"
+                }
+            }
         }
 
     }
@@ -211,6 +269,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                         }
                         
                         if node.name == "Option0" {
+                            self.addDuck(loc: CGPoint(x: node.position.x + 5, y: node.position.y - 75))
+                            node.alpha = 0
+                        } else if node.name == "Option1" {
+                            self.addDuck(loc: CGPoint(x: node.position.x + 5, y: node.position.y - 75))
+                            node.alpha = 0
+                        } else if node.name == "Option2" {
+                            self.addDuck(loc: CGPoint(x: node.position.x + 5, y: node.position.y - 75))
+                            node.alpha = 0
+                        } else if node.name == "Option3" {
+                            self.addDuck(loc: CGPoint(x: node.position.x + 5, y: node.position.y - 75))
+                            node.alpha = 0
+                        } else if node.name == "Option4" {
                             self.addDuck(loc: CGPoint(x: node.position.x + 5, y: node.position.y - 75))
                             node.alpha = 0
                         }
