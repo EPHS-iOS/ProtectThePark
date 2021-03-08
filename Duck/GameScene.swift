@@ -317,9 +317,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 
             })
         }
-    func random() -> CGFloat {
-      return CGFloat(Float(arc4random()) / 4294967296)
-
     }
     
     /* -------------------- ADD FUNCTIONS -------------------- */
@@ -522,4 +519,5 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             gooseSeries(amt: 20, speed: 0.5)
         ])
     }
+
 }
