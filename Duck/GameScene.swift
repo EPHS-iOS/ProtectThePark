@@ -519,5 +519,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             gooseSeries(amt: 20, speed: 0.5)
         ])
     }
+
 }
 
