@@ -94,7 +94,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     /* -------------------- FUNCTIONS -------------------- */
     
     func random() -> CGFloat {
-      return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+      return CGFloat(Float(arc4random()) / 4294967296)
     }
 
     func random(min: CGFloat, max: CGFloat) -> CGFloat {
@@ -110,11 +110,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         physicsWorld.contactDelegate = self
 
         //Adding nest to appropriate spots
-        addNest(location: CGPoint(x: self.frame.width/2 - 358, y: self.frame.height/2 - 140))
-        addNest(location: CGPoint(x: self.frame.width/2 - 265, y: self.frame.height/2 + 20))
-        addNest(location: CGPoint(x: self.frame.width/2 - 90, y: self.frame.height/2 - 35))
-        addNest(location: CGPoint(x: self.frame.width/2 + 45, y: self.frame.height/2 + 25))
-        addNest(location: CGPoint(x: self.frame.width/2 + 300, y: self.frame.height/2 + 25))
+        addNest(location: CGPoint(x: self.frame.width/12, y: self.frame.height/8.5))
+        addNest(location: CGPoint(x: self.frame.width/4.9, y: self.frame.height/1.8))
+        addNest(location: CGPoint(x: self.frame.width/2.5, y: self.frame.height/2.2))
+        addNest(location: CGPoint(x: self.frame.width/1.4, y: self.frame.height/1.75))
+        addNest(location: CGPoint(x: self.frame.width/1.25, y: self.frame.height/3.75))
         
         //Label for the lives remaining
         healthLabel.text = "Remaining Lives:  " + String(remainingLives)
@@ -330,7 +330,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let nest = SKSpriteNode(imageNamed: "Nest")
         nest.position = location
         nest.name = "Nest\(nestIDX)"
-        nest.size = CGSize(width: nest.size.width/(self.frame.width/45), height: nest.size.height/(self.frame.width/45))
+        nest.size = CGSize(width: 75, height: 100)
         nest.zPosition = 2
         
         //Add the buttons for upgrades or ducks at a specified location above the nest.
@@ -525,3 +525,4 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
 
 }
+
