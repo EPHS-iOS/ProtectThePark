@@ -43,7 +43,7 @@ struct PhysicsCategory {
     static let enemy : UInt32 = 0b1
     static let projectile : UInt32 = 0b10
     static let detection : UInt32 = 0b11
-    static let none : UInt32 = 0b100
+    static let none : UInt32 = 0
 }
 
 struct Nests {
@@ -177,6 +177,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         }
         
         if nn.name?.suffix(4) == "true" {
+            print(nn.name!)
             print("Could not purchase duck: Duck is already there!")
         }
         
@@ -356,7 +357,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func addDuck(loc: CGPoint) {
-        physicsWorld.contactDelegate = self
         
         //Only allows a duck to be placed if player has enough money and if there is not more than 5 ducks, and subtracts that money from their total
         if (self.currentMoney >= duckCost && duckIDX < 5) {
@@ -381,11 +381,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         detectionCircle.physicsBody?.affectedByGravity = false
         detectionCircle.name = "DetectionCircle\(duckIDX)"
         detectionCircle.alpha = 0.1
-        detectionCircle.physicsBody?.usesPreciseCollisionDetection = true
         detectionCircle.physicsBody?.isDynamic = true
+        
         //Collisions:
+        //The circle is a type of detection.
         detectionCircle.physicsBody?.categoryBitMask = PhysicsCategory.detection
+        
+        //Do we want it to BOUNCE off things? We don't want the detection circle to collide with anything, so we set it to none.
         detectionCircle.physicsBody?.collisionBitMask = PhysicsCategory.none
+        
+        //DETECTIONS between objects; does not have an effect on if an object will or can bounce off one another or COLLIDE? Since we want the detection circle to detect geese or any enemy that are in the circle, we put the category "enemy" in.
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
         duckIDX+=1
@@ -396,22 +401,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func addGoose() {  // Goose Spawner
-      
-        physicsWorld.contactDelegate = self
         
       // Create sprite
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
         goose.size = CGSize(width: 58, height: 70)
         goose.physicsBody = SKPhysicsBody(circleOfRadius: 70)
         goose.zPosition = 1
+        goose.physicsBody?.affectedByGravity = false
         
-        goose.physicsBody?.usesPreciseCollisionDetection = true
         goose.name = "enemy"
-        goose.physicsBody?.isDynamic = false
+        goose.physicsBody?.isDynamic = true
 
-        goose.physicsBody?.categoryBitMask = PhysicsCategory.enemy
-        goose.physicsBody?.collisionBitMask = PhysicsCategory.projectile
-        goose.physicsBody?.contactTestBitMask = PhysicsCategory.detection | PhysicsCategory.projectile
+        //Collisions
+        goose.physicsBody?.categoryBitMask = PhysicsCategory.enemy //Goose is a type of enemy
+        goose.physicsBody?.collisionBitMask = PhysicsCategory.none //We want the breadcrumb to look like it's bouncing off of the goose, so we put projectile in for collisionBitMask
+        goose.physicsBody?.contactTestBitMask = PhysicsCategory.projectile | PhysicsCategory.detection// We also want the goose to detect if it has been hit by a breadcrumb, not only just bouncing it off. In addition, we want the detection circle to detect if a goose is in its radius, so we add that too.
 
         goose.position = CGPoint(x: self.frame.width/8.75, y: self.frame.height/1.05)
       
@@ -464,16 +468,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let crumb = SKSpriteNode (imageNamed: "Breadcrumb")
         crumb.size = CGSize(width: 30, height: 30)
         crumb.position = startPoint
-        crumb.zPosition = 1
+        crumb.zPosition = 3
         crumb.name = "projectile"
         crumb.physicsBody = SKPhysicsBody(circleOfRadius: 1)
         crumb.physicsBody?.usesPreciseCollisionDetection = true
         crumb.physicsBody?.affectedByGravity = false
         crumb.physicsBody?.isDynamic = true
        
-        crumb.physicsBody?.categoryBitMask = PhysicsCategory.projectile
-        crumb.physicsBody?.collisionBitMask = PhysicsCategory.enemy
-        crumb.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
+        crumb.physicsBody?.categoryBitMask = PhysicsCategory.projectile //Breadcrumb is type projectile
+        crumb.physicsBody?.collisionBitMask = PhysicsCategory.none //We want the breadcrumb to bounce off the goose
+        crumb.physicsBody?.contactTestBitMask = PhysicsCategory.enemy //We want to detect when the breadcrumb touches the goose
         
         let rotation = CGFloat (random(min: 0, max: CGFloat( 2.0 * Double.pi)))
         
