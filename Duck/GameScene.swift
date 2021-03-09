@@ -172,6 +172,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     func showOptions(nn: SKSpriteNode) {
         
         if currentMoney < 100 {
+            print(nn.name!)
             print("Could not purchase duck: Insufficient Costs")
             return
         }
@@ -268,7 +269,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                             return
                             
                         }
-                        
+                        print(node.name!)
                         if node.name == "Option0" {
                             self.addDuck(loc: CGPoint(x: node.position.x + 5, y: node.position.y - 75))
                             node.alpha = 0
@@ -341,7 +342,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func addOptions(loc: CGPoint, pB: String, id: String){
-        print("id: " + id)
         let heightScale = CGFloat(25)
         
         let option = SKSpriteNode(imageNamed: "Breadcrumb")
@@ -357,9 +357,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func addDuck(loc: CGPoint) {
+        print(loc)
         
         //Only allows a duck to be placed if player has enough money and if there is not more than 5 ducks, and subtracts that money from their total
-        if (self.currentMoney >= duckCost && duckIDX < 5) {
+        if (self.currentMoney >= duckCost) {
             self.currentMoney -= duckCost
             self.moneyLabel.text = "$: " + String(self.currentMoney)
         } else {
@@ -367,7 +368,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         }
         //Makes a duck
         let duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
-        duckIDX+=1
         duck.position = loc
         duck.size = CGSize(width: 100, height: 110)
         duck.name = "Duck\(duckIDX)"
