@@ -94,7 +94,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     /* -------------------- FUNCTIONS -------------------- */
     
     func random() -> CGFloat {
-      return CGFloat(Float(arc4random()) / 4294967296)
+      return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
     }
 
     func random(min: CGFloat, max: CGFloat) -> CGFloat {
@@ -110,11 +110,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         physicsWorld.contactDelegate = self
 
         //Adding nest to appropriate spots
-        addNest(location: CGPoint(x: self.frame.width/12, y: self.frame.height/8.5))
-        addNest(location: CGPoint(x: self.frame.width/4.9, y: self.frame.height/1.8))
-        addNest(location: CGPoint(x: self.frame.width/2.5, y: self.frame.height/2.2))
-        addNest(location: CGPoint(x: self.frame.width/1.4, y: self.frame.height/1.75))
-        addNest(location: CGPoint(x: self.frame.width/1.25, y: self.frame.height/3.75))
+        addNest(location: CGPoint(x: self.frame.width/2 - 358, y: self.frame.height/2 - 140))
+        addNest(location: CGPoint(x: self.frame.width/2 - 265, y: self.frame.height/2 + 20))
+        addNest(location: CGPoint(x: self.frame.width/2 - 90, y: self.frame.height/2 - 35))
+        addNest(location: CGPoint(x: self.frame.width/2 + 45, y: self.frame.height/2 + 25))
+        addNest(location: CGPoint(x: self.frame.width/2 + 300, y: self.frame.height/2 + 25))
         
         //Label for the lives remaining
         healthLabel.text = "Remaining Lives:  " + String(remainingLives)
@@ -172,6 +172,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     func showOptions(nn: SKSpriteNode) {
         
         if currentMoney < 100 {
+            print(nn.name!)
             print("Could not purchase duck: Insufficient Costs")
             return
         }
@@ -268,7 +269,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                             return
                             
                         }
-                        
+                        print(node.name!)
                         if node.name == "Option0" {
                             self.addDuck(loc: CGPoint(x: node.position.x + 5, y: node.position.y - 75))
                             node.alpha = 0
@@ -329,7 +330,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let nest = SKSpriteNode(imageNamed: "Nest")
         nest.position = location
         nest.name = "Nest\(nestIDX)"
-        nest.size = CGSize(width: 75, height: 100)
+        nest.size = CGSize(width: nest.size.width/(self.frame.width/45), height: nest.size.height/(self.frame.width/45))
         nest.zPosition = 2
         
         //Add the buttons for upgrades or ducks at a specified location above the nest.
@@ -341,7 +342,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func addOptions(loc: CGPoint, pB: String, id: String){
-        print("id: " + id)
         let heightScale = CGFloat(25)
         
         let option = SKSpriteNode(imageNamed: "Breadcrumb")
@@ -357,9 +357,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func addDuck(loc: CGPoint) {
+        print(loc)
         
         //Only allows a duck to be placed if player has enough money and if there is not more than 5 ducks, and subtracts that money from their total
-        if (self.currentMoney >= duckCost && duckIDX < 5) {
+        if (self.currentMoney >= duckCost) {
             self.currentMoney -= duckCost
             self.moneyLabel.text = "$: " + String(self.currentMoney)
         } else {
@@ -367,7 +368,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         }
         //Makes a duck
         let duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
-        duckIDX+=1
         duck.position = loc
         duck.size = CGSize(width: 100, height: 110)
         duck.name = "Duck\(duckIDX)"
@@ -525,4 +525,3 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
 
 }
-
