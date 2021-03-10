@@ -5,7 +5,7 @@ Protect The Park is a ducky themed tower defense game where you protect your sta
 <br>
 <br>
 
-**VERSION v0.2**
+<b>VERSION v0.2**</b>
 - Updates to Sprites 
 - Ducks will launch breadcrumbs at geese
 - You can only place ducks on nests now
@@ -16,6 +16,6 @@ Protect The Park is a ducky themed tower defense game where you protect your sta
 - Currency System
 - Menu Art
 
-Version v0.1
+<b>Version v0.1</b>
 
 </html>
