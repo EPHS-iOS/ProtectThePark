@@ -77,7 +77,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     public var moneyLabel = SKLabelNode()
     //How much 1 duck costs and how much money you get per goose
     var duckCost = 100
-    var gooseReward = 50
+    var gooseReward = 10
     
     
     //Stores Information on Ducks and their corresponding detection radiuses in an array
@@ -94,7 +94,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     /* -------------------- FUNCTIONS -------------------- */
     
     func random() -> CGFloat {
-      return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+      return CGFloat(Float(arc4random()) / 4294967296)
     }
 
     func random(min: CGFloat, max: CGFloat) -> CGFloat {
@@ -110,11 +110,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         physicsWorld.contactDelegate = self
 
         //Adding nest to appropriate spots
-        addNest(location: CGPoint(x: self.frame.width/2 - 358, y: self.frame.height/2 - 140))
-        addNest(location: CGPoint(x: self.frame.width/2 - 265, y: self.frame.height/2 + 20))
-        addNest(location: CGPoint(x: self.frame.width/2 - 90, y: self.frame.height/2 - 35))
-        addNest(location: CGPoint(x: self.frame.width/2 + 45, y: self.frame.height/2 + 25))
-        addNest(location: CGPoint(x: self.frame.width/2 + 300, y: self.frame.height/2 + 25))
+        addNest(location: CGPoint(x: self.frame.width/12, y: self.frame.height/8.5))
+        addNest(location: CGPoint(x: self.frame.width/4.9, y: self.frame.height/1.8))
+        addNest(location: CGPoint(x: self.frame.width/2.5, y: self.frame.height/2.2))
+        addNest(location: CGPoint(x: self.frame.width/1.4, y: self.frame.height/1.75))
+        addNest(location: CGPoint(x: self.frame.width/1.25, y: self.frame.height/3.75))
         
         //Label for the lives remaining
         healthLabel.text = "Remaining Lives:  " + String(remainingLives)
