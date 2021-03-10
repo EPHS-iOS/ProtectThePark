@@ -269,21 +269,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                             return
                             
                         }
+                        
                         print(node.name!)
+                        let upDown : CGFloat = -60
+                        let leftRight: CGFloat = -3
+                        
                         if node.name == "Option0" {
-                            self.addDuck(loc: CGPoint(x: node.position.x + 5, y: node.position.y - 75))
+                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown))
                             node.alpha = 0
                         } else if node.name == "Option1" {
-                            self.addDuck(loc: CGPoint(x: node.position.x + 5, y: node.position.y - 75))
+                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown))
                             node.alpha = 0
                         } else if node.name == "Option2" {
-                            self.addDuck(loc: CGPoint(x: node.position.x + 5, y: node.position.y - 75))
+                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown))
                             node.alpha = 0
                         } else if node.name == "Option3" {
-                            self.addDuck(loc: CGPoint(x: node.position.x + 5, y: node.position.y - 75))
+                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown))
                             node.alpha = 0
                         } else if node.name == "Option4" {
-                            self.addDuck(loc: CGPoint(x: node.position.x + 5, y: node.position.y - 75))
+                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown))
                             node.alpha = 0
                         }
                         
@@ -369,14 +373,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         //Makes a duck
         let duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
         duck.position = loc
-        duck.size = CGSize(width: 100, height: 110)
+        duck.size = CGSize(width: duck.size.width/(self.frame.width/50), height: duck.size.height/(self.frame.width/50))
         duck.name = "Duck\(duckIDX)"
         duck.zPosition = 3
         
         // Detection Circle to detect Geese that are close
         let detectionCircle = SKShapeNode(circleOfRadius: 100)
         detectionCircle.physicsBody = SKPhysicsBody(circleOfRadius: 80)
-        detectionCircle.position = CGPoint(x: duck.position.x - 2, y: duck.position.y + 15)
+        detectionCircle.position = duck.position
         detectionCircle.fillColor = .cyan
         detectionCircle.physicsBody?.affectedByGravity = false
         detectionCircle.name = "DetectionCircle\(duckIDX)"
@@ -404,8 +408,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
       // Create sprite
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
-        goose.size = CGSize(width: 58, height: 70)
-        goose.physicsBody = SKPhysicsBody(circleOfRadius: 70)
+        goose.size = CGSize(width: goose.size.width/(self.frame.width/65), height: goose.size.height/(self.frame.width/65))
+        goose.physicsBody = SKPhysicsBody(circleOfRadius: goose.size.width - 25)
         goose.zPosition = 1
         goose.physicsBody?.affectedByGravity = false
         
