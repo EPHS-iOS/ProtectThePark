@@ -36,10 +36,10 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="llZ-IR-1Cl" userLabel="Start the Game">
-                                <rect key="frame" x="295" y="322" width="146" height="51"/>
+                                <rect key="frame" x="264" y="302" width="208" height="112"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="51" id="MmJ-4B-y0u"/>
-                                    <constraint firstAttribute="width" secondItem="llZ-IR-1Cl" secondAttribute="height" multiplier="35:9" constant="-52.333333333333343" id="zA1-6Q-O3Q"/>
+                                    <constraint firstAttribute="height" constant="112" id="MmJ-4B-y0u"/>
+                                    <constraint firstAttribute="width" secondItem="llZ-IR-1Cl" secondAttribute="height" multiplier="35:9" constant="-227.55555555555554" id="zA1-6Q-O3Q"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <state key="normal" title="Start the Game">
@@ -53,10 +53,10 @@
                         <viewLayoutGuide key="safeArea" id="6FY-OX-QaY"/>
                         <color key="backgroundColor" systemColor="systemTealColor"/>
                         <constraints>
-                            <constraint firstItem="llZ-IR-1Cl" firstAttribute="centerY" secondItem="OTa-lc-8bg" secondAttribute="centerY" constant="140.5" id="1sT-Ot-fIo"/>
+                            <constraint firstItem="llZ-IR-1Cl" firstAttribute="centerY" secondItem="OTa-lc-8bg" secondAttribute="centerY" constant="151" id="1sT-Ot-fIo"/>
                             <constraint firstItem="llZ-IR-1Cl" firstAttribute="centerX" secondItem="OTa-lc-8bg" secondAttribute="centerX" id="8ZH-9S-ohU"/>
-                            <constraint firstItem="llZ-IR-1Cl" firstAttribute="centerY" secondItem="OTa-lc-8bg" secondAttribute="centerY" constant="140.5" id="cBo-t0-nvh"/>
-                            <constraint firstItem="llZ-IR-1Cl" firstAttribute="centerY" secondItem="OTa-lc-8bg" secondAttribute="centerY" constant="140.5" id="iJm-jz-yn3"/>
+                            <constraint firstItem="llZ-IR-1Cl" firstAttribute="centerY" secondItem="OTa-lc-8bg" secondAttribute="centerY" constant="151" id="cBo-t0-nvh"/>
+                            <constraint firstItem="llZ-IR-1Cl" firstAttribute="centerY" secondItem="OTa-lc-8bg" secondAttribute="centerY" constant="151" id="iJm-jz-yn3"/>
                             <constraint firstItem="llZ-IR-1Cl" firstAttribute="centerX" secondItem="OTa-lc-8bg" secondAttribute="centerX" id="rmT-2J-MuK"/>
                         </constraints>
                     </view>
