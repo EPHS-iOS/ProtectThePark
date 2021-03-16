@@ -67,6 +67,16 @@ struct Buttons {
     let name : String
 }
 
+struct Gooses {
+    var health : CGFloat
+    let sprite : SKSpriteNode
+}
+
+struct breadcrumb  {
+    let damage : CGFloat
+    let sprite : SKSpriteNode
+}
+
 class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //Unique Duck Identifier
@@ -95,6 +105,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //An array of all the nests CURRENTLY on the screen
     var currentNests: [Nests] = []
+    //array of geese
+    var currentGeese: [Gooses] = []
     
     var currentDucks: [Ducks] = []
     /* -------------------- FUNCTIONS -------------------- */
@@ -442,6 +454,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       
       // Add the goose to the scene
       addChild(goose)
+        let goose1 = Gooses(health : 100, sprite: goose)
+        currentGeese.append(goose1)
         
       // Determine speed of the geese. Bigger number = faster
         let gooseSpeed = 0.9
@@ -504,9 +518,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         crumb.zRotation = rotation
         addChild(crumb)
-          
+        let crumb1 = breadcrumb(damage: 10, sprite : crumb)
+        
         crumb.run(SKAction.sequence([SKAction.move(to: endPoint, duration: 0.2), SKAction.removeFromParent()]))
     }
+    
+    
     
     /* -------------------- HANDLERS -------------------- */
      //Used for the detection circle to indicate whether or not a goose has entered the "bread" zone
@@ -567,10 +584,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //Used to actually deal damage to the goose if the breadcrumbs collide with a goose.
     func collisionHandler(proj: SKSpriteNode, enemy: SKSpriteNode) {
-        enemy.removeFromParent()
+    var i = 0
+        while(i < currentGeese.count){
+            if currentGeese[i].health <= 0{
+                enemy.removeFromParent()
+           
+        }else{
+            currentGeese[i].health = currentGeese[i].health - 50
+        }
+        i+=1
+    
+    }
+    i=0
+       
         proj.removeFromParent()
         self.currentMoney += gooseReward
         self.moneyLabel.text = "$: " + String(self.currentMoney)
+      
+        
+        
+        
     }
       
     //Adds a series of geese with number "amt" and waits for "speed" seconds between each goose
