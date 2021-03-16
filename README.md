@@ -8,7 +8,6 @@ Protect The Park is a ducky themed tower defense game where you protect your sta
 CURRENT VERSION: v0.2 Build 2
 
 <b>VERSION v0.2 Build 2</b>
-- Main menu art
 - Game over art
 - WIP Goose health
 - Original Icon
