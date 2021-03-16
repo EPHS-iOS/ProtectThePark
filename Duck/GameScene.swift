@@ -433,7 +433,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         addChild(duck)
     }
     
-    func addGoose() {  // Goose Spawner
+    func addGoose(health: Int, speed: Double) {  // Goose Spawner
         
       // Create sprite
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
@@ -454,11 +454,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       
       // Add the goose to the scene
       addChild(goose)
-        let goose1 = Gooses(health : 100, sprite: goose)
+        let goose1 = Gooses(health : CGFloat(health), sprite: goose)
         currentGeese.append(goose1)
         
-      // Determine speed of the geese. Bigger number = faster
-        let gooseSpeed = 0.9
+      
+        let gooseSpeed = speed
       
       // Create the actions
 
@@ -494,7 +494,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             ])
 
       goose.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
-        
     }
     
 
@@ -527,7 +526,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     /* -------------------- HANDLERS -------------------- */
      //Used for the detection circle to indicate whether or not a goose has entered the "bread" zone
-    //NOTE: This is where you can get the geese's position as well ("thing" is the reference to the goose)
+    //NOTE: This is where you can get the geese's position as well
     func detectionHandler(circle: SKShapeNode, goose: SKSpriteNode, duck: SKSpriteNode){
         
         
@@ -538,7 +537,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         } else {
             duck.zRotation = CGFloat(Double.pi - atan(Double(distanceX/distanceY))) //If duck is below goose
         }
+        launchBreadcrumb(startPoint: duck.position, endPoint: goose.position)
         
+        
+        /*
+         
         var i = 0
             while i < currentDucks.count {
                 if currentDucks[0].name.suffix(1) == duck.name!.suffix(1) {
@@ -577,6 +580,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     i += 1
                 }
                 i = 0
+         
+         */
             }
     
         
@@ -584,7 +589,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //Used to actually deal damage to the goose if the breadcrumbs collide with a goose.
     func collisionHandler(proj: SKSpriteNode, enemy: SKSpriteNode) {
-    var i = 0
+    /*
+        
+        var i = 0
         while(i < currentGeese.count){
             if currentGeese[i].health <= 0{
                 enemy.removeFromParent()
@@ -596,7 +603,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     }
     i=0
-       
+        
+        
+    */
+       var i = 0
+        while (i < currentGeese.count) {
+            if currentGeese[i].sprite == enemy {
+                currentGeese[i].health -= 50
+                if currentGeese[i].health <= 0 {
+                    enemy.removeFromParent()
+                }
+            }
+            i += 1
+        }
         proj.removeFromParent()
         self.currentMoney += gooseReward
         self.moneyLabel.text = "$: " + String(self.currentMoney)
@@ -606,16 +625,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
     }
       
-    //Adds a series of geese with number "amt" and waits for "speed" seconds between each goose
-    public func gooseSeries(amt: Int, speed: Double) -> SKAction {
-        SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: speed)]), count: amt)
+    //Adds a series of geese with number "amt" and waits for "gap" seconds between each goose. All geese in the series will have health of "hp" and move at speed "spd"
+    public func gooseSeries(amt: Int, gap: Double, hp: Int, spd: Double) -> SKAction {
+       // SKAction.repeat(SKAction.sequence([SKAction.run(addGoose(health: hp, speed: spd)), SKAction.wait(forDuration: gap)]), count: amt)
+        let gooseWait = SKAction.sequence([SKAction.run {
+            self.addGoose(health: hp, speed: spd)
+        },
+        SKAction.wait(forDuration: gap)
+        ])
+        return SKAction.repeat(gooseWait, count: amt)
     }
     
     func firstWave() -> SKAction{
         SKAction.sequence([
-            gooseSeries(amt: 5, speed: 1.5),
-            gooseSeries(amt: 5, speed: 1.0),
-            gooseSeries(amt: 200, speed: 0.7)
+            gooseSeries(amt: 5, gap: 1.5, hp: 50, spd: 1.0),
+            gooseSeries(amt: 5, gap: 1.0, hp : 100, spd: 1.1),
+            gooseSeries(amt: 200, gap: 0.7, hp : 150, spd: 1.3)
         ])
     }
 
