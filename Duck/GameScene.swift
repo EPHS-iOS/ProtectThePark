@@ -53,12 +53,28 @@ struct Nests {
     let nestNumber : Int
 }
 
+struct Ducks {
+    var canFire = true
+    let name: String
+    let sprite: SKSpriteNode
+}
+
 struct Buttons {
     let loc : CGPoint
     let sprite: SKSpriteNode
     var isPresent : Bool
     let parentButton : String
     let name : String
+}
+
+struct Gooses {
+    var health : CGFloat
+    let sprite : SKSpriteNode
+}
+
+struct breadcrumb  {
+    let damage : CGFloat
+    let sprite : SKSpriteNode
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate{
@@ -73,24 +89,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     public var remainingLives = 10
     public var healthLabel = SKLabelNode()
-    public var currentMoney = 100
+    public var currentMoney = 10000
     public var moneyLabel = SKLabelNode()
     //How much 1 duck costs and how much money you get per goose
     var duckCost = 100
-    var gooseReward = 10
+    var gooseReward = 100
     
     
     //Stores Information on Ducks and their corresponding detection radiuses in an array
     //Stored in a swift lock-key system
-    var duckLocs = [(SKSpriteNode,SKShapeNode)]()
+    var duckInfo = [(SKSpriteNode,SKShapeNode)]()
     
     //An array of all the buttons
     var currentButtons: [Buttons] = []
     
     //An array of all the nests CURRENTLY on the screen
     var currentNests: [Nests] = []
+    //array of geese
+    var currentGeese: [Gooses] = []
     
-    
+    var currentDucks: [Ducks] = []
     /* -------------------- FUNCTIONS -------------------- */
     
     func random() -> CGFloat {
@@ -156,9 +174,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let secondBody = contact.bodyB
         
         if (firstBody.categoryBitMask == PhysicsCategory.enemy) && (secondBody.categoryBitMask == PhysicsCategory.detection) {
-            detectionHandler(obj: secondBody.node as! SKShapeNode, thing: firstBody.node as! SKSpriteNode)
+            
+            let circleID  = (secondBody.node?.name!.replacingOccurrences(of: "DetectionCircle", with: "Duck"))!
+            let firingDuck = childNode(withName: circleID)!
+            
+            detectionHandler(circle: secondBody.node as! SKShapeNode, goose: firstBody.node as! SKSpriteNode, duck: firingDuck as! SKSpriteNode)
+            
         }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.detection) {
-            detectionHandler(obj: firstBody.node as! SKShapeNode, thing: secondBody.node as! SKSpriteNode)
+            let circleID  = (firstBody.node?.name!.replacingOccurrences(of: "DetectionCircle", with: "Duck"))!
+            let firingDuck = childNode(withName: circleID)!
+            
+            detectionHandler(circle: firstBody.node as! SKShapeNode, goose: secondBody.node as! SKSpriteNode, duck: firingDuck as! SKSpriteNode)
         }else if (firstBody.categoryBitMask == PhysicsCategory.enemy) && (secondBody.categoryBitMask == PhysicsCategory.projectile) {
             collisionHandler(proj: secondBody.node as! SKSpriteNode, enemy: firstBody.node as! SKSpriteNode)
         }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.projectile) {
@@ -297,7 +323,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             })
             
             //Checks if there is a duck at where you tapped.
-            for duck in duckLocs {
+            for duck in duckInfo {
                 if location.x >= duck.0.position.x - 20 && location.x <= duck.0.position.x + 20 && location.y >= duck.0.position.y - 20 && location.y <= duck.0.position.y + 20 {
                     print("Duck at this location: \(duck.0.position)")
                     if(duck.1.alpha > 0){
@@ -371,14 +397,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             return
         }
         //Makes a duck
-        let duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
+        var duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
         duck.position = loc
         duck.size = CGSize(width: duck.size.width/(self.frame.width/50), height: duck.size.height/(self.frame.width/50))
         duck.name = "Duck\(duckIDX)"
         duck.zPosition = 3
         
         // Detection Circle to detect Geese that are close
-        let detectionCircle = SKShapeNode(circleOfRadius: 100)
+        var detectionCircle = SKShapeNode(circleOfRadius: 100)
         detectionCircle.physicsBody = SKPhysicsBody(circleOfRadius: 80)
         detectionCircle.position = duck.position
         detectionCircle.fillColor = .cyan
@@ -397,14 +423,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         //DETECTIONS between objects; does not have an effect on if an object will or can bounce off one another or COLLIDE? Since we want the detection circle to detect geese or any enemy that are in the circle, we put the category "enemy" in.
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
+        var newDuck = Ducks(canFire: true, name: duck.name!, sprite: duck)
+        currentDucks.append(newDuck)
+        
         duckIDX+=1
         //Adds duck to current list of ducks
-        duckLocs.append((duck, detectionCircle))
+        duckInfo.append((duck, detectionCircle))
         addChild(detectionCircle)
         addChild(duck)
     }
     
-    func addGoose() {  // Goose Spawner
+    func addGoose(health: Int, speed: Double) {  // Goose Spawner
         
       // Create sprite
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
@@ -425,9 +454,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       
       // Add the goose to the scene
       addChild(goose)
+        let goose1 = Gooses(health : CGFloat(health), sprite: goose)
+        currentGeese.append(goose1)
         
-      // Determine speed of the geese. Bigger number = faster
-        let gooseSpeed = 0.9
+      
+        let gooseSpeed = speed
       
       // Create the actions
 
@@ -463,7 +494,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             ])
 
       goose.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
-        
     }
     
 
@@ -487,44 +517,130 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         crumb.zRotation = rotation
         addChild(crumb)
-          
+        let crumb1 = breadcrumb(damage: 10, sprite : crumb)
+        
         crumb.run(SKAction.sequence([SKAction.move(to: endPoint, duration: 0.2), SKAction.removeFromParent()]))
     }
     
+    
+    
     /* -------------------- HANDLERS -------------------- */
      //Used for the detection circle to indicate whether or not a goose has entered the "bread" zone
-    //NOTE: This is where you can get the geese's position as well ("thing" is the reference to the goose)
-    func detectionHandler(obj: SKShapeNode, thing: SKSpriteNode){
-        let circleID  = (obj.name!.replacingOccurrences(of: "DetectionCircle", with: "Duck"))
-        let spinningDuck = childNode(withName: circleID)!
-        let distanceX = spinningDuck.position.x - thing.position.x
-        let distanceY = spinningDuck.position.y - thing.position.y
+    //NOTE: This is where you can get the geese's position as well
+    func detectionHandler(circle: SKShapeNode, goose: SKSpriteNode, duck: SKSpriteNode){
+        
+        
+        let distanceX = duck.position.x - goose.position.x
+        let distanceY = duck.position.y - goose.position.y
         if distanceY >= 0 {
-            spinningDuck.zRotation = CGFloat(2 * Double.pi - atan(Double(distanceX/distanceY))) //If duck is above or equal to goose
+            duck.zRotation = CGFloat(2 * Double.pi - atan(Double(distanceX/distanceY))) //If duck is above or equal to goose
         } else {
-            spinningDuck.zRotation = CGFloat(Double.pi - atan(Double(distanceX/distanceY))) //If duck is below goose
+            duck.zRotation = CGFloat(Double.pi - atan(Double(distanceX/distanceY))) //If duck is below goose
         }
-        launchBreadcrumb(startPoint: obj.position, endPoint: thing.position)
-    }
+        launchBreadcrumb(startPoint: duck.position, endPoint: goose.position)
+        
+        
+        /*
+         
+        var i = 0
+            while i < currentDucks.count {
+                if currentDucks[0].name.suffix(1) == duck.name!.suffix(1) {
+                    if currentDucks[0].canFire {
+                        /*
+                        print(currentDucks[i].canFire)
+                        currentDucks[i].canFire = false
+                        launchBreadcrumb(startPoint: circle.position, endPoint: goose.position)
+                        print(currentDucks[i].canFire)
+                        SKAction.wait(forDuration: 10.0)
+                        currentDucks[i].canFire = true
+                        print(currentDucks[i].canFire)
+                        
+                        */
+                        run(SKAction.sequence([
+                            SKAction.run {
+                                //print(self.currentDucks[i].canFire)
+                                self.currentDucks[i].canFire = false
+                                self.launchBreadcrumb(startPoint: circle.position, endPoint: goose.position)
+                                //print(self.currentDucks[i].canFire)
+                            },
+                            SKAction.wait(forDuration: 1.5),
+                            
+                            SKAction.run {
+                                self.currentDucks[i].canFire = true
+                                print(self.currentDucks[i].canFire)
+                            },
+                        
+                        
+                        ]))
+                        
+                        
+                        return
+                        }
+                    }
+                    i += 1
+                }
+                i = 0
+         
+         */
+            }
+    
+        
+        
     
     //Used to actually deal damage to the goose if the breadcrumbs collide with a goose.
     func collisionHandler(proj: SKSpriteNode, enemy: SKSpriteNode) {
-        enemy.removeFromParent()
+    /*
+        
+        var i = 0
+        while(i < currentGeese.count){
+            if currentGeese[i].health <= 0{
+                enemy.removeFromParent()
+           
+        }else{
+            currentGeese[i].health = currentGeese[i].health - 50
+        }
+        i+=1
+    
+    }
+    i=0
+        
+        
+    */
+       var i = 0
+        while (i < currentGeese.count) {
+            if currentGeese[i].sprite == enemy {
+                currentGeese[i].health -= 50
+                if currentGeese[i].health <= 0 {
+                    enemy.removeFromParent()
+                }
+            }
+            i += 1
+        }
         proj.removeFromParent()
         self.currentMoney += gooseReward
         self.moneyLabel.text = "$: " + String(self.currentMoney)
+      
+        
+        
+        
     }
       
-    //Adds a series of geese with number "amt" and waits for "speed" seconds between each goose
-    public func gooseSeries(amt: Int, speed: Double) -> SKAction {
-        SKAction.repeat(SKAction.sequence([SKAction.run(addGoose), SKAction.wait(forDuration: speed)]), count: amt)
+    //Adds a series of geese with number "amt" and waits for "gap" seconds between each goose. All geese in the series will have health of "hp" and move at speed "spd"
+    public func gooseSeries(amt: Int, gap: Double, hp: Int, spd: Double) -> SKAction {
+       // SKAction.repeat(SKAction.sequence([SKAction.run(addGoose(health: hp, speed: spd)), SKAction.wait(forDuration: gap)]), count: amt)
+        let gooseWait = SKAction.sequence([SKAction.run {
+            self.addGoose(health: hp, speed: spd)
+        },
+        SKAction.wait(forDuration: gap)
+        ])
+        return SKAction.repeat(gooseWait, count: amt)
     }
     
     func firstWave() -> SKAction{
         SKAction.sequence([
-            gooseSeries(amt: 10, speed: 1.5),
-            gooseSeries(amt: 15, speed: 1.0),
-            gooseSeries(amt: 20, speed: 0.5)
+            gooseSeries(amt: 5, gap: 1.5, hp: 50, spd: 1.0),
+            gooseSeries(amt: 5, gap: 1.0, hp : 100, spd: 1.1),
+            gooseSeries(amt: 200, gap: 0.7, hp : 150, spd: 1.3)
         ])
     }
 

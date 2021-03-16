@@ -1,6 +1,6 @@
 //
 //  GameOverController.swift
-//  Duck
+//  Duck8
 //
 //  Created by 90307988 on 3/4/21.
 //
@@ -14,8 +14,10 @@ class GameOverController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
+   // let retryButton = UIButton.init(type: .roundedRect)
+     //   .setTitle("Click here to retry", for: .normal)
     
-
+    
     /*
     // MARK: - Navigation
 
