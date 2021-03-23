@@ -87,7 +87,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"portal")
     
-    public var remainingLives = 10
+    public var remainingLives = 1000
     public var healthLabel = SKLabelNode()
     public var currentMoney = 10000
     public var moneyLabel = SKLabelNode()
@@ -128,11 +128,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         physicsWorld.contactDelegate = self
 
         //Adding nest to appropriate spots
-        addNest(location: CGPoint(x: self.frame.width/12, y: self.frame.height/8.5))
-        addNest(location: CGPoint(x: self.frame.width/4.9, y: self.frame.height/1.8))
-        addNest(location: CGPoint(x: self.frame.width/2.5, y: self.frame.height/2.2))
-        addNest(location: CGPoint(x: self.frame.width/1.4, y: self.frame.height/1.75))
-        addNest(location: CGPoint(x: self.frame.width/1.25, y: self.frame.height/3.75))
+        addNest(location: CGPoint(x: self.frame.width/12, y: self.frame.height/8.5), isWater: false)
+        addNest(location: CGPoint(x: self.frame.width/4.9, y: self.frame.height/1.8), isWater: false)
+        addNest(location: CGPoint(x: self.frame.width/2.5, y: self.frame.height/2.2), isWater: false)
+        addNest(location: CGPoint(x: self.frame.width/1.4, y: self.frame.height/1.75), isWater: false)
+        addNest(location: CGPoint(x: self.frame.width/1.20, y: self.frame.height/3.50), isWater: true)
         
         //Label for the lives remaining
         healthLabel.text = "Remaining Lives:  " + String(remainingLives)
@@ -353,14 +353,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     /* -------------------- ADD FUNCTIONS -------------------- */
  
-    func addNest(location: CGPoint) {
+    func addNest(location: CGPoint, isWater: Bool) {
         let posScale = CGFloat(60)
         
         //Make the actual nest
-        let nest = SKSpriteNode(imageNamed: "Nest")
+        let nest: SKSpriteNode
+        if isWater {
+            nest = SKSpriteNode(imageNamed: "InnerTube")
+            nest.size = CGSize(width: nest.size.width/(self.frame.width/250), height: nest.size.height/(self.frame.width/250))
+        } else {
+            nest = SKSpriteNode(imageNamed: "Nest")
+            nest.size = CGSize(width: nest.size.width/(self.frame.width/45), height: nest.size.height/(self.frame.width/45))
+        }
         nest.position = location
         nest.name = "Nest\(nestIDX)"
-        nest.size = CGSize(width: nest.size.width/(self.frame.width/45), height: nest.size.height/(self.frame.width/45))
+        
         nest.zPosition = 2
         
         //Add the buttons for upgrades or ducks at a specified location above the nest.
