@@ -635,10 +635,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     //Adds a series of geese with number "amt" and waits for "gap" seconds between each goose. All geese in the series will have health of "hp" and move at speed "spd"
     public func gooseSeries(amt: Int, gap: Double, hp: Int, spd: Double) -> SKAction {
        // SKAction.repeat(SKAction.sequence([SKAction.run(addGoose(health: hp, speed: spd)), SKAction.wait(forDuration: gap)]), count: amt)
-        let gooseWait = SKAction.sequence([SKAction.run {
+        let gooseWait = SKAction.sequence([
+        SKAction.run {
             self.addGoose(health: hp, speed: spd)
         },
-        SKAction.wait(forDuration: gap)
+        SKAction.wait(forDuration: gap),
         ])
         return SKAction.repeat(gooseWait, count: amt)
     }
@@ -646,7 +647,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     func firstWave() -> SKAction{
         SKAction.sequence([
             gooseSeries(amt: 5, gap: 1.5, hp: 50, spd: 1.0),
+            SKAction.wait(forDuration: 0.1),
             gooseSeries(amt: 5, gap: 1.0, hp : 100, spd: 1.1),
+            SKAction.wait(forDuration: 0.1),
             gooseSeries(amt: 200, gap: 0.7, hp : 150, spd: 1.3)
         ])
     }
