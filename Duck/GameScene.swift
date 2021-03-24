@@ -87,13 +87,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"portal")
     
-    public var remainingLives = 1000
+    public var remainingLives = 10
     public var healthLabel = SKLabelNode()
-    public var currentMoney = 10000
+    public var currentMoney = 150
     public var moneyLabel = SKLabelNode()
+    public var waveLabel = SKLabelNode()
     //How much 1 duck costs and how much money you get per goose
     var duckCost = 100
-    var gooseReward = 100
+    var gooseReward = 10
     
     //Stores Information on Ducks and their corresponding detection radiuses in an array
     //Stored in a swift lock-key system
@@ -150,6 +151,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         moneyLabel.fontSize = CGFloat(20)
         moneyLabel.fontColor = .black
         addChild(moneyLabel)
+        
+        //Label for current wave
+        waveLabel.text = "Hello World"
+        waveLabel.zPosition = 2
+        waveLabel.position = CGPoint(x: self.frame.width/2.3, y: self.frame.height/1.1)
+        waveLabel.fontSize = CGFloat(20)
+        waveLabel.fontColor = .black
+        addChild(waveLabel)
     
         //Map
         currentMap.position = CGPoint(x: self.frame.width/2, y: self.frame.height/2)
@@ -158,6 +167,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         currentMap.zPosition = -1
         
         addChild(currentMap)
+    
         
         portal.position = CGPoint(x: self.frame.width/8.75, y: self.frame.height/1.05)
         portal.zPosition = 0
@@ -165,7 +175,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         addChild(portal)
  
-        run(firstWave())
+        run(waveSequence())
 
         }
     
@@ -632,13 +642,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 currentGeese[i].health -= 50
                 if currentGeese[i].health <= 0 {
                     enemy.removeFromParent()
+                    self.currentMoney += gooseReward
+                    self.moneyLabel.text = "$: " + String(self.currentMoney)
                 }
             }
             i += 1
         }
         proj.removeFromParent()
-        self.currentMoney += gooseReward
-        self.moneyLabel.text = "$: " + String(self.currentMoney)
+       
       
         
         
@@ -648,19 +659,97 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     //Adds a series of geese with number "amt" and waits for "gap" seconds between each goose. All geese in the series will have health of "hp" and move at speed "spd"
     public func gooseSeries(amt: Int, gap: Double, hp: Int, spd: Double) -> SKAction {
        // SKAction.repeat(SKAction.sequence([SKAction.run(addGoose(health: hp, speed: spd)), SKAction.wait(forDuration: gap)]), count: amt)
-        let gooseWait = SKAction.sequence([SKAction.run {
+        let gooseWait = SKAction.sequence([
+        SKAction.run {
             self.addGoose(health: hp, speed: spd)
         },
-        SKAction.wait(forDuration: gap)
+        SKAction.wait(forDuration: gap),
         ])
         return SKAction.repeat(gooseWait, count: amt)
     }
     
+    func waveSequence() -> SKAction{
+        SKAction.sequence([
+        firstWave(),
+        SKAction.wait(forDuration: 10.0),
+        secondWave(),
+        SKAction.wait(forDuration: 10.0),
+        thirdWave(),
+        SKAction.wait(forDuration: 10.0),
+        fourthWave(),
+        SKAction.wait(forDuration: 10.0),
+        fifthWave()
+        
+        ])
+    }
+    
     func firstWave() -> SKAction{
         SKAction.sequence([
-            gooseSeries(amt: 5, gap: 1.5, hp: 50, spd: 1.0),
-            gooseSeries(amt: 5, gap: 1.0, hp : 100, spd: 1.1),
-            gooseSeries(amt: 200, gap: 0.7, hp : 150, spd: 1.3)
+            SKAction.run {
+                self.waveLabel.text = "Wave 1"
+            },
+            gooseSeries(amt: 10, gap: 1.5, hp: 50, spd: 1.0),
+            SKAction.wait(forDuration: 0.1),
+            gooseSeries(amt: 15, gap: 1.0, hp : 100, spd: 1.1),
+            SKAction.wait(forDuration: 0.1),
+            gooseSeries(amt: 20, gap: 0.7, hp : 150, spd: 1.3)
+        ])
+    }
+    
+    func secondWave() -> SKAction{
+       
+        SKAction.sequence([
+            SKAction.run {
+                self.waveLabel.text = "Wave 2"
+            },
+            gooseSeries(amt: 5, gap: 1.0, hp: 100, spd: 1.0),
+            SKAction.wait(forDuration: 0.1),
+            gooseSeries(amt: 15, gap: 1.0, hp : 200, spd: 1.3),
+            SKAction.wait(forDuration: 0.1),
+            gooseSeries(amt: 30, gap: 0.5, hp : 200, spd: 1.5)
+        ])
+    }
+    
+    func thirdWave() -> SKAction{
+       
+        SKAction.sequence([
+            SKAction.run {
+                self.waveLabel.text = "Wave 3"
+            },
+            gooseSeries(amt: 10, gap: 0.7, hp: 150, spd: 1.3),
+            SKAction.wait(forDuration: 0.1),
+            gooseSeries(amt: 30, gap: 0.7, hp : 250, spd: 1.3),
+            SKAction.wait(forDuration: 0.1),
+            gooseSeries(amt: 25, gap: 1.0, hp : 200, spd: 1.5)
+        ])
+    }
+    
+    func fourthWave() -> SKAction{
+       
+        SKAction.sequence([
+            SKAction.run {
+                self.waveLabel.text = "Wave 4"
+            },
+            gooseSeries(amt: 15, gap: 0.5, hp: 100, spd: 1.3),
+            SKAction.wait(forDuration: 0.1),
+            gooseSeries(amt: 30, gap: 0.8, hp : 250, spd: 1.3),
+            SKAction.wait(forDuration: 0.1),
+            gooseSeries(amt: 2, gap: 1.0, hp : 150, spd: 2.0)
+        ])
+    }
+    
+    func fifthWave() -> SKAction{
+       
+        SKAction.sequence([
+            SKAction.run {
+                self.waveLabel.text = "Wave 5"
+            },
+            gooseSeries(amt: 10, gap: 0.4, hp: 100, spd: 2.3),
+            SKAction.wait(forDuration: 0.1),
+            gooseSeries(amt: 20, gap: 0.6, hp : 250, spd: 1.7),
+            SKAction.wait(forDuration: 0.1),
+            gooseSeries(amt: 20, gap: 0.5, hp : 200, spd: 1.5)
+            //Miniboss???
         ])
     }
 
