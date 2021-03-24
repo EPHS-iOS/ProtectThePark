@@ -183,16 +183,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 if duck.sprite.name!.suffix(1) == id {
                     aDuck = duck.sprite
                     detectionHandler(circle: secondBody.node as! SKShapeNode, goose: firstBody.node as! SKSpriteNode, duck: aDuck)
-                } else {
-                    print("ERROR: Could not find duck associated with... " + String(id!) + " | " + secondBody.node!.name!)
-                    return
                 }
             }
             
             
         }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.detection) {
-            
-            print("DOS")
             
             var aDuck : SKSpriteNode
             let id = firstBody.node!.name?.suffix(1)
@@ -200,9 +195,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 if duck.sprite.name!.suffix(1) == id {
                     aDuck = duck.sprite
                     detectionHandler(circle: firstBody.node as! SKShapeNode, goose: secondBody.node as! SKSpriteNode, duck: aDuck)
-                } else {
-                    print("ERROR: Could not find duck associated with... " + String(id!) + " | " + firstBody.node!.name!)
-                    return
                 }
             }
             
@@ -415,14 +407,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             return
         }
         //Makes a duck
-        var duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
+        let duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
         duck.position = loc
         duck.size = CGSize(width: duck.size.width/(self.frame.width/50), height: duck.size.height/(self.frame.width/50))
         duck.name = "Duck\(duckIDX)"
         duck.zPosition = 3
         
         // Detection Circle to detect Geese that are close
-        var detectionCircle = SKShapeNode(circleOfRadius: 100)
+        let detectionCircle = SKShapeNode(circleOfRadius: 100)
         detectionCircle.physicsBody = SKPhysicsBody(circleOfRadius: 80)
         detectionCircle.position = duck.position
         detectionCircle.fillColor = .cyan
@@ -441,7 +433,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         //DETECTIONS between objects; does not have an effect on if an object will or can bounce off one another or COLLIDE? Since we want the detection circle to detect geese or any enemy that are in the circle, we put the category "enemy" in.
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
-        var newDuck = Ducks(canFire: true, name: duck.name!, sprite: duck)
+        let newDuck = Ducks(canFire: true, name: duck.name!, sprite: duck)
         currentDucks.append(newDuck)
         
         duckIDX+=1
@@ -564,8 +556,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 
             //Check for the duck that is associated with the detection circle that was triggered.
             if currentDucks[i].sprite.name!.suffix(1) == duck.name!.suffix(1) {
-                    
                 print(currentDucks[i].name + " canFire = " + String(currentDucks[i].canFire))
+                print(i)
                 
                 if !currentDucks[i].canFire {
                     //If there is a cooldown, do nothing.
@@ -574,38 +566,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                        
                 if currentDucks[i].canFire {
                     //If there is not a cooldown, shoot the breadcrumb, wait for 2 seconds, and set cooldown back to false.
-//                    run(SKAction.sequence([SKAction.run {
-//                        self.launchBreadcrumb(startPoint: circle.position, endPoint: goose.position)
-//
-//                        print(self.currentDucks[i].name + " is going to be set to false")
-//                        self.currentDucks[i].canFire = false
-//
-//
-//                    }, SKAction.wait(forDuration: 3),
-//
-//                    SKAction.run {
-//                        self.currentDucks[i].canFire = true
-//                    }
-//
-//                    ])
-//                    )
-                    
                     run(SKAction.sequence([
                         
                             SKAction.run {
                                 
                                 self.launchBreadcrumb(startPoint: circle.position, endPoint: goose.position)
-                                //print(self.currentDucks[i].name + " is going to be set to false")
-                                self.currentDucks[i].canFire = false
+                                print(self.currentDucks[Int(duck.name!.suffix(1))!].name + " is going to be set to false")
+                                self.currentDucks[Int(duck.name!.suffix(1))!].canFire = false
                                 
                             }
                             ,
-                            SKAction.wait(forDuration: 3)
+                        SKAction.wait(forDuration: 0.5)
                             ,
                             
                             SKAction.run{
                                 
-                                self.currentDucks[i].canFire = true
+                                self.currentDucks[Int(duck.name!.suffix(1))!].canFire = true
                                 
                             }
                             
