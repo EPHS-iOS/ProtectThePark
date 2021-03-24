@@ -95,7 +95,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var duckCost = 100
     var gooseReward = 100
     
-    
     //Stores Information on Ducks and their corresponding detection radiuses in an array
     //Stored in a swift lock-key system
     var duckInfo = [(SKSpriteNode,SKShapeNode)]()
@@ -108,7 +107,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     //array of geese
     var currentGeese: [Gooses] = []
     
+    //An array of current ducks on the screen
     var currentDucks: [Ducks] = []
+    
     /* -------------------- FUNCTIONS -------------------- */
     
     func random() -> CGFloat {
@@ -170,21 +171,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //Detects any COLLISIONS and CONTACTS
     func didBegin(_ contact: SKPhysicsContact) {
+        
         let firstBody = contact.bodyA
         let secondBody = contact.bodyB
         
         if (firstBody.categoryBitMask == PhysicsCategory.enemy) && (secondBody.categoryBitMask == PhysicsCategory.detection) {
+        
+            var aDuck : SKSpriteNode
+            let id = secondBody.node!.name?.suffix(1)
+            for duck in currentDucks {
+                if duck.sprite.name!.suffix(1) == id {
+                    aDuck = duck.sprite
+                    detectionHandler(circle: secondBody.node as! SKShapeNode, goose: firstBody.node as! SKSpriteNode, duck: aDuck)
+                }
+            }
             
-            let circleID  = (secondBody.node?.name!.replacingOccurrences(of: "DetectionCircle", with: "Duck"))!
-            let firingDuck = childNode(withName: circleID)!
-            
-            detectionHandler(circle: secondBody.node as! SKShapeNode, goose: firstBody.node as! SKSpriteNode, duck: firingDuck as! SKSpriteNode)
             
         }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.detection) {
-            let circleID  = (firstBody.node?.name!.replacingOccurrences(of: "DetectionCircle", with: "Duck"))!
-            let firingDuck = childNode(withName: circleID)!
             
-            detectionHandler(circle: firstBody.node as! SKShapeNode, goose: secondBody.node as! SKSpriteNode, duck: firingDuck as! SKSpriteNode)
+            var aDuck : SKSpriteNode
+            let id = firstBody.node!.name?.suffix(1)
+            for duck in currentDucks {
+                if duck.sprite.name!.suffix(1) == id {
+                    aDuck = duck.sprite
+                    detectionHandler(circle: firstBody.node as! SKShapeNode, goose: secondBody.node as! SKSpriteNode, duck: aDuck)
+                }
+            }
+            
+            
         }else if (firstBody.categoryBitMask == PhysicsCategory.enemy) && (secondBody.categoryBitMask == PhysicsCategory.projectile) {
             collisionHandler(proj: secondBody.node as! SKSpriteNode, enemy: firstBody.node as! SKSpriteNode)
         }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.projectile) {
@@ -197,14 +211,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     func showOptions(nn: SKSpriteNode) {
         
-        if currentMoney < 100 {
-            print(nn.name!)
+        if currentMoney < duckCost {
             print("Could not purchase duck: Insufficient Costs")
             return
         }
         
         if nn.name?.suffix(4) == "true" {
-            print(nn.name!)
             print("Could not purchase duck: Duck is already there!")
         }
         
@@ -296,7 +308,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                             
                         }
                         
-                        print(node.name!)
                         let upDown : CGFloat = -60
                         let leftRight: CGFloat = -3
                         
@@ -325,7 +336,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             //Checks if there is a duck at where you tapped.
             for duck in duckInfo {
                 if location.x >= duck.0.position.x - 20 && location.x <= duck.0.position.x + 20 && location.y >= duck.0.position.y - 20 && location.y <= duck.0.position.y + 20 {
-                    print("Duck at this location: \(duck.0.position)")
+                    
                     if(duck.1.alpha > 0){
                         duck.1.alpha = 0
                     } else {
@@ -394,7 +405,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func addDuck(loc: CGPoint) {
-        print(loc)
         
         //Only allows a duck to be placed if player has enough money and if there is not more than 5 ducks, and subtracts that money from their total
         if (self.currentMoney >= duckCost) {
@@ -404,14 +414,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             return
         }
         //Makes a duck
-        var duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
+        let duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
         duck.position = loc
         duck.size = CGSize(width: duck.size.width/(self.frame.width/50), height: duck.size.height/(self.frame.width/50))
         duck.name = "Duck\(duckIDX)"
         duck.zPosition = 3
         
         // Detection Circle to detect Geese that are close
-        var detectionCircle = SKShapeNode(circleOfRadius: 100)
+        let detectionCircle = SKShapeNode(circleOfRadius: 100)
         detectionCircle.physicsBody = SKPhysicsBody(circleOfRadius: 80)
         detectionCircle.position = duck.position
         detectionCircle.fillColor = .cyan
@@ -430,7 +440,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         //DETECTIONS between objects; does not have an effect on if an object will or can bounce off one another or COLLIDE? Since we want the detection circle to detect geese or any enemy that are in the circle, we put the category "enemy" in.
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
-        var newDuck = Ducks(canFire: true, name: duck.name!, sprite: duck)
+        let newDuck = Ducks(canFire: true, name: duck.name!, sprite: duck)
         currentDucks.append(newDuck)
         
         duckIDX+=1
@@ -506,6 +516,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
 
     /* -------------------- ACTIONS -------------------- */
     func launchBreadcrumb (startPoint: CGPoint, endPoint: CGPoint) {
+        
         let crumb = SKSpriteNode (imageNamed: "Breadcrumb")
         crumb.size = CGSize(width: 30, height: 30)
         crumb.position = startPoint
@@ -533,65 +544,67 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     /* -------------------- HANDLERS -------------------- */
      //Used for the detection circle to indicate whether or not a goose has entered the "bread" zone
-    //NOTE: This is where you can get the geese's position as well
+    //NOTE: This is where you can get the geese's position as well.
     func detectionHandler(circle: SKShapeNode, goose: SKSpriteNode, duck: SKSpriteNode){
-        
-        
-        let distanceX = duck.position.x - goose.position.x
-        let distanceY = duck.position.y - goose.position.y
+
+        let circleID  = (circle.name!.replacingOccurrences(of: "DetectionCircle", with: "Duck"))
+        let spinningDuck = childNode(withName: circleID)!
+        let distanceX = spinningDuck.position.x - goose.position.x
+        let distanceY = spinningDuck.position.y - goose.position.y
         if distanceY >= 0 {
             duck.zRotation = CGFloat(2 * Double.pi - atan(Double(distanceX/distanceY))) //If duck is above or equal to goose
         } else {
             duck.zRotation = CGFloat(Double.pi - atan(Double(distanceX/distanceY))) //If duck is below goose
         }
-        launchBreadcrumb(startPoint: duck.position, endPoint: goose.position)
-        
-        
-        /*
-         
+
+        //Cooldown
         var i = 0
-            while i < currentDucks.count {
-                if currentDucks[0].name.suffix(1) == duck.name!.suffix(1) {
-                    if currentDucks[0].canFire {
-                        /*
-                        print(currentDucks[i].canFire)
-                        currentDucks[i].canFire = false
-                        launchBreadcrumb(startPoint: circle.position, endPoint: goose.position)
-                        print(currentDucks[i].canFire)
-                        SKAction.wait(forDuration: 10.0)
-                        currentDucks[i].canFire = true
-                        print(currentDucks[i].canFire)
-                        
-                        */
-                        run(SKAction.sequence([
-                            SKAction.run {
-                                //print(self.currentDucks[i].canFire)
-                                self.currentDucks[i].canFire = false
-                                self.launchBreadcrumb(startPoint: circle.position, endPoint: goose.position)
-                                //print(self.currentDucks[i].canFire)
-                            },
-                            SKAction.wait(forDuration: 1.5),
-                            
-                            SKAction.run {
-                                self.currentDucks[i].canFire = true
-                                print(self.currentDucks[i].canFire)
-                            },
-                        
-                        
-                        ]))
-                        
-                        
-                        return
-                        }
-                    }
-                    i += 1
+        while i < currentDucks.count {
+                
+            //Check for the duck that is associated with the detection circle that was triggered.
+            if currentDucks[i].sprite.name!.suffix(1) == duck.name!.suffix(1) {
+                print(currentDucks[i].name + " canFire = " + String(currentDucks[i].canFire))
+                print(i)
+                
+                if !currentDucks[i].canFire {
+                    //If there is a cooldown, do nothing.
+                    return
                 }
-                i = 0
-         
-         */
+                       
+                if currentDucks[i].canFire {
+                    //If there is not a cooldown, shoot the breadcrumb, wait for 2 seconds, and set cooldown back to false.
+                    run(SKAction.sequence([
+                        
+                            SKAction.run {
+                                
+                                self.launchBreadcrumb(startPoint: circle.position, endPoint: goose.position)
+                                print(self.currentDucks[Int(duck.name!.suffix(1))!].name + " is going to be set to false")
+                                self.currentDucks[Int(duck.name!.suffix(1))!].canFire = false
+                                
+                            }
+                            ,
+                        SKAction.wait(forDuration: 0.5)
+                            ,
+                            
+                            SKAction.run{
+                                
+                                self.currentDucks[Int(duck.name!.suffix(1))!].canFire = true
+                                
+                            }
+                            
+                        ])
+                    )
+                    
+                }
+                
             }
-    
+            
+            i+=1
+        }
+        i=0
         
+    }
+    
         
     
     //Used to actually deal damage to the goose if the breadcrumbs collide with a goose.
