@@ -107,6 +107,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     //array of geese
     var currentGeese: [Gooses] = []
     
+    //An array of current ducks on the screen
     var currentDucks: [Ducks] = []
     
     /* -------------------- FUNCTIONS -------------------- */
@@ -182,11 +183,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 if duck.sprite.name!.suffix(1) == id {
                     aDuck = duck.sprite
                     detectionHandler(circle: secondBody.node as! SKShapeNode, goose: firstBody.node as! SKSpriteNode, duck: aDuck)
+                } else {
+                    print("ERROR: Could not find duck associated with... " + String(id!) + " | " + secondBody.node!.name!)
+                    return
                 }
             }
             
             
         }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.detection) {
+            
+            print("DOS")
             
             var aDuck : SKSpriteNode
             let id = firstBody.node!.name?.suffix(1)
@@ -194,6 +200,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 if duck.sprite.name!.suffix(1) == id {
                     aDuck = duck.sprite
                     detectionHandler(circle: firstBody.node as! SKShapeNode, goose: secondBody.node as! SKSpriteNode, duck: aDuck)
+                } else {
+                    print("ERROR: Could not find duck associated with... " + String(id!) + " | " + firstBody.node!.name!)
+                    return
                 }
             }
             
@@ -606,9 +615,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 }
                 
             }
+            
             i+=1
         }
         i=0
+        
     }
     
         
