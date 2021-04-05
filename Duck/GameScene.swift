@@ -60,7 +60,6 @@ struct Ducks {
     var damage: CGFloat
     var level: Int
     var upgradeCost: Int
-    var damageUp: CGFloat
 }
 
 struct Buttons {
@@ -100,7 +99,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //How much 1 duck costs and how much money you get per goose
     var duckCost = 100
-    var gooseReward = 10
+    var gooseReward = 20
     
     //Stores Information on Ducks and their corresponding detection radiuses in an array
     //Stored in a swift lock-key system
@@ -309,22 +308,60 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             print("Not enough money to upgrade duck")
             return
         }
-        if duck.name.suffix(1) == "0" {
-            for button in currentButtons{
-                if button.name.suffix(1) == "0"{
-                    if button.sprite.alpha == 1 {
-                        button.sprite.alpha = 0
+            var i = 0
+            while i < currentButtons.count {
+                if currentButtons[i].name.suffix(1) == "0"{
+                    if currentButtons[i].sprite.alpha == 1 {
+                        currentButtons[i].sprite.alpha = 0
                         return
                     }
                     
-                    button.sprite.alpha = 1
-                    button.name = "Upgrade0"
+                    currentButtons[i].sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade0"
                 }
+                
+                else if currentButtons[i].name.suffix(1) == "1"{
+                    if currentButtons[i].sprite.alpha == 1 {
+                        currentButtons[i].sprite.alpha = 0
+                        return
+                    }
+                    
+                    currentButtons[i].sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade1"
+                }
+                else if currentButtons[i].name.suffix(1) == "2"{
+                    if currentButtons[i].sprite.alpha == 1 {
+                        currentButtons[i].sprite.alpha = 0
+                        return
+                    }
+                    
+                    currentButtons[i].sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade3"
+                }
+                else if currentButtons[i].name.suffix(1) == "3"{
+                    if currentButtons[i].sprite.alpha == 1 {
+                        currentButtons[i].sprite.alpha = 0
+                        return
+                    }
+                    
+                    currentButtons[i].sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade3"
+                }
+                else if currentButtons[i].name.suffix(1) == "4"{
+                    if currentButtons[i].sprite.alpha == 1 {
+                        currentButtons[i].sprite.alpha = 0
+                        return
+                    }
+                    
+                    currentButtons[i].sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade4"
+                }
+                
+                
+                i += 1
             }
-            let i = 0
-            
         }
-    }
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
@@ -368,6 +405,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                         } else if node.name == "Option4" {
                             self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown))
                             node.alpha = 0
+                        }
+                        
+                    }
+                }
+                
+                else if node.name?.prefix(7) == "Upgrade" {
+                    if node.contains(location) {
+                        if node.alpha == 0 {
+                            print("Upgrade button does not exist")
+                            return
+                        }
+                        let nodeIDNum = node.name!.suffix(1)
+                        var i = 0
+                        while i < self.currentDucks.count {
+                            if self.currentDucks[i].name.suffix(1) == nodeIDNum {
+                                if self.currentDucks[i].level < 5{
+                                self.currentDucks[i].level += 1 //Increase duck level by 1
+                                self.currentDucks[i].damage = self.damageCalc(currentLvl: self.currentDucks[i].level) //Increase the specific duck's damage by the given amount
+                                self.currentMoney -= self.currentDucks[i].upgradeCost
+                                self.moneyLabel.text = "$: " + String(self.currentMoney) //Deduct the correct amount of money from the player's total and update the label
+                                self.currentDucks[i].upgradeCost = self.upgradeCostCalc(currentLvl: self.currentDucks[i].level)
+                                //Troubleshooting
+                                let duckName = self.currentDucks[i].name
+                                let duckDmg = String(Int(self.currentDucks[i].damage))
+                                let duckUpCost = String(self.currentDucks[i].upgradeCost)
+                                let duckLvl = String(self.currentDucks[i].level)
+                                print ("Duck " + duckName + " is level " + duckLvl + ", deals " + duckDmg + " damage and costs " + duckUpCost + " to upgrade")
+                                } else {
+                                    print("This duck is maximum level")
+                                }
+                            }
+                            i += 1
                         }
                         
                     }
@@ -495,7 +564,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         //DETECTIONS between objects; does not have an effect on if an object will or can bounce off one another or COLLIDE? Since we want the detection circle to detect geese or any enemy that are in the circle, we put the category "enemy" in.
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
-        let newDuck = Ducks(canFire: true, name: duck.name!, sprite: duck, damage: 50, level: 1, upgradeCost: 250, damageUp: 30)
+        let newDuck = Ducks(canFire: true, name: duck.name!, sprite: duck, damage: damageCalc(currentLvl: 1), level: 1, upgradeCost: upgradeCostCalc(currentLvl: 1))
         currentDucks.append(newDuck)
         
         duckIDX+=1
@@ -581,7 +650,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         crumb.physicsBody?.usesPreciseCollisionDetection = true
         crumb.physicsBody?.affectedByGravity = false
         crumb.physicsBody?.isDynamic = true
-       
         crumb.physicsBody?.categoryBitMask = PhysicsCategory.projectile //Breadcrumb is type projectile
         crumb.physicsBody?.collisionBitMask = PhysicsCategory.none //We want the breadcrumb to bounce off the goose
         crumb.physicsBody?.contactTestBitMask = PhysicsCategory.enemy //We want to detect when the breadcrumb touches the goose
@@ -595,6 +663,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
        
     }
+    
+    func upgradeCostCalc(currentLvl: Int) -> Int{
+        return (100 * currentLvl) + (50 * currentLvl^2)
+    }
+    
+    func damageCalc(currentLvl: Int) -> CGFloat{
+        return CGFloat((10 * currentLvl) + (20 * currentLvl^2))
+    }
+    
     
     
     
@@ -714,11 +791,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 1"
             },
-            gooseSeries(amt: 10, gap: 1.5, hp: 50, spd: 1.0),
+            gooseSeries(amt: 10, gap: 1.5, hp: 10, spd: 1.0),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 15, gap: 1.0, hp : 100, spd: 1.1),
+            gooseSeries(amt: 15, gap: 1.0, hp : 20, spd: 1.1),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 0.4, hp : 150, spd: 1.3)
+            //gooseSeries(amt: 20, gap: 0.4, hp : 50, spd: 1.3)
         ])
     }
     
