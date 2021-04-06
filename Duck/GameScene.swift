@@ -649,10 +649,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             i += 1
         }
         proj.removeFromParent()
-       
-      
-        
-        
         
     }
       
