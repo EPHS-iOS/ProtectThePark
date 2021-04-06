@@ -308,58 +308,89 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             print("Not enough money to upgrade duck")
             return
         }
+        if duck.name.suffix(1) == "0" {
             var i = 0
-            while i < currentButtons.count {
-                if currentButtons[i].name.suffix(1) == "0"{
-                    if currentButtons[i].sprite.alpha == 1 {
-                        currentButtons[i].sprite.alpha = 0
+            while i < currentButtons.count{
+                let button = currentButtons[i]
+                if button.name.suffix(1) == "0" {
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
                         return
                     }
                     
-                    currentButtons[i].sprite.alpha = 1
+                    button.sprite.alpha = 1
                     currentButtons[i].name = "Upgrade0"
+                    i += 1
                 }
-                
-                else if currentButtons[i].name.suffix(1) == "1"{
-                    if currentButtons[i].sprite.alpha == 1 {
-                        currentButtons[i].sprite.alpha = 0
-                        return
-                    }
-                    
-                    currentButtons[i].sprite.alpha = 1
-                    currentButtons[i].name = "Upgrade1"
-                }
-                else if currentButtons[i].name.suffix(1) == "2"{
-                    if currentButtons[i].sprite.alpha == 1 {
-                        currentButtons[i].sprite.alpha = 0
-                        return
-                    }
-                    
-                    currentButtons[i].sprite.alpha = 1
-                    currentButtons[i].name = "Upgrade3"
-                }
-                else if currentButtons[i].name.suffix(1) == "3"{
-                    if currentButtons[i].sprite.alpha == 1 {
-                        currentButtons[i].sprite.alpha = 0
-                        return
-                    }
-                    
-                    currentButtons[i].sprite.alpha = 1
-                    currentButtons[i].name = "Upgrade3"
-                }
-                else if currentButtons[i].name.suffix(1) == "4"{
-                    if currentButtons[i].sprite.alpha == 1 {
-                        currentButtons[i].sprite.alpha = 0
-                        return
-                    }
-                    
-                    currentButtons[i].sprite.alpha = 1
-                    currentButtons[i].name = "Upgrade4"
-                }
-                
-                
-                i += 1
             }
+            
+        } else if duck.name.suffix(1) == "1" {
+            var i = 0
+            while i < currentButtons.count{
+                let button = currentButtons[i]
+                if button.name.suffix(1) == "1" {
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade1"
+                    i += 1
+                }
+            }
+            
+        }else if duck.name.suffix(1) == "2" {
+            var i = 0
+            while i < currentButtons.count{
+                let button = currentButtons[i]
+                if button.name.suffix(1) == "2" {
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade2"
+                    i += 1
+                }
+            }
+            
+        } else if duck.name.suffix(1) == "3" {
+            var i = 0
+            while i < currentButtons.count{
+                let button = currentButtons[i]
+                if button.name.suffix(1) == "3" {
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade3"
+                    i += 1
+                }
+            }
+            
+        } else if duck.name.suffix(1) == "4" {
+            var i = 0
+            while i < currentButtons.count{
+                let button = currentButtons[i]
+                if button.name.suffix(1) == "4" {
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade4"
+                    i += 1
+                }
+            }
+            
+        }
+                
+            
         }
     
     
@@ -419,13 +450,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                         let nodeIDNum = node.name!.suffix(1)
                         var i = 0
                         while i < self.currentDucks.count {
-                            if self.currentDucks[i].name.suffix(1) == nodeIDNum {
+                            if seslf.currentDucks[i].name.suffix(1) == nodeIDNum {
                                 if self.currentDucks[i].level < 5{
                                 self.currentDucks[i].level += 1 //Increase duck level by 1
-                                self.currentDucks[i].damage = self.damageCalc(currentLvl: self.currentDucks[i].level) //Increase the specific duck's damage by the given amount
+                                self.currentDucks[i].damage = self.damageCalc(currentLvl: self.currentDucks[i].level) //Calcuate the new correct damage value and give it to the duck
                                 self.currentMoney -= self.currentDucks[i].upgradeCost
                                 self.moneyLabel.text = "$: " + String(self.currentMoney) //Deduct the correct amount of money from the player's total and update the label
-                                self.currentDucks[i].upgradeCost = self.upgradeCostCalc(currentLvl: self.currentDucks[i].level)
+                                self.currentDucks[i].upgradeCost = self.upgradeCostCalc(currentLvl: self.currentDucks[i].level) //Calculate the new cost to reach the next level
+                                
+                                    
                                 //Troubleshooting
                                 let duckName = self.currentDucks[i].name
                                 let duckDmg = String(Int(self.currentDucks[i].damage))
