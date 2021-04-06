@@ -92,7 +92,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     public var currentMoney = 150
     public var moneyLabel = SKLabelNode()
     public var waveLabel = SKLabelNode()
-    public var didWin = false
     //How much 1 duck costs and how much money you get per goose
     var duckCost = 100
     var gooseReward = 10
@@ -178,8 +177,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
  
         run(waveSequence())
         
-       
-
         }
     
     //Detects any COLLISIONS and CONTACTS
@@ -656,11 +653,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             i += 1
         }
         proj.removeFromParent()
-       
-        if didWin == true {
-            let VictoryScene = SKScene(fileNamed: "Victory")
-            self.view?.presentScene(VictoryScene)
-        }
+        
         
     }
       
@@ -695,13 +688,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
     }
     
-    func win(){
-    
-    SKAction.wait(forDuration: 30.0)
-    let VictoryScene = SKScene(fileNamed: "Victory")
-    self.view?.presentScene(VictoryScene)
-    didWin = true
-}
     
     func firstWave() -> SKAction{
         SKAction.sequence([
@@ -787,15 +773,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "The end"
                 SKAction.wait(forDuration: 5.0)
-                self.didWin = true
-               
+                let VictoryScene = SKScene(fileNamed: "Victory")
+                self.view?.presentScene(VictoryScene)
             },
-            gooseSeries(amt: 1, gap: 0.4, hp: 50, spd: 1.3),
-            SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 2, gap: 0.6, hp : 50, spd: 1.0),
-            SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 2, gap: 0.5, hp : 50, spd: 1.0),
-                            
-                ])
+            ])
         }
 }
