@@ -57,6 +57,9 @@ struct Ducks {
     var canFire = true
     let name: String
     let sprite: SKSpriteNode
+    var damage: CGFloat
+    var level: Int
+    var upgradeCost: Int
 }
 
 struct Buttons {
@@ -64,7 +67,7 @@ struct Buttons {
     let sprite: SKSpriteNode
     var isPresent : Bool
     let parentButton : String
-    let name : String
+    var name : String
 }
 
 struct Gooses {
@@ -92,9 +95,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     public var currentMoney = 150
     public var moneyLabel = SKLabelNode()
     public var waveLabel = SKLabelNode()
+    public var currentCrumb: breadcrumb = breadcrumb(damage: 0, sprite: SKSpriteNode())
+    
     //How much 1 duck costs and how much money you get per goose
     var duckCost = 100
-    var gooseReward = 10
+    var gooseReward = 20
     
     //Stores Information on Ducks and their corresponding detection radiuses in an array
     //Stored in a swift lock-key system
@@ -110,6 +115,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //An array of current ducks on the screen
     var currentDucks: [Ducks] = []
+    
     
     /* -------------------- FUNCTIONS -------------------- */
     
@@ -210,9 +216,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             
             
         }else if (firstBody.categoryBitMask == PhysicsCategory.enemy) && (secondBody.categoryBitMask == PhysicsCategory.projectile) {
-            collisionHandler(proj: secondBody.node as! SKSpriteNode, enemy: firstBody.node as! SKSpriteNode)
+           
+            
+            collisionHandler(proj: secondBody.node as! SKSpriteNode, enemy: firstBody.node as! SKSpriteNode, dmg: currentCrumb.damage)
         }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.projectile) {
-            collisionHandler(proj: firstBody.node as! SKSpriteNode, enemy: secondBody.node as! SKSpriteNode)
+           
+            collisionHandler(proj: firstBody.node as! SKSpriteNode, enemy: secondBody.node as! SKSpriteNode, dmg: currentCrumb.damage)
         }else{
             return
         }
@@ -294,6 +303,97 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
 
     }
     
+    func showUpgrades (duck: Ducks) {
+        if currentMoney < duck.upgradeCost {
+            print("Not enough money to upgrade duck")
+            return
+        }
+        if duck.name.suffix(1) == "0" {
+            var i = 0
+            while i < currentButtons.count{
+                let button = currentButtons[i]
+                if button.name.suffix(1) == "0" {
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade0"
+                    i += 1
+                }
+            }
+            
+        } else if duck.name.suffix(1) == "1" {
+            var i = 0
+            while i < currentButtons.count{
+                let button = currentButtons[i]
+                if button.name.suffix(1) == "1" {
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade1"
+                    i += 1
+                }
+            }
+            
+        }else if duck.name.suffix(1) == "2" {
+            var i = 0
+            while i < currentButtons.count{
+                let button = currentButtons[i]
+                if button.name.suffix(1) == "2" {
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade2"
+                    i += 1
+                }
+            }
+            
+        } else if duck.name.suffix(1) == "3" {
+            var i = 0
+            while i < currentButtons.count{
+                let button = currentButtons[i]
+                if button.name.suffix(1) == "3" {
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade3"
+                    i += 1
+                }
+            }
+            
+        } else if duck.name.suffix(1) == "4" {
+            var i = 0
+            while i < currentButtons.count{
+                let button = currentButtons[i]
+                if button.name.suffix(1) == "4" {
+                    if button.sprite.alpha == 1 {
+                        button.sprite.alpha = 0
+                        return
+                    }
+                    
+                    button.sprite.alpha = 1
+                    currentButtons[i].name = "Upgrade4"
+                    i += 1
+                }
+            }
+            
+        }
+                
+            
+        }
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             
@@ -341,6 +441,50 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     }
                 }
                 
+                else if node.name?.prefix(7) == "Upgrade" {
+                    if node.contains(location) {
+                        if node.alpha == 0 {
+                            print("Upgrade button does not exist")
+                            return
+                        }
+                        let nodeIDNum = node.name!.suffix(1)
+                        var i = 0
+                        while i < self.currentDucks.count {
+                            if seslf.currentDucks[i].name.suffix(1) == nodeIDNum {
+                                if self.currentDucks[i].level < 5{
+                                self.currentDucks[i].level += 1 //Increase duck level by 1
+                                self.currentDucks[i].damage = self.damageCalc(currentLvl: self.currentDucks[i].level) //Calcuate the new correct damage value and give it to the duck
+                                self.currentMoney -= self.currentDucks[i].upgradeCost
+                                self.moneyLabel.text = "$: " + String(self.currentMoney) //Deduct the correct amount of money from the player's total and update the label
+                                self.currentDucks[i].upgradeCost = self.upgradeCostCalc(currentLvl: self.currentDucks[i].level) //Calculate the new cost to reach the next level
+                                
+                                    
+                                //Troubleshooting
+                                let duckName = self.currentDucks[i].name
+                                let duckDmg = String(Int(self.currentDucks[i].damage))
+                                let duckUpCost = String(self.currentDucks[i].upgradeCost)
+                                let duckLvl = String(self.currentDucks[i].level)
+                                print ("Duck " + duckName + " is level " + duckLvl + ", deals " + duckDmg + " damage and costs " + duckUpCost + " to upgrade")
+                                } else {
+                                    print("This duck is maximum level")
+                                }
+                            }
+                            i += 1
+                        }
+                        
+                    }
+                }
+                else if node.name?.prefix(4) == "Duck" {
+                    if node.contains(location) {
+                        for ducks in self.currentDucks {
+                            if ducks.name.suffix(1) == node.name?.suffix(1) {
+                                self.showUpgrades(duck: ducks)
+                            }
+                        }
+                        
+                    }
+                }
+                
             })
             
             //Checks if there is a duck at where you tapped.
@@ -352,8 +496,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     } else {
                         duck.1.alpha = 0.1
                     }
+                    
+                    
                 }
             }
+            
             
         }
     }
@@ -416,7 +563,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     func addDuck(loc: CGPoint) {
         
-        //Only allows a duck to be placed if player has enough money and if there is not more than 5 ducks, and subtracts that money from their total
+        //Only allows a duck to be placed if player has enough money and subtracts that money from their total
         if (self.currentMoney >= duckCost) {
             self.currentMoney -= duckCost
             self.moneyLabel.text = "$: " + String(self.currentMoney)
@@ -450,7 +597,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         //DETECTIONS between objects; does not have an effect on if an object will or can bounce off one another or COLLIDE? Since we want the detection circle to detect geese or any enemy that are in the circle, we put the category "enemy" in.
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
-        let newDuck = Ducks(canFire: true, name: duck.name!, sprite: duck)
+        let newDuck = Ducks(canFire: true, name: duck.name!, sprite: duck, damage: damageCalc(currentLvl: 1), level: 1, upgradeCost: upgradeCostCalc(currentLvl: 1))
         currentDucks.append(newDuck)
         
         duckIDX+=1
@@ -525,7 +672,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
 
     /* -------------------- ACTIONS -------------------- */
-    func launchBreadcrumb (startPoint: CGPoint, endPoint: CGPoint) {
+    func launchBreadcrumb (startPoint: CGPoint, endPoint: CGPoint, dmg: CGFloat, duck: Ducks) -> breadcrumb {
         
         let crumb = SKSpriteNode (imageNamed: "Breadcrumb")
         crumb.size = CGSize(width: 30, height: 30)
@@ -536,7 +683,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         crumb.physicsBody?.usesPreciseCollisionDetection = true
         crumb.physicsBody?.affectedByGravity = false
         crumb.physicsBody?.isDynamic = true
-       
         crumb.physicsBody?.categoryBitMask = PhysicsCategory.projectile //Breadcrumb is type projectile
         crumb.physicsBody?.collisionBitMask = PhysicsCategory.none //We want the breadcrumb to bounce off the goose
         crumb.physicsBody?.contactTestBitMask = PhysicsCategory.enemy //We want to detect when the breadcrumb touches the goose
@@ -545,10 +691,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         crumb.zRotation = rotation
         addChild(crumb)
-        let crumb1 = breadcrumb(damage: 10, sprite : crumb)
-        
         crumb.run(SKAction.sequence([SKAction.move(to: endPoint, duration: 0.2), SKAction.removeFromParent()]))
+        return breadcrumb(damage: duck.damage, sprite : crumb)
+        
+       
     }
+    
+    func upgradeCostCalc(currentLvl: Int) -> Int{
+        return (100 * currentLvl) + (50 * currentLvl^2)
+    }
+    
+    func damageCalc(currentLvl: Int) -> CGFloat{
+        return CGFloat((10 * currentLvl) + (20 * currentLvl^2))
+    }
+    
     
     
     
@@ -557,16 +713,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     //NOTE: This is where you can get the geese's position as well.
     func detectionHandler(circle: SKShapeNode, goose: SKSpriteNode, duck: SKSpriteNode){
 
-        let circleID  = (circle.name!.replacingOccurrences(of: "DetectionCircle", with: "Duck"))
-        let spinningDuck = childNode(withName: circleID)!
-        let distanceX = spinningDuck.position.x - goose.position.x
-        let distanceY = spinningDuck.position.y - goose.position.y
+        
+        let distanceX = duck.position.x - goose.position.x
+        let distanceY = duck.position.y - goose.position.y
         if distanceY >= 0 {
             duck.zRotation = CGFloat(2 * Double.pi - atan(Double(distanceX/distanceY))) //If duck is above or equal to goose
         } else {
             duck.zRotation = CGFloat(Double.pi - atan(Double(distanceX/distanceY))) //If duck is below goose
         }
-
+        
         //Cooldown
         var i = 0
         while i < currentDucks.count {
@@ -587,7 +742,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                         
                             SKAction.run {
                                 
-                                self.launchBreadcrumb(startPoint: circle.position, endPoint: goose.position)
+                                self.currentCrumb = self.launchBreadcrumb(startPoint: circle.position, endPoint: goose.position, dmg: self.currentDucks[i].damage, duck: self.currentDucks[i])
                                 print(self.currentDucks[Int(duck.name!.suffix(1))!].name + " is going to be set to false")
                                 self.currentDucks[Int(duck.name!.suffix(1))!].canFire = false
                                 
@@ -615,31 +770,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
     }
     
-        
-    
+
     //Used to actually deal damage to the goose if the breadcrumbs collide with a goose.
-    func collisionHandler(proj: SKSpriteNode, enemy: SKSpriteNode) {
-    /*
-        
-        var i = 0
-        while(i < currentGeese.count){
-            if currentGeese[i].health <= 0{
-                enemy.removeFromParent()
-           
-        }else{
-            currentGeese[i].health = currentGeese[i].health - 50
-        }
-        i+=1
-    
-    }
-    i=0
-        
-        
-    */
+    func collisionHandler(proj: SKSpriteNode, enemy: SKSpriteNode, dmg: CGFloat) {
        var i = 0
         while (i < currentGeese.count) {
             if currentGeese[i].sprite == enemy {
-                currentGeese[i].health -= 50
+                currentGeese[i].health -= dmg
                 if currentGeese[i].health <= 0 {
                     enemy.removeFromParent()
                     self.currentMoney += gooseReward
@@ -651,7 +788,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         proj.removeFromParent()
         
     }
-      
+    /* -----------------WAVE CREATION --------------  */
+    
+    
     //Adds a series of geese with number "amt" and waits for "gap" seconds between each goose. All geese in the series will have health of "hp" and move at speed "spd"
     public func gooseSeries(amt: Int, gap: Double, hp: Int, spd: Double) -> SKAction {
        // SKAction.repeat(SKAction.sequence([SKAction.run(addGoose(health: hp, speed: spd)), SKAction.wait(forDuration: gap)]), count: amt)
@@ -663,32 +802,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         ])
         return SKAction.repeat(gooseWait, count: amt)
     }
-    
+    //Puts all waves in order with a set delay between each one
     func waveSequence() -> SKAction{
-        SKAction.sequence([
+        let waveDelay: TimeInterval = 10.0
+        return SKAction.sequence([
         firstWave(),
-        SKAction.wait(forDuration: 10.0),
+        SKAction.wait(forDuration: waveDelay),
         secondWave(),
-        SKAction.wait(forDuration: 10.0),
+        SKAction.wait(forDuration: waveDelay),
         thirdWave(),
-        SKAction.wait(forDuration: 10.0),
+        SKAction.wait(forDuration: waveDelay),
         fourthWave(),
-        SKAction.wait(forDuration: 10.0),
+        SKAction.wait(forDuration: waveDelay),
         fifthWave()
         
         ])
     }
-    
+    //The individual geese spawn commands for each wave for easy customization
     func firstWave() -> SKAction{
         SKAction.sequence([
             SKAction.run {
                 self.waveLabel.text = "Wave 1"
             },
-            gooseSeries(amt: 10, gap: 1.5, hp: 50, spd: 1.0),
+            gooseSeries(amt: 10, gap: 1.5, hp: 10, spd: 1.0),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 15, gap: 1.0, hp : 100, spd: 1.1),
+            gooseSeries(amt: 15, gap: 1.0, hp : 20, spd: 1.1),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 0.7, hp : 150, spd: 1.3)
+            //gooseSeries(amt: 20, gap: 0.4, hp : 50, spd: 1.3)
         ])
     }
     
@@ -745,7 +885,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             gooseSeries(amt: 20, gap: 0.6, hp : 250, spd: 1.7),
             SKAction.wait(forDuration: 0.1),
             gooseSeries(amt: 20, gap: 0.5, hp : 200, spd: 1.5)
-            //Miniboss???
+            
         ])
     }
 
