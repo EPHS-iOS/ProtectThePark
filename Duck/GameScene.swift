@@ -680,7 +680,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         fourthWave(),
         SKAction.wait(forDuration: 1.0),
         fifthWave(),
-        SKAction.wait(forDuration: 3.0),
+        SKAction.wait(forDuration: 10.0),
         endWave()
         
             
@@ -694,11 +694,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 1"
             },
-            gooseSeries(amt: 4, gap: 1.1, hp: 50, spd: 1.5),
-            SKAction.wait(forDuration: 1.5),
-            gooseSeries(amt: 4, gap: 1.1, hp : 50, spd: 1.6),
-            SKAction.wait(forDuration: 1.5),
-            gooseSeries(amt: 4, gap: 1.1, hp : 50, spd: 1.7)
+            SKAction.wait(forDuration: 3.0),
+            gooseSeries(amt: 3, gap: 1.0, hp: 50, spd: 1.2),
+            SKAction.wait(forDuration: 0.5),
+            gooseSeries(amt: 3, gap: 1.0, hp : 50, spd: 1.3),
+            SKAction.wait(forDuration: 0.5),
+            gooseSeries(amt: 3, gap: 1.0, hp : 50, spd: 1.4) // $150 start + $90 earned by this point
         ])
     }
     
@@ -708,11 +709,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 2"
             },
-            gooseSeries(amt: 6, gap: 1.0, hp: 50, spd: 2.2),
-            SKAction.wait(forDuration: 1.5),
-            gooseSeries(amt: 6, gap: 1.0, hp : 50, spd: 2.3),
-            SKAction.wait(forDuration: 1.5),
-            gooseSeries(amt: 6, gap: 1.0, hp : 100, spd: 2.4)
+            gooseSeries(amt: 4, gap: 0.9, hp: 50, spd: 1.4),
+            SKAction.wait(forDuration: 0.5),
+            gooseSeries(amt: 4, gap: 0.9, hp : 50, spd: 1.5),
+            SKAction.wait(forDuration: 0.8),
+            gooseSeries(amt: 4, gap: 1.2, hp : 100, spd: 1.0) //$150 start + $210 earned by this point
         ])
     }
     
@@ -722,11 +723,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 3"
             },
-            gooseSeries(amt: 8, gap: 0.9, hp: 100, spd: 2.6),
-            SKAction.wait(forDuration: 1.5),
-            gooseSeries(amt: 8, gap: 0.9, hp : 100, spd: 2.7),
-            SKAction.wait(forDuration: 1.5),
-            gooseSeries(amt: 8, gap: 0.9, hp : 100, spd: 2.8)
+            gooseSeries(amt: 4, gap: 1.1, hp: 100, spd: 1.4),
+            SKAction.wait(forDuration: 0.5),
+            gooseSeries(amt: 5, gap: 1.1, hp : 100, spd: 1.4),
+            SKAction.wait(forDuration: 0.5),
+            gooseSeries(amt: 5, gap: 1.1, hp : 100, spd: 1.4) //$150 start + $350 earned by this point
         ])
     }
     
@@ -736,11 +737,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 4"
             },
-            gooseSeries(amt: 10, gap: 0.8, hp: 100, spd: 2.9),
-            SKAction.wait(forDuration: 1.5),
-            gooseSeries(amt: 10, gap: 0.8, hp : 150, spd: 3.0),
-            SKAction.wait(forDuration: 1.5),
-            gooseSeries(amt: 10, gap: 0.8, hp : 150, spd: 3.1)
+            gooseSeries(amt: 7, gap: 1.0, hp: 100, spd: 1.4),
+            SKAction.wait(forDuration: 0.9),
+            gooseSeries(amt: 7, gap: 1.0, hp : 150, spd: 1.0),
+            SKAction.wait(forDuration: 0.5),
+            gooseSeries(amt: 7, gap: 1.0, hp : 150, spd: 1.0) //$150 start + $560 earned by this point
         ])
     }
     
@@ -750,15 +751,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             
             SKAction.run {
                 self.waveLabel.text = "Wave 5"
-                SKAction.wait(forDuration: 5.0)
+                
                
                
             },
-            gooseSeries(amt: 8, gap: 0.7, hp: 150, spd: 3.1),
-            SKAction.wait(forDuration: 1.5),
-            gooseSeries(amt: 10, gap: 0.7, hp : 150, spd: 3.2),
-            SKAction.wait(forDuration: 1.5),
-            gooseSeries(amt: 12, gap: 0.7, hp : 200, spd: 3.3),
+            gooseSeries(amt: 8, gap: 1.2, hp: 150, spd: 1.4),
+            SKAction.wait(forDuration: 0.9),
+            gooseSeries(amt: 6, gap: 1.3, hp : 200, spd: 1.0),
+            SKAction.wait(forDuration: 0.9),
+            gooseSeries(amt: 4, gap: 1.5, hp : 250, spd: 0.8), //$150 start + $740 earned by this point
+            
             //Miniboss???
             
             
@@ -772,7 +774,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             
             SKAction.run {
                 self.waveLabel.text = "The end"
-                SKAction.wait(forDuration: 2.0)
                 let VictoryScene = SKScene(fileNamed: "Victory")
                 self.view?.presentScene(VictoryScene)
             },
