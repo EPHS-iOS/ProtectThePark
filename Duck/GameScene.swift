@@ -89,7 +89,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     public var remainingLives = 10
     public var healthLabel = SKLabelNode()
-    public var currentMoney = 150
+    public var currentMoney = 100
     public var moneyLabel = SKLabelNode()
     public var waveLabel = SKLabelNode()
     //How much 1 duck costs and how much money you get per goose
@@ -680,7 +680,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         fourthWave(),
         SKAction.wait(forDuration: 1.0),
         fifthWave(),
-        SKAction.wait(forDuration: 10.0),
+        SKAction.wait(forDuration: 6.5),
         endWave()
         
             
@@ -699,7 +699,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.wait(forDuration: 0.5),
             gooseSeries(amt: 3, gap: 1.0, hp : 50, spd: 1.3),
             SKAction.wait(forDuration: 0.5),
-            gooseSeries(amt: 3, gap: 1.0, hp : 50, spd: 1.4) // $150 start + $90 earned by this point
+            gooseSeries(amt: 3, gap: 1.0, hp : 50, spd: 1.4) // $100 start + $90 earned by this point
         ])
     }
     
@@ -713,7 +713,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.wait(forDuration: 0.5),
             gooseSeries(amt: 4, gap: 0.9, hp : 50, spd: 1.5),
             SKAction.wait(forDuration: 0.8),
-            gooseSeries(amt: 4, gap: 1.2, hp : 100, spd: 1.0) //$150 start + $210 earned by this point
+            gooseSeries(amt: 4, gap: 1.2, hp : 100, spd: 1.4) //$100 start + $210 earned by this point
         ])
     }
     
@@ -723,11 +723,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 3"
             },
-            gooseSeries(amt: 4, gap: 1.1, hp: 100, spd: 1.4),
+            gooseSeries(amt: 4, gap: 1.1, hp: 150, spd: 1.4),
             SKAction.wait(forDuration: 0.5),
-            gooseSeries(amt: 5, gap: 1.1, hp : 100, spd: 1.4),
+            gooseSeries(amt: 5, gap: 1.1, hp : 150, spd: 1.4),
             SKAction.wait(forDuration: 0.5),
-            gooseSeries(amt: 5, gap: 1.1, hp : 100, spd: 1.4) //$150 start + $350 earned by this point
+            gooseSeries(amt: 5, gap: 1.1, hp : 150, spd: 1.5) //$100 start + $350 earned by this point
         ])
     }
     
@@ -737,11 +737,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 4"
             },
-            gooseSeries(amt: 7, gap: 1.0, hp: 100, spd: 1.4),
+            gooseSeries(amt: 7, gap: 1.0, hp: 200, spd: 1.4),
             SKAction.wait(forDuration: 0.9),
-            gooseSeries(amt: 7, gap: 1.0, hp : 150, spd: 1.0),
+            gooseSeries(amt: 7, gap: 1.0, hp : 200, spd: 1.2),
             SKAction.wait(forDuration: 0.5),
-            gooseSeries(amt: 7, gap: 1.0, hp : 150, spd: 1.0) //$150 start + $560 earned by this point
+            gooseSeries(amt: 7, gap: 1.0, hp : 200, spd: 1.5) //$100 start + $560 earned by this point
         ])
     }
     
@@ -755,11 +755,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                
                
             },
-            gooseSeries(amt: 8, gap: 1.2, hp: 150, spd: 1.4),
+            gooseSeries(amt: 8, gap: 1.2, hp: 200, spd: 1.4),
             SKAction.wait(forDuration: 0.9),
-            gooseSeries(amt: 6, gap: 1.3, hp : 200, spd: 1.0),
+            gooseSeries(amt: 6, gap: 1.3, hp : 250, spd: 1.2),
             SKAction.wait(forDuration: 0.9),
-            gooseSeries(amt: 4, gap: 1.5, hp : 250, spd: 0.8), //$150 start + $740 earned by this point
+            gooseSeries(amt: 4, gap: 1.3, hp : 250, spd: 1.4), //$100 start + $740 earned by this point
             
             //Miniboss???
             
