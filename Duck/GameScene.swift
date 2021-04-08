@@ -48,14 +48,13 @@ struct PhysicsCategory {
 
 struct Nests {
     let loc : CGPoint
-    let name : String
+    
     let sprite : SKSpriteNode
     let nestNumber : Int
 }
 
 struct Ducks {
     var canFire = true
-    let name: String
     let sprite: SKSpriteNode
     var damage: CGFloat
     var level: Int
@@ -67,7 +66,6 @@ struct Buttons {
     let sprite: SKSpriteNode
     var isPresent : Bool
     let parentButton : String
-    var name : String
 }
 
 struct Gooses {
@@ -241,7 +239,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         if nn.name?.suffix(1) == "0" {
             for button in currentButtons{
-                if button.name.suffix(1) == "0"{
+                if button.sprite.name!.suffix(1) == "0"{
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
                         return
@@ -253,7 +251,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             }
         } else if nn.name?.suffix(1) == "1" {
             for button in currentButtons{
-                if button.name.suffix(1) == "1"{
+                if button.sprite.name!.suffix(1) == "1"{
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
                         return
@@ -265,7 +263,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             }
         } else if nn.name?.suffix(1) == "2" {
             for button in currentButtons{
-                if button.name.suffix(1) == "2"{
+                if button.sprite.name!.suffix(1) == "2"{
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
                         return
@@ -277,7 +275,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             }
         } else if nn.name?.suffix(1) == "3" {
             for button in currentButtons{
-                if button.name.suffix(1) == "3"{
+                if button.sprite.name!.suffix(1) == "3"{
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
                         return
@@ -289,7 +287,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             }
         } else if nn.name?.suffix(1) == "4" {
             for button in currentButtons{
-                if button.name.suffix(1) == "4"{
+                if button.sprite.name!.suffix(1) == "4"{
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
                         return
@@ -308,84 +306,94 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             print("Not enough money to upgrade duck")
             return
         }
-        if duck.name.suffix(1) == "0" {
+        print(duck.sprite.name!)
+        
+        
+        
+        if duck.sprite.name!.suffix(1) == "0" {
             var i = 0
             while i < currentButtons.count{
                 let button = currentButtons[i]
-                if button.name.suffix(1) == "0" {
+                if button.sprite.name!.suffix(1) == "0" {
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
                         return
                     }
                     
                     button.sprite.alpha = 1
-                    currentButtons[i].name = "Upgrade0"
+                    currentButtons[i].sprite.name = "Upgrade0"
                     i += 1
                 }
+                print(button.sprite.name!)
             }
             
-        } else if duck.name.suffix(1) == "1" {
+            
+        } else if duck.sprite.name!.suffix(1) == "1" {
             var i = 0
             while i < currentButtons.count{
                 let button = currentButtons[i]
-                if button.name.suffix(1) == "1" {
+                if button.sprite.name!.suffix(1) == "1" {
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
                         return
                     }
                     
                     button.sprite.alpha = 1
-                    currentButtons[i].name = "Upgrade1"
+                    currentButtons[i].sprite.name! = "Upgrade1"
                     i += 1
                 }
+                print(button.sprite.name!)
             }
             
-        }else if duck.name.suffix(1) == "2" {
+        }else if duck.sprite.name!.suffix(1) == "2" {
             var i = 0
             while i < currentButtons.count{
                 let button = currentButtons[i]
-                if button.name.suffix(1) == "2" {
+                if button.sprite.name!.suffix(1) == "2" {
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
                         return
                     }
                     
                     button.sprite.alpha = 1
-                    currentButtons[i].name = "Upgrade2"
+                    currentButtons[i].sprite.name! = "Upgrade2"
                     i += 1
                 }
+                print(button.sprite.name!)
             }
             
-        } else if duck.name.suffix(1) == "3" {
+        } else if duck.sprite.name!.suffix(1) == "3" {
             var i = 0
             while i < currentButtons.count{
                 let button = currentButtons[i]
-                if button.name.suffix(1) == "3" {
+                if button.sprite.name!.suffix(1) == "3" {
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
                         return
                     }
                     
                     button.sprite.alpha = 1
-                    currentButtons[i].name = "Upgrade3"
+                    currentButtons[i].sprite.name! = "Upgrade3"
                     i += 1
                 }
+                print(button.sprite.name!)
             }
             
-        } else if duck.name.suffix(1) == "4" {
+        } else if duck.sprite.name!.suffix(1) == "4" {
             var i = 0
             while i < currentButtons.count{
                 let button = currentButtons[i]
-                if button.name.suffix(1) == "4" {
+                if button.sprite.name!.suffix(1) == "4" {
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
                         return
                     }
                     
                     button.sprite.alpha = 1
-                    currentButtons[i].name = "Upgrade4"
+                    currentButtons[i].sprite.name! = "Upgrade4"
                     i += 1
                 }
+                print(button.sprite.name!)
             }
             
         }
@@ -422,19 +430,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                         let leftRight: CGFloat = -3
                         
                         if node.name == "Option0" {
-                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown))
+                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown), id: String(node.name!.suffix(1)))
                             node.alpha = 0
                         } else if node.name == "Option1" {
-                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown))
+                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown), id: String(node.name!.suffix(1)))
                             node.alpha = 0
                         } else if node.name == "Option2" {
-                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown))
+                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown), id: String(node.name!.suffix(1)))
                             node.alpha = 0
                         } else if node.name == "Option3" {
-                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown))
+                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown), id: String(node.name!.suffix(1)))
                             node.alpha = 0
                         } else if node.name == "Option4" {
-                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown))
+                            self.addDuck(loc: CGPoint(x: node.position.x + leftRight, y: node.position.y + upDown), id: String(node.name!.suffix(1)))
                             node.alpha = 0
                         }
                         
@@ -450,7 +458,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                         let nodeIDNum = node.name!.suffix(1)
                         var i = 0
                         while i < self.currentDucks.count {
-                            if seslf.currentDucks[i].name.suffix(1) == nodeIDNum {
+                            if self.currentDucks[i].sprite.name!.suffix(1) == nodeIDNum {
                                 if self.currentDucks[i].level < 5{
                                 self.currentDucks[i].level += 1 //Increase duck level by 1
                                 self.currentDucks[i].damage = self.damageCalc(currentLvl: self.currentDucks[i].level) //Calcuate the new correct damage value and give it to the duck
@@ -460,7 +468,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                                 
                                     
                                 //Troubleshooting
-                                let duckName = self.currentDucks[i].name
+                                let duckName = self.currentDucks[i].sprite.name!
                                 let duckDmg = String(Int(self.currentDucks[i].damage))
                                 let duckUpCost = String(self.currentDucks[i].upgradeCost)
                                 let duckLvl = String(self.currentDucks[i].level)
@@ -477,7 +485,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 else if node.name?.prefix(4) == "Duck" {
                     if node.contains(location) {
                         for ducks in self.currentDucks {
-                            if ducks.name.suffix(1) == node.name?.suffix(1) {
+                            if ducks.sprite.name!.suffix(1) == node.name?.suffix(1) {
                                 self.showUpgrades(duck: ducks)
                             }
                         }
@@ -542,7 +550,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         addOptions(loc: CGPoint(x: nest.position.x, y: nest.position.y + posScale),pB: nest.name!, id: "Option\(nest.name!.suffix(1))");
         
         addChild(nest)
-        currentNests.append(Nests(loc: nest.position, name: nest.name!, sprite: nest, nestNumber: nestIDX))
+        currentNests.append(Nests(loc: nest.position, sprite: nest, nestNumber: nestIDX))
         nestIDX += 1
     }
     
@@ -557,11 +565,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         option.size = CGSize(width: option.size.width/(self.frame.width/heightScale), height: option.size.height/(self.frame.width/heightScale))
         
         addChild(option)
-        currentButtons.append(Buttons(loc: option.position, sprite: option, isPresent: true, parentButton: pB, name: option.name!))
+        currentButtons.append(Buttons(loc: option.position, sprite: option, isPresent: true, parentButton: pB))
         
     }
     
-    func addDuck(loc: CGPoint) {
+    func addDuck(loc: CGPoint, id: String) {
         
         //Only allows a duck to be placed if player has enough money and subtracts that money from their total
         if (self.currentMoney >= duckCost) {
@@ -574,7 +582,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let duck = SKSpriteNode(imageNamed: "BasicDuckFullBody")
         duck.position = loc
         duck.size = CGSize(width: duck.size.width/(self.frame.width/50), height: duck.size.height/(self.frame.width/50))
-        duck.name = "Duck\(duckIDX)"
+        duck.name = "Duck" + id
         duck.zPosition = 3
         
         // Detection Circle to detect Geese that are close
@@ -583,7 +591,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         detectionCircle.position = duck.position
         detectionCircle.fillColor = .cyan
         detectionCircle.physicsBody?.affectedByGravity = false
-        detectionCircle.name = "DetectionCircle\(duckIDX)"
+        detectionCircle.name = "DetectionCircle" + id
         detectionCircle.alpha = 0.1
         detectionCircle.physicsBody?.isDynamic = true
         
@@ -597,7 +605,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         //DETECTIONS between objects; does not have an effect on if an object will or can bounce off one another or COLLIDE? Since we want the detection circle to detect geese or any enemy that are in the circle, we put the category "enemy" in.
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
-        let newDuck = Ducks(canFire: true, name: duck.name!, sprite: duck, damage: damageCalc(currentLvl: 1), level: 1, upgradeCost: upgradeCostCalc(currentLvl: 1))
+        let newDuck = Ducks(canFire: true, sprite: duck, damage: damageCalc(currentLvl: 1), level: 1, upgradeCost: upgradeCostCalc(currentLvl: 1))
         currentDucks.append(newDuck)
         
         duckIDX+=1
@@ -605,6 +613,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         duckInfo.append((duck, detectionCircle))
         addChild(detectionCircle)
         addChild(duck)
+        
+        for duck in currentDucks {
+            print(duck.sprite.name!)
+        }
     }
     
     func addGoose(health: Int, speed: Double) {  // Goose Spawner
@@ -728,7 +740,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 
             //Check for the duck that is associated with the detection circle that was triggered.
             if currentDucks[i].sprite.name!.suffix(1) == duck.name!.suffix(1) {
-                print(currentDucks[i].name + " canFire = " + String(currentDucks[i].canFire))
+                print(currentDucks[i].sprite.name! + " canFire = " + String(currentDucks[i].canFire))
                 print(i)
                 
                 if !currentDucks[i].canFire {
@@ -743,9 +755,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                             SKAction.run {
                                 
                                 self.currentCrumb = self.launchBreadcrumb(startPoint: circle.position, endPoint: goose.position, dmg: self.currentDucks[i].damage, duck: self.currentDucks[i])
-                                print(self.currentDucks[Int(duck.name!.suffix(1))!].name + " is going to be set to false")
-                                self.currentDucks[Int(duck.name!.suffix(1))!].canFire = false
+//                                print(self.currentDucks[Int(duck.name!.suffix(1))!].name + " is going to be set to false")
+                                //self.currentDucks[Int(duck.name!.suffix(1))!].canFire = false
                                 
+                                var j = 0
+                                while j < self.currentDucks.count {
+                                    if self.currentDucks[j].sprite.name!.suffix(i) == duck.name!.suffix(1) {
+                                        self.currentDucks[j].canFire = false
+                                    }
+                                    j+=1
+                                }
+                                j=0
                             }
                             ,
                         SKAction.wait(forDuration: 0.5)
@@ -753,7 +773,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                             
                             SKAction.run{
                                 
-                                self.currentDucks[Int(duck.name!.suffix(1))!].canFire = true
+                                //self.currentDucks[Int(duck.name!.suffix(1))!].canFire = true
+                                var j = 0
+                                while j < self.currentDucks.count {
+                                    if self.currentDucks[j].sprite.name!.suffix(i) == duck.name!.suffix(1) {
+                                        self.currentDucks[j].canFire = true
+                                    }
+                                    j+=1
+                                }
+                                j=0
                                 
                             }
                             
