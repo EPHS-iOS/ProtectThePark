@@ -97,7 +97,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //How much 1 duck costs and how much money you get per goose
     var duckCost = 100
-    var gooseReward = 20
+    var gooseReward = 30
     
     //Stores Information on Ducks and their corresponding detection radiuses in an array
     //Stored in a swift lock-key system
@@ -302,10 +302,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func showUpgrades (duck: Ducks) {
-        if currentMoney < duck.upgradeCost {
-            print("Not enough money to upgrade duck")
-            return
-        }
         print(duck.sprite.name!)
         
         
@@ -322,16 +318,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     
                     button.sprite.alpha = 1
                     currentButtons[i].sprite.name = "Upgrade0"
-                    i += 1
+                    
                 }
+                i += 1
                 print(button.sprite.name!)
             }
             
             
         } else if duck.sprite.name!.suffix(1) == "1" {
-            var i = 0
-            while i < currentButtons.count{
-                let button = currentButtons[i]
+            var j = 0
+            while j < currentButtons.count{
+                let button = currentButtons[j]
                 if button.sprite.name!.suffix(1) == "1" {
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
@@ -339,16 +336,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     }
                     
                     button.sprite.alpha = 1
-                    currentButtons[i].sprite.name! = "Upgrade1"
-                    i += 1
+                    currentButtons[j].sprite.name! = "Upgrade1"
+                    
                 }
+                j += 1
                 print(button.sprite.name!)
+                
             }
             
         }else if duck.sprite.name!.suffix(1) == "2" {
-            var i = 0
-            while i < currentButtons.count{
-                let button = currentButtons[i]
+            var k = 0
+            while k < currentButtons.count{
+                let button = currentButtons[k]
                 if button.sprite.name!.suffix(1) == "2" {
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
@@ -356,16 +355,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     }
                     
                     button.sprite.alpha = 1
-                    currentButtons[i].sprite.name! = "Upgrade2"
-                    i += 1
+                    currentButtons[k].sprite.name! = "Upgrade2"
                 }
+                k += 1
                 print(button.sprite.name!)
+                
             }
             
         } else if duck.sprite.name!.suffix(1) == "3" {
-            var i = 0
-            while i < currentButtons.count{
-                let button = currentButtons[i]
+            var l = 0
+            while l < currentButtons.count{
+                let button = currentButtons[l]
                 if button.sprite.name!.suffix(1) == "3" {
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
@@ -373,16 +373,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     }
                     
                     button.sprite.alpha = 1
-                    currentButtons[i].sprite.name! = "Upgrade3"
-                    i += 1
+                    currentButtons[l].sprite.name! = "Upgrade3"
+                    
                 }
+                l += 1
                 print(button.sprite.name!)
+                
             }
             
         } else if duck.sprite.name!.suffix(1) == "4" {
-            var i = 0
-            while i < currentButtons.count{
-                let button = currentButtons[i]
+            var m = 0
+            while m < currentButtons.count{
+                let button = currentButtons[m]
                 if button.sprite.name!.suffix(1) == "4" {
                     if button.sprite.alpha == 1 {
                         button.sprite.alpha = 0
@@ -390,9 +392,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     }
                     
                     button.sprite.alpha = 1
-                    currentButtons[i].sprite.name! = "Upgrade4"
-                    i += 1
+                    currentButtons[m].sprite.name! = "Upgrade4"
+                    
                 }
+                m += 1
                 print(button.sprite.name!)
             }
             
@@ -459,7 +462,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                         var i = 0
                         while i < self.currentDucks.count {
                             if self.currentDucks[i].sprite.name!.suffix(1) == nodeIDNum {
-                                if self.currentDucks[i].level < 5{
+                                if self.currentMoney > self.currentDucks[i].upgradeCost {
+                                if self.currentDucks[i].level < 5 && self.currentMoney >= self.currentDucks[i].upgradeCost{
                                 self.currentDucks[i].level += 1 //Increase duck level by 1
                                 self.currentDucks[i].damage = self.damageCalc(currentLvl: self.currentDucks[i].level) //Calcuate the new correct damage value and give it to the duck
                                 self.currentMoney -= self.currentDucks[i].upgradeCost
@@ -475,6 +479,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                                 print ("Duck " + duckName + " is level " + duckLvl + ", deals " + duckDmg + " damage and costs " + duckUpCost + " to upgrade")
                                 } else {
                                     print("This duck is maximum level")
+                                }
+                                } else {
+                                    print("Not enough money to upgrade")
                                 }
                             }
                             i += 1
@@ -710,11 +717,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func upgradeCostCalc(currentLvl: Int) -> Int{
-        return (100 * currentLvl) + (50 * currentLvl^2)
+        return (100 * currentLvl) + (50 * currentLvl * currentLvl)
     }
     
     func damageCalc(currentLvl: Int) -> CGFloat{
-        return CGFloat((10 * currentLvl) + (20 * currentLvl^2))
+        return CGFloat((10 * currentLvl) + (20 * currentLvl * currentLvl))
     }
     
     
@@ -740,8 +747,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 
             //Check for the duck that is associated with the detection circle that was triggered.
             if currentDucks[i].sprite.name!.suffix(1) == duck.name!.suffix(1) {
-                print(currentDucks[i].sprite.name! + " canFire = " + String(currentDucks[i].canFire))
-                print(i)
+                //print(currentDucks[i].sprite.name! + " canFire = " + String(currentDucks[i].canFire))
+               // print(i)
                 
                 if !currentDucks[i].canFire {
                     //If there is a cooldown, do nothing.
@@ -755,7 +762,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                             SKAction.run {
                                 
                                 self.currentCrumb = self.launchBreadcrumb(startPoint: circle.position, endPoint: goose.position, dmg: self.currentDucks[i].damage, duck: self.currentDucks[i])
-//                                print(self.currentDucks[Int(duck.name!.suffix(1))!].name + " is going to be set to false")
+                                //print(self.currentDucks[Int(duck.name!.suffix(1))!].name + " is going to be set to false")
                                 //self.currentDucks[Int(duck.name!.suffix(1))!].canFire = false
                                 
                                 var j = 0
@@ -805,6 +812,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         while (i < currentGeese.count) {
             if currentGeese[i].sprite == enemy {
                 currentGeese[i].health -= dmg
+                //print ("Dealt " + String(Int(dmg)))
                 if currentGeese[i].health <= 0 {
                     enemy.removeFromParent()
                     self.currentMoney += gooseReward
