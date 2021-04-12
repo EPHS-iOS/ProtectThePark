@@ -842,17 +842,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     //Puts all waves in order with a set delay between each one
     func waveSequence() -> SKAction{
-        let waveDelay: TimeInterval = 10.0
-        return SKAction.sequence([
-        firstWave(),
-        SKAction.wait(forDuration: waveDelay),
-        secondWave(),
-        SKAction.wait(forDuration: waveDelay),
-        thirdWave(),
-        SKAction.wait(forDuration: waveDelay),
-        fourthWave(),
-        SKAction.wait(forDuration: waveDelay),
-        fifthWave()
+           SKAction.sequence([
+           firstWave(),
+           SKAction.wait(forDuration: 1.0),
+           secondWave(),
+           SKAction.wait(forDuration: 1.0),
+           thirdWave(),
+           SKAction.wait(forDuration: 1.0),
+           fourthWave(),
+           SKAction.wait(forDuration: 1.0),
+           fifthWave(),
+           SKAction.wait(forDuration: 6.5),
+           endWave()
+           
         
         ])
     }
@@ -862,9 +864,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 1"
             },
-            gooseSeries(amt: 10, gap: 1.5, hp: 10, spd: 1.0),
+            gooseSeries(amt: 1, gap: 1.5, hp: 10, spd: 1.0),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 15, gap: 1.0, hp : 20, spd: 1.1),
+            gooseSeries(amt: 1, gap: 1.0, hp : 20, spd: 1.1),
             SKAction.wait(forDuration: 0.1),
             //gooseSeries(amt: 20, gap: 0.4, hp : 50, spd: 1.3)
         ])
@@ -876,11 +878,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 2"
             },
-            gooseSeries(amt: 5, gap: 1.0, hp: 100, spd: 1.0),
+            gooseSeries(amt: 5, gap: 1.0, hp: 10, spd: 1.0),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 15, gap: 1.0, hp : 200, spd: 1.3),
+            gooseSeries(amt: 1, gap: 1.0, hp : 20, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 30, gap: 0.5, hp : 200, spd: 1.5)
+            gooseSeries(amt: 3, gap: 0.5, hp : 20, spd: 1.5)
         ])
     }
     
@@ -890,11 +892,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 3"
             },
-            gooseSeries(amt: 10, gap: 0.7, hp: 150, spd: 1.3),
+            gooseSeries(amt: 1, gap: 0.7, hp: 15, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 30, gap: 0.7, hp : 250, spd: 1.3),
+            gooseSeries(amt: 3, gap: 0.7, hp : 25, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 25, gap: 1.0, hp : 200, spd: 1.5)
+            gooseSeries(amt: 2, gap: 1.0, hp : 20, spd: 1.5)
         ])
     }
     
@@ -904,11 +906,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 4"
             },
-            gooseSeries(amt: 15, gap: 0.5, hp: 100, spd: 1.3),
+            gooseSeries(amt: 1, gap: 0.5, hp: 10, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 30, gap: 0.8, hp : 250, spd: 1.3),
+            gooseSeries(amt: 3, gap: 0.8, hp : 25, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 2, gap: 1.0, hp : 150, spd: 2.0)
+            gooseSeries(amt: 2, gap: 1.0, hp : 15, spd: 1.0)
         ])
     }
     
@@ -918,13 +920,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 5"
             },
-            gooseSeries(amt: 10, gap: 0.4, hp: 100, spd: 2.3),
+            gooseSeries(amt: 1, gap: 0.4, hp: 10, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 0.6, hp : 250, spd: 1.7),
+            gooseSeries(amt: 2, gap: 0.6, hp : 25, spd: 1.7),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 0.5, hp : 200, spd: 1.5)
+            gooseSeries(amt: 2, gap: 0.5, hp : 20, spd: 1.5)
             
         ])
     }
+    func endWave() -> SKAction{
+            
+            SKAction.sequence([
+                
+                SKAction.run {
+                    self.waveLabel.text = "The end"
+                    let VictoryScene = SKScene(fileNamed: "Victory")
+                    self.view?.presentScene(VictoryScene)
+                },
+                ])
+            }
 
 }
