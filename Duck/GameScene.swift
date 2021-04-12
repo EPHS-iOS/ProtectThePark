@@ -50,7 +50,6 @@ struct PhysicsCategory {
 
 struct Nests {
     let loc : CGPoint
-    
     let sprite : SKSpriteNode
     let nestNumber : Int
 }
@@ -99,7 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //How much 1 duck costs and how much money you get per goose
     var duckCost = 100
-    var gooseReward = 30
+    var gooseReward = 50
     
     //Stores Information on Ducks and their corresponding detection radiuses in an array
     //Stored in a swift lock-key system
@@ -115,6 +114,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //An array of current ducks on the screen
     var currentDucks: [Ducks] = []
+    
+    var upgradeLabels: [SKLabelNode] = []
     
     
     /* -------------------- FUNCTIONS -------------------- */
@@ -305,7 +306,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     func showUpgrades (duck: Ducks) {
         print(duck.sprite.name!)
-        
+        let idNum = duck.sprite.name!.suffix(1)
+        for label in upgradeLabels {
+            if label.name!.suffix(1) == idNum {
+                updateLabel(label: label, duck: duck)
+            }
+        }
         
         
         if duck.sprite.name!.suffix(1) == "0" {
@@ -464,7 +470,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                         var i = 0
                         while i < self.currentDucks.count {
                             if self.currentDucks[i].sprite.name!.suffix(1) == nodeIDNum {
-                                if self.currentMoney > self.currentDucks[i].upgradeCost {
+                                if self.currentMoney >= self.currentDucks[i].upgradeCost {
                                 if self.currentDucks[i].level < 5 && self.currentMoney >= self.currentDucks[i].upgradeCost{
                                 self.currentDucks[i].level += 1 //Increase duck level by 1
                                 self.currentDucks[i].damage = self.damageCalc(currentLvl: self.currentDucks[i].level) //Calcuate the new correct damage value and give it to the duck
@@ -472,6 +478,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                                 self.moneyLabel.text = "$: " + String(self.currentMoney) //Deduct the correct amount of money from the player's total and update the label
                                 self.currentDucks[i].upgradeCost = self.upgradeCostCalc(currentLvl: self.currentDucks[i].level) //Calculate the new cost to reach the next level
                                 
+                                //self.upgradeLabels[Int(nodeIDNum)!].text = "$\(self.currentDucks[i].upgradeCost)"
+                                    self.updateLabel(label: self.upgradeLabels[Int(nodeIDNum)!], duck: self.currentDucks[i])
                                     
                                 //Troubleshooting
                                 let duckName = self.currentDucks[i].sprite.name!
@@ -573,8 +581,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         option.alpha = 0
         option.size = CGSize(width: option.size.width/(self.frame.width/heightScale), height: option.size.height/(self.frame.width/heightScale))
         
+        let label = SKLabelNode()
+        label.name = "Label\(id.suffix(1))"
+        label.fontColor = .black
+        label.text = "$100"
+        label.position = CGPoint(x: loc.x, y: loc.y + 20)
+        label.fontSize = CGFloat(20)
+        
         addChild(option)
+        addChild(label)
         currentButtons.append(Buttons(loc: option.position, sprite: option, isPresent: true, parentButton: pB))
+        upgradeLabels.append(label)
         
     }
     
@@ -623,9 +640,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         addChild(detectionCircle)
         addChild(duck)
         
-        for duck in currentDucks {
-            print(duck.sprite.name!)
-        }
+        updateLabel(label: upgradeLabels[Int(id)!], duck: newDuck)
+        
     }
     
     func addGoose(health: Int, speed: Double) {  // Goose Spawner
@@ -724,6 +740,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     func damageCalc(currentLvl: Int) -> CGFloat{
         return CGFloat((10 * currentLvl) + (20 * currentLvl * currentLvl))
+    }
+    
+    func updateLabel(label: SKLabelNode, duck: Ducks) {
+        if duck.level < 5{
+            label.text = "$\(duck.upgradeCost)"
+        } else {
+            label.text = "Max level"
+        }
     }
     
     
@@ -864,9 +888,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 1"
             },
-            gooseSeries(amt: 1, gap: 1.5, hp: 10, spd: 1.0),
+            gooseSeries(amt: 3, gap: 1.5, hp: 10, spd: 1.0),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 1, gap: 1.0, hp : 20, spd: 1.1),
+            gooseSeries(amt: 6, gap: 1.0, hp : 20, spd: 1.1),
             SKAction.wait(forDuration: 0.1),
             //gooseSeries(amt: 20, gap: 0.4, hp : 50, spd: 1.3)
         ])
@@ -878,11 +902,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 2"
             },
-            gooseSeries(amt: 5, gap: 1.0, hp: 10, spd: 1.0),
+            gooseSeries(amt: 7, gap: 1.0, hp: 10, spd: 1.0),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 1, gap: 1.0, hp : 20, spd: 1.3),
+            gooseSeries(amt: 8, gap: 1.0, hp : 20, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 3, gap: 0.5, hp : 20, spd: 1.5)
+            gooseSeries(amt: 13, gap: 0.5, hp : 20, spd: 1.5)
         ])
     }
     
@@ -892,11 +916,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 3"
             },
-            gooseSeries(amt: 1, gap: 0.7, hp: 15, spd: 1.3),
+            gooseSeries(amt: 10, gap: 0.7, hp: 15, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 3, gap: 0.7, hp : 25, spd: 1.3),
+            gooseSeries(amt: 23, gap: 0.7, hp : 25, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 2, gap: 1.0, hp : 20, spd: 1.5)
+            gooseSeries(amt: 20, gap: 1.0, hp : 20, spd: 1.5)
         ])
     }
     
@@ -906,11 +930,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 4"
             },
-            gooseSeries(amt: 1, gap: 0.5, hp: 10, spd: 1.3),
+            gooseSeries(amt: 12, gap: 0.5, hp: 10, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 3, gap: 0.8, hp : 25, spd: 1.3),
+            gooseSeries(amt: 13, gap: 0.8, hp : 25, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 2, gap: 1.0, hp : 15, spd: 1.0)
+            gooseSeries(amt: 20, gap: 1.0, hp : 15, spd: 1.0)
         ])
     }
     
@@ -920,11 +944,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 5"
             },
-            gooseSeries(amt: 1, gap: 0.4, hp: 10, spd: 1.3),
+            gooseSeries(amt: 10, gap: 0.4, hp: 10, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 2, gap: 0.6, hp : 25, spd: 1.7),
+            gooseSeries(amt: 20, gap: 0.6, hp : 25, spd: 1.7),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 2, gap: 0.5, hp : 20, spd: 1.5)
+            gooseSeries(amt: 20, gap: 0.5, hp : 20, spd: 1.5)
             
         ])
     }
