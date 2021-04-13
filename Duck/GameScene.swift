@@ -50,7 +50,6 @@ struct PhysicsCategory {
 
 struct Nests {
     let loc : CGPoint
-    
     let sprite : SKSpriteNode
     let nestNumber : Int
 }
@@ -325,7 +324,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 i += 1
                 print(button.sprite.name!)
             }
-            
+            i = 0
             
         } else if duck.sprite.name!.suffix(1) == "1" {
             var j = 0
@@ -361,7 +360,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 }
                 k += 1
                 print(button.sprite.name!)
-                
+              
             }
             
         } else if duck.sprite.name!.suffix(1) == "3" {
