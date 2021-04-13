@@ -89,7 +89,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"portal")
     
-    public var remainingLives = 10
+    public var remainingLives = 5
     public var healthLabel = SKLabelNode()
     public var currentMoney = 150
     public var moneyLabel = SKLabelNode()
@@ -707,6 +707,64 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       goose.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
     }
     
+    
+    func addDemon(hp: CGFloat) {
+        let demon = SKSpriteNode(imageNamed: "DemonGoose")
+        demon.size = CGSize(width: demon.size.width/(self.frame.width/75), height: demon.size.height/(self.frame.width/75))
+        demon.physicsBody = SKPhysicsBody(circleOfRadius: demon.size.width - 25)
+        demon.zPosition = 1
+        demon.physicsBody?.affectedByGravity = false
+        
+        demon.name = "enemy"
+        demon.physicsBody?.isDynamic = true
+
+        //Collisions
+        demon.physicsBody?.categoryBitMask = PhysicsCategory.enemy //Goose is a type of enemy
+        demon.physicsBody?.collisionBitMask = PhysicsCategory.none //We want the breadcrumb to look like it's bouncing off of the goose, so we put projectile in for collisionBitMask
+        demon.physicsBody?.contactTestBitMask = PhysicsCategory.projectile | PhysicsCategory.detection// We also want the goose to detect if it has been hit by a breadcrumb, not only just bouncing it off. In addition, we want the detection circle to detect if a goose is in its radius, so we add that too.
+
+        demon.position = CGPoint(x: self.frame.width/8.75, y: self.frame.height/1.05)
+        
+        addChild(demon)
+        let newDemon = Gooses(health : hp, sprite: demon)
+        currentGeese.append(newDemon)
+        
+        
+        let gooseSpeed = 0.5
+        
+        let firstMove = SKAction.sequence([
+            SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.82),duration: TimeInterval((320.0/250.0)/gooseSpeed)),
+            SKAction.run {demon.zRotation = CGFloat(Double.pi/2.0)}
+        ])
+            
+        let secondMove = SKAction.sequence([
+            SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.82), duration: TimeInterval((250.0/250.0)/gooseSpeed)),
+            SKAction.run {demon.zRotation = CGFloat(Double.pi)}])
+        
+        let thirdMove = SKAction.sequence([
+            SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.30), duration: TimeInterval((245.0/250.0)/gooseSpeed)),
+            SKAction.run {demon.zRotation = CGFloat(Double.pi/2.0)}])
+        
+        let fourthMove = SKAction.sequence([ SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.30), duration: TimeInterval((685.0/250.0)/gooseSpeed)),
+            SKAction.run {demon.zRotation = CGFloat(Double.pi * 0)}])
+        
+        let fifthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/5), duration: TimeInterval((320.0/250.0)/gooseSpeed))
+        
+        let finalAction = SKAction.sequence(
+            [SKAction.run {self.remainingLives -= 5},
+             SKAction.run{self.healthLabel.text = "Remaining Lives:  " + String(self.remainingLives)},
+             SKAction.removeFromParent(),
+             SKAction.run {
+                if self.remainingLives <= 0 {
+                    let gameOverScene = SKScene(fileNamed: "GameOver")
+                    self.view?.presentScene(gameOverScene)
+                    
+                }
+             }
+            ])
+
+      demon.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
+    }
 
     /* -------------------- ACTIONS -------------------- */
     func launchBreadcrumb (startPoint: CGPoint, endPoint: CGPoint, dmg: CGFloat, duck: Ducks) -> breadcrumb {
@@ -876,7 +934,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
            fourthWave(),
            SKAction.wait(forDuration: 1.0),
            fifthWave(),
-           SKAction.wait(forDuration: 6.5),
+            SKAction.wait(forDuration: 15.0),
            endWave()
            
         
@@ -948,8 +1006,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.wait(forDuration: 0.1),
             gooseSeries(amt: 20, gap: 0.6, hp : 25, spd: 1.7),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 0.5, hp : 20, spd: 1.5)
-            
+            gooseSeries(amt: 20, gap: 0.5, hp : 20, spd: 1.5),
+            SKAction.wait(forDuration: 0.1),
+            SKAction.run{self.addDemon(hp: 1750)}
         ])
     }
     func endWave() -> SKAction{
