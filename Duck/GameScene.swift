@@ -89,7 +89,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"portal")
     
-    public var remainingLives = 5
+    public var remainingLives = 10
     public var healthLabel = SKLabelNode()
     public var currentMoney = 150
     public var moneyLabel = SKLabelNode()
@@ -98,7 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //How much 1 duck costs and how much money you get per goose
     var duckCost = 100
-    var gooseReward = 50
+    var gooseReward = 15
     
     //Stores Information on Ducks and their corresponding detection radiuses in an array
     //Stored in a swift lock-key system
@@ -756,6 +756,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
              SKAction.removeFromParent(),
              SKAction.run {
                 if self.remainingLives <= 0 {
+                  
+                    
                     let gameOverScene = SKScene(fileNamed: "GameOver")
                     self.view?.presentScene(gameOverScene)
                     
@@ -946,11 +948,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 1"
             },
-            gooseSeries(amt: 3, gap: 1.5, hp: 10, spd: 1.0),
+            gooseSeries(amt: 10, gap: 1.5, hp: 10, spd: 1.0),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 6, gap: 1.0, hp : 20, spd: 1.1),
+            gooseSeries(amt: 16, gap: 1.0, hp : 10, spd: 1.1),
             SKAction.wait(forDuration: 0.1),
-            //gooseSeries(amt: 20, gap: 0.4, hp : 50, spd: 1.3)
+            gooseSeries(amt: 20, gap: 0.4, hp : 50, spd: 1.3)
         ])
     }
     
@@ -960,11 +962,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 2"
             },
-            gooseSeries(amt: 7, gap: 1.0, hp: 10, spd: 1.0),
+            gooseSeries(amt: 17, gap: 1.0, hp: 75, spd: 1.0),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 8, gap: 1.0, hp : 20, spd: 1.3),
+            gooseSeries(amt: 28, gap: 1.0, hp : 100, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 13, gap: 0.5, hp : 20, spd: 1.5)
+            gooseSeries(amt: 13, gap: 0.5, hp : 200, spd: 1.5)
         ])
     }
     
@@ -974,11 +976,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 3"
             },
-            gooseSeries(amt: 10, gap: 0.7, hp: 15, spd: 1.3),
+            gooseSeries(amt: 10, gap: 0.7, hp: 100, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 23, gap: 0.7, hp : 25, spd: 1.3),
+            gooseSeries(amt: 23, gap: 0.7, hp : 300, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 1.0, hp : 20, spd: 1.5)
+            gooseSeries(amt: 20, gap: 1.0, hp : 275, spd: 1.5)
         ])
     }
     
@@ -988,11 +990,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 4"
             },
-            gooseSeries(amt: 12, gap: 0.5, hp: 10, spd: 1.3),
+            gooseSeries(amt: 12, gap: 0.5, hp: 400, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 13, gap: 0.8, hp : 25, spd: 1.3),
+            gooseSeries(amt: 13, gap: 0.8, hp : 550, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 1.0, hp : 15, spd: 1.0)
+            gooseSeries(amt: 20, gap: 1.0, hp : 675, spd: 1.0)
         ])
     }
     
@@ -1002,13 +1004,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 5"
             },
-            gooseSeries(amt: 10, gap: 0.4, hp: 10, spd: 1.3),
+            gooseSeries(amt: 10, gap: 0.4, hp: 700, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 0.6, hp : 25, spd: 1.7),
+            gooseSeries(amt: 20, gap: 0.6, hp : 775, spd: 1.7),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 0.5, hp : 20, spd: 1.5),
+            gooseSeries(amt: 20, gap: 0.5, hp : 1000, spd: 1.5),
             SKAction.wait(forDuration: 0.1),
-            SKAction.run{self.addDemon(hp: 1750)}
+            SKAction.run{self.addDemon(hp: 1300)}
         ])
     }
     func endWave() -> SKAction{
