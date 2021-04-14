@@ -6,9 +6,9 @@ Protect The Park is a ducky themed tower defense game where you protect your sta
 > CURRENT VERSION: v0.4
 
 **VERSION v0.4**
--Added demonic miniboss at the end of wave 5
--Ducks can now be upgraded with money
--WIP victory screen will appear after wave 5 is completed 
+- Added demonic miniboss at the end of wave 5
+- Ducks can now be upgraded with money
+- WIP victory screen will appear after wave 5 is completed 
 
 **VERSION v0.3**
 - Cool Down System
