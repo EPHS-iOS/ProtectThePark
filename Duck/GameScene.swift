@@ -98,7 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //How much 1 duck costs and how much money you get per goose
     var duckCost = 100
-    var gooseReward = 15
+    var gooseReward = 20
     
     //Stores Information on Ducks and their corresponding detection radiuses in an array
     //Stored in a swift lock-key system
@@ -936,7 +936,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
            fourthWave(),
            SKAction.wait(forDuration: 1.0),
            fifthWave(),
-            SKAction.wait(forDuration: 15.0),
+            SKAction.wait(forDuration: 45.0),
            endWave()
            
         
@@ -1008,9 +1008,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.wait(forDuration: 0.1),
             gooseSeries(amt: 20, gap: 0.6, hp : 775, spd: 1.7),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 0.5, hp : 1000, spd: 1.5),
+            gooseSeries(amt: 20, gap: 0.5, hp : 850, spd: 1.5),
             SKAction.wait(forDuration: 0.1),
-            SKAction.run{self.addDemon(hp: 1300)}
+            SKAction.run{self.addDemon(hp: 1200)}
         ])
     }
     func endWave() -> SKAction{
