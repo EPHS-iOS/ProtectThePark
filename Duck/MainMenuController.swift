@@ -8,15 +8,15 @@
 import UIKit
 
 let image = UIImage(named:"MenuArt")
-let uiImage = UIImageView(image: image!)
+let MainMenuArt = UIImageView(image: image!)
 
 class MainMenuController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        uiImage.frame = CGRect(x: 0, y: 0, width: 100, height: 200)
-        view.addSubview(uiImage)
+        MainMenuArt.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+        view.addSubview(MainMenuArt)
         // Do any additional setup after loading the view.
     }
     
