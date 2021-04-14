@@ -18,6 +18,7 @@
                         <viewLayoutGuide key="safeArea" id="4qk-I5-YsI"/>
                         <color key="backgroundColor" systemColor="systemGreenColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="CUV-eq-UgV"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
@@ -30,33 +31,13 @@
                     <view key="view" contentMode="scaleToFill" id="OTa-lc-8bg">
                         <rect key="frame" x="0.0" y="0.0" width="736" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="llZ-IR-1Cl" userLabel="Start the Game">
-                                <rect key="frame" x="264" y="302" width="208" height="112"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="112" id="MmJ-4B-y0u"/>
-                                    <constraint firstAttribute="width" secondItem="llZ-IR-1Cl" secondAttribute="height" multiplier="35:9" constant="-227.55555555555554" id="zA1-6Q-O3Q"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
-                                <state key="normal" title="Start the Game">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <segue destination="BV1-FR-VrT" kind="show" id="Lj6-dI-1Nc"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6FY-OX-QaY"/>
                         <color key="backgroundColor" systemColor="systemTealColor"/>
-                        <constraints>
-                            <constraint firstItem="llZ-IR-1Cl" firstAttribute="centerY" secondItem="OTa-lc-8bg" secondAttribute="centerY" constant="151" id="1sT-Ot-fIo"/>
-                            <constraint firstItem="llZ-IR-1Cl" firstAttribute="centerX" secondItem="OTa-lc-8bg" secondAttribute="centerX" id="8ZH-9S-ohU"/>
-                            <constraint firstItem="llZ-IR-1Cl" firstAttribute="centerY" secondItem="OTa-lc-8bg" secondAttribute="centerY" constant="151" id="cBo-t0-nvh"/>
-                            <constraint firstItem="llZ-IR-1Cl" firstAttribute="centerY" secondItem="OTa-lc-8bg" secondAttribute="centerY" constant="151" id="iJm-jz-yn3"/>
-                            <constraint firstItem="llZ-IR-1Cl" firstAttribute="centerX" secondItem="OTa-lc-8bg" secondAttribute="centerX" id="rmT-2J-MuK"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Xgr-EB-YFU"/>
+                    <connections>
+                        <segue destination="BV1-FR-VrT" kind="show" identifier="toGameScene" id="eqK-dB-ehK"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S2I-qW-hps" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

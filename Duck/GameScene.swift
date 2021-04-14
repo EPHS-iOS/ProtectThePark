@@ -40,6 +40,12 @@ extension CGPoint {
   }
 }
 
+struct Scenes {
+    let gameScene : SKScene = GameScene(fileNamed: "GameScene")!
+    let gameOver : SKScene = GameScene(fileNamed: "GameOver")!
+    let victory : SKScene = GameScene(fileNamed: "Victory")!
+}
+
 //For specific detections
 struct PhysicsCategory {
     static let enemy : UInt32 = 0b1
@@ -698,10 +704,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
              SKAction.run {
                 if self.remainingLives <= 0 {
                     let gameOverScene = SKScene(fileNamed: "GameOver")
+                    gameOverScene!.scaleMode = .aspectFill
                     self.view?.presentScene(gameOverScene)
                     
                 }
              }
+             
             ])
 
       goose.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
@@ -1020,6 +1028,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 SKAction.run {
                     self.waveLabel.text = "The end"
                     let VictoryScene = SKScene(fileNamed: "Victory")
+                    VictoryScene?.scaleMode = .aspectFill
+                    
                     self.view?.presentScene(VictoryScene)
                 },
                 ])
