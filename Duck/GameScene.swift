@@ -66,6 +66,7 @@ struct Ducks {
     var damage: CGFloat
     var level: Int
     var upgradeCost: Int
+    var cooldownDelay: TimeInterval
 }
 
 struct Buttons {
@@ -104,7 +105,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //How much 1 duck costs and how much money you get per goose
     var duckCost = 100
-    var gooseReward = 20
+    var gooseReward = 200
+    var variantCost = 1750
     
     //Stores Information on Ducks and their corresponding detection radiuses in an array
     //Stored in a swift lock-key system
@@ -515,6 +517,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                         
                     }
                 }
+                else if node.name?.prefix(8) == "VarToast" {
+                    if node.contains(location) {
+                        //STUFF HERE 
+                    }
+                    
+                    
+                }
+                
                 
             })
             
@@ -578,9 +588,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func addOptions(loc: CGPoint, pB: String, id: String){
-        let heightScale = CGFloat(25)
+        let heightScale = CGFloat(900)
         
-        let option = SKSpriteNode(imageNamed: "Breadcrumb")
+        let option = SKSpriteNode(imageNamed: "breadcrumbIcon")
         option.name = id
         option.position = loc
         option.zPosition = 2
@@ -598,6 +608,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         addChild(label)
         currentButtons.append(Buttons(loc: option.position, sprite: option, isPresent: true, parentButton: pB))
         upgradeLabels.append(label)
+        
+    }
+    
+    func addVariantBranch(loc: CGPoint, id: String) {
+        let toast = SKSpriteNode(imageNamed: "toastIcon")
+        let heightScale: CGFloat = 900
+        toast.name = id
+        toast.position = loc
+        toast.zPosition = 2
+        toast.alpha = 1
+        toast.size = CGSize(width: toast.size.width/(self.frame.width/heightScale), height: toast.size.height/(self.frame.width/heightScale))
+        
+        let label = SKLabelNode()
+        label.fontColor = .black
+        label.text = "$1750"
+        label.position = CGPoint(x: loc.x, y: loc.y + 20)
+        label.fontSize = CGFloat(20)
+        
+        addChild(toast)
+        addChild(label)
         
     }
     
@@ -637,7 +667,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         //DETECTIONS between objects; does not have an effect on if an object will or can bounce off one another or COLLIDE? Since we want the detection circle to detect geese or any enemy that are in the circle, we put the category "enemy" in.
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
-        let newDuck = Ducks(canFire: true, sprite: duck, damage: damageCalc(currentLvl: 1), level: 1, upgradeCost: upgradeCostCalc(currentLvl: 1))
+        let newDuck = Ducks(canFire: true, sprite: duck, damage: damageCalc(currentLvl: 1), level: 1, upgradeCost: upgradeCostCalc(currentLvl: 1), cooldownDelay: 0.5)
         currentDucks.append(newDuck)
         
         duckIDX+=1
@@ -649,6 +679,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         updateLabel(label: upgradeLabels[Int(id)!], duck: newDuck)
         
     }
+    
+    func addToaster (loc: CGPoint, id: String) {
+        if (self.currentMoney >= variantCost) {
+            self.currentMoney -= variantCost
+            self.moneyLabel.text = "$: " + String(self.currentMoney)
+        } else {
+            return
+        }
+        
+        let toaster = SKSpriteNode (imageNamed: "ToasterDuck")
+        toaster.size = CGSize(width: toaster.size.width/(self.frame.width/50), height: toaster.size.height/(self.frame.width/50))
+        toaster.position = loc
+        toaster.name = id
+        toaster.zPosition = 3
+        
+        let newToaster = Ducks(canFire: true, sprite: toaster, damage: damageCalc(currentLvl: 1) / 2 , level: 1, upgradeCost: upgradeCostCalc(currentLvl: 1) * 2 , cooldownDelay: 0.3)
+        
+        currentDucks.remove(at: Int(id.suffix(1))!)
+        currentDucks.insert(newToaster, at: Int(id.suffix(1))!)
+    }
+    
     
     func addGoose(health: Int, speed: Double) {  // Goose Spawner
         
@@ -815,6 +866,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             label.text = "$\(duck.upgradeCost)"
         } else {
             label.text = "Max level"
+            addVariantBranch(loc: CGPoint(x: duck.sprite.position.x + 75, y: duck.sprite.position.y), id: "VarToast\(duck.sprite.name!.suffix(1))")
+        }
+    }
+    
+    func addMoney(money: Int) -> SKAction {
+        return SKAction.run{
+        self.currentMoney += money
+        self.moneyLabel.text = "$: \(self.currentMoney)"
         }
     }
     
@@ -869,7 +928,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                                 j=0
                             }
                             ,
-                        SKAction.wait(forDuration: 0.5)
+                        SKAction.wait(forDuration: self.currentDucks[i].cooldownDelay)
                             ,
                             
                             SKAction.run{
@@ -936,15 +995,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     func waveSequence() -> SKAction{
            SKAction.sequence([
            firstWave(),
-           SKAction.wait(forDuration: 1.0),
+           SKAction.wait(forDuration: 3.0),
+           addMoney(money: 75),
            secondWave(),
-           SKAction.wait(forDuration: 1.0),
+           SKAction.wait(forDuration: 3.0),
+           addMoney(money: 75),
            thirdWave(),
-           SKAction.wait(forDuration: 1.0),
+           SKAction.wait(forDuration: 3.0),
+           addMoney(money: 75),
            fourthWave(),
-           SKAction.wait(forDuration: 1.0),
+           SKAction.wait(forDuration: 3.0),
+           addMoney(money: 75),
            fifthWave(),
-            SKAction.wait(forDuration: 45.0),
+           SKAction.wait(forDuration: 15.0),
            endWave()
            
         
