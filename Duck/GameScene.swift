@@ -67,6 +67,7 @@ struct Ducks {
     var level: Int
     var upgradeCost: Int
     var cooldownDelay: TimeInterval
+    var duckType: String
 }
 
 struct Buttons {
@@ -94,7 +95,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var nestIDX = 0
     
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
-    var portal = SKSpriteNode(imageNamed:"portal")
+    var portal = SKSpriteNode(imageNamed:"gooseForest")
     
     public var remainingLives = 10
     public var healthLabel = SKLabelNode()
@@ -187,9 +188,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         addChild(currentMap)
     
         
-        portal.position = CGPoint(x: self.frame.width/8.75, y: self.frame.height/1.05)
+        portal.position = CGPoint(x: self.frame.width/8.80, y: self.frame.height/1.05)
         portal.zPosition = 0
-        portal.size = CGSize(width: 100, height: 110)
+        portal.size = CGSize(width: portal.size.width/(self.frame.width/750), height: portal.size.height/(self.frame.height/550))
         
         addChild(portal)
  
@@ -229,7 +230,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             
         }else if (firstBody.categoryBitMask == PhysicsCategory.enemy) && (secondBody.categoryBitMask == PhysicsCategory.projectile) {
            
-            
             collisionHandler(proj: secondBody.node as! SKSpriteNode, enemy: firstBody.node as! SKSpriteNode, dmg: currentCrumb.damage)
         }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.projectile) {
            
@@ -480,31 +480,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                         let nodeIDNum = node.name!.suffix(1)
                         var i = 0
                         while i < self.currentDucks.count {
-                            if self.currentDucks[i].sprite.name!.suffix(1) == nodeIDNum {
-                                if self.currentMoney >= self.currentDucks[i].upgradeCost {
-                                if self.currentDucks[i].level < 5 && self.currentMoney >= self.currentDucks[i].upgradeCost{
-                                self.currentDucks[i].level += 1 //Increase duck level by 1
-                                    self.currentDucks[i].damage = self.damageCalc(currentLvl: self.currentDucks[i].level, duckType: "Crumb") //Calcuate the new correct damage value and give it to the duck
-                                self.currentMoney -= self.currentDucks[i].upgradeCost
-                                self.moneyLabel.text = "$: " + String(self.currentMoney) //Deduct the correct amount of money from the player's total and update the label
-                                self.currentDucks[i].upgradeCost = self.upgradeCostCalc(currentLvl: self.currentDucks[i].level, duckType: "Crumb") //Calculate the new cost to reach the next level
-                                
-                                //self.upgradeLabels[Int(nodeIDNum)!].text = "$\(self.currentDucks[i].upgradeCost)"
-                                    self.updateLabel(label: self.upgradeLabels[Int(nodeIDNum)!], duck: self.currentDucks[i])
-                                    
-                                //Troubleshooting
-                                let duckName = self.currentDucks[i].sprite.name!
-                                let duckDmg = String(Int(self.currentDucks[i].damage))
-                                let duckUpCost = String(self.currentDucks[i].upgradeCost)
-                                let duckLvl = String(self.currentDucks[i].level)
-                                print ("Duck " + duckName + " is level " + duckLvl + ", deals " + duckDmg + " damage and costs " + duckUpCost + " to upgrade")
-                                } else {
-                                    print("This duck is maximum level")
-                                }
-                                } else {
-                                    print("Not enough money to upgrade")
-                                }
+                            if self.currentDucks[i].sprite.name?.suffix(1) == nodeIDNum {
+                                self.currentDucks[i] = self.upgradeDuck(duck: self.currentDucks[i], label: self.upgradeLabels[Int(nodeIDNum)!])
                             }
+                            
+                            
                             i += 1
                         }
                         
@@ -528,6 +508,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                             for duck in self.currentDucks {
                                 if duck.sprite.name?.suffix(1) == idNUM && !self.isSpecialized[idINT] {
                                     duck.sprite.removeFromParent()
+                                    var i = 0
+                                    while i < self.upgradeLabels.count {
+                                        if self.upgradeLabels[i].name!.suffix(1) == idNUM {
+                                            self.upgradeLabels[i].removeFromParent()
+                                        }
+                                        if self.currentButtons[i].sprite.name!.prefix(7) == "Upgrade" && self.currentButtons[i].sprite.name!.suffix(1) == idNUM {
+                                            self.currentButtons[i].sprite.removeFromParent()
+                                        }
+                                        i += 1
+                                    }
                                     self.isSpecialized[idINT] = true
                                     self.addToaster(loc: CGPoint(x: node.position.x - self.frame.width/9 , y: node.position.y) , id: ("Toaster" + idNUM!))
                                     //node.removeFromParent()
@@ -691,7 +681,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         //DETECTIONS between objects; does not have an effect on if an object will or can bounce off one another or COLLIDE? Since we want the detection circle to detect geese or any enemy that are in the circle, we put the category "enemy" in.
         detectionCircle.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         
-        let newDuck = Ducks(canFire: true, sprite: duck, damage: damageCalc(currentLvl: 1, duckType: "Toast"), level: 1, upgradeCost: upgradeCostCalc(currentLvl: 1, duckType: "Toast"), cooldownDelay: 0.6)
+        let newDuck = Ducks(canFire: true, sprite: duck, damage: damageCalc(currentLvl: 1, duckType: "Crumb"), level: 1, upgradeCost: upgradeCostCalc(currentLvl: 1, duckType: "Crumb"), cooldownDelay: 0.6, duckType: "Crumb")
         currentDucks.append(newDuck)
         
         duckIDX+=1
@@ -722,7 +712,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         
         addChild(toaster)
-        let newToaster = Ducks(canFire: true, sprite: toaster, damage: damageCalc(currentLvl: 4, duckType: "Toast"), level: 4, upgradeCost: upgradeCostCalc(currentLvl: 4, duckType: "Toast"), cooldownDelay: 0.3)
+        let newToaster = Ducks(canFire: true, sprite: toaster, damage: damageCalc(currentLvl: 4, duckType: "Toast"), level: 4, upgradeCost: upgradeCostCalc(currentLvl: 4, duckType: "Toast"), cooldownDelay: 0.3, duckType: "Toast")
         
         var i = 0
         while i < currentDucks.count {
@@ -923,6 +913,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         }
     }
     
+    func upgradeDuck(duck: Ducks, label: SKLabelNode) -> Ducks{
+        if self.currentMoney < duck.upgradeCost{
+            print ("Not enough money to upgrade.")
+            return duck
+        } else if (duck.duckType == "Crumb" && duck.level >= 5) || (duck.level >= 10){
+            print ("This duck is max level")
+            return duck
+        } else {
+            self.currentMoney -= duck.upgradeCost
+            self.moneyLabel.text = "$: " + String(self.currentMoney)
+            var newDuck = duck
+            newDuck.level = duck.level + 1
+            newDuck.upgradeCost = upgradeCostCalc(currentLvl: newDuck.level, duckType: duck.duckType)
+            newDuck.damage = damageCalc(currentLvl: newDuck.level, duckType: duck.duckType)
+            updateLabel(label: label, duck: newDuck)
+            return newDuck
+            
+        }
+    }
     
     
     
@@ -1054,6 +1063,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
            SKAction.wait(forDuration: waveDelay),
            addMoney(money: 75),
            wave5(),
+           SKAction.wait(forDuration: waveDelay),
+           addMoney(money: 100),
+           wave6(),
            SKAction.wait(forDuration: 15.0),
            victoryScreen()
            
