@@ -508,23 +508,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                             for duck in self.currentDucks {
                                 if duck.sprite.name?.suffix(1) == idNUM && !self.isSpecialized[idINT] {
                                     duck.sprite.removeFromParent()
-                                    var i = 0
-                                    while i < self.upgradeLabels.count {
-                                        if self.upgradeLabels[i].name!.suffix(1) == idNUM {
-                                            self.upgradeLabels[i].removeFromParent()
-                                        }
-                                        if self.currentButtons[i].sprite.name!.prefix(7) == "Upgrade" && self.currentButtons[i].sprite.name!.suffix(1) == idNUM {
-                                            self.currentButtons[i].sprite.removeFromParent()
-                                        }
-                                        i += 1
-                                    }
                                     self.isSpecialized[idINT] = true
                                     self.addToaster(loc: CGPoint(x: node.position.x - self.frame.width/9 , y: node.position.y) , id: ("Toaster" + idNUM!))
-                                    //node.removeFromParent()
+                                    node.name! = "UpToast\(idNUM!)"
+                                    
                                     for label in self.variantLabels {
                                         if label.name == "LabelToaster\(duck.sprite.name!.suffix(1))" {
                                             self.updateLabel(label:  label, duck: duck)
+                                            
                                         }
+                                    var i = 0
+                                    while i < self.upgradeLabels.count {
+                                                            if self.upgradeLabels[i].name!.suffix(1) == idNUM {
+                                                              self.upgradeLabels[i].removeFromParent()
+                                                            }
+                                                            if self.currentButtons[i].sprite.name!.prefix(7) == "Upgrade" && self.currentButtons[i].sprite.name!.suffix(1) == idNUM {
+                                                              self.currentButtons[i].sprite.removeFromParent()
+                                                            }
+                                                            i += 1
+                                                          }
+                                   
                                         
                                     }
                                     
@@ -535,6 +538,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     }
                     
                     
+                } else if node.name?.prefix(7) == "UpToast" {
+                    if node.contains(location) {
+                        let nodeIDNum = node.name!.suffix(1)
+                        var i = 0
+                        while i < self.currentDucks.count {
+                            if self.currentDucks[i].sprite.name?.suffix(1) == nodeIDNum {
+                                var j = 0
+                                var labelIndex = 0
+                                while j < self.variantLabels.count {
+                                    if self.variantLabels[j].name?.suffix(1) == nodeIDNum {
+                                        labelIndex = j
+                                    }
+                                    
+                                    j += 1
+                                }
+                                self.currentDucks[i] = self.upgradeDuck(duck: self.currentDucks[i], label: self.variantLabels[labelIndex])
+                            }
+                            
+                            
+                            i += 1
+                        }
+                    }
                 }
                 
                 
@@ -898,11 +923,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func updateLabel(label: SKLabelNode, duck: Ducks) {
-        if duck.level < 5{
-            label.text = "$\(duck.upgradeCost)"
+        if duck.duckType == "Crumb" {
+            if duck.level < 5{
+                label.text = "$\(duck.upgradeCost)"
+            } else {
+                label.text = "Max level"
+                addVariantBranch(loc: CGPoint(x: duck.sprite.position.x + 75, y: duck.sprite.position.y), id: "VarToast\(duck.sprite.name!.suffix(1))")
+            }
         } else {
-            label.text = "Max level"
-            addVariantBranch(loc: CGPoint(x: duck.sprite.position.x + 75, y: duck.sprite.position.y), id: "VarToast\(duck.sprite.name!.suffix(1))")
+            if duck.level < 10{
+                label.text = "$\(duck.upgradeCost)"
+            } else {
+                label.text = "Max level"
+            }
         }
     }
     
