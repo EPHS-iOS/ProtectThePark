@@ -747,6 +747,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             
             i += 1
         }
+        
+        var j = 0
+        while j < variantLabels.count {
+            if variantLabels[j].name?.suffix(1) == toaster.name?.suffix(1) {
+                updateLabel(label: variantLabels[j], duck: newToaster)
+            }
+            j += 1
+        }
     }
     
     
