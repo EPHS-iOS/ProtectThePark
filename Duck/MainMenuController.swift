@@ -19,7 +19,7 @@ class MainMenuController: UIViewController {
         view.addSubview(MainMenuArt)
         
         let button = UIButton(type: .custom)
-        button.frame = CGRect(x: self.view.frame.size.width/2 - 70, y: self.view.frame.size.height/2 + 80, width: 130, height: 110)
+        button.frame = CGRect(x: self.view.frame.size.width/2 - 1, y: self.view.frame.size.height/2 + 80, width: 130, height: 110)
         button.layer.cornerRadius = 0.5 * button.bounds.size.width
         button.clipsToBounds = true
         button.backgroundColor = .systemRed
@@ -28,6 +28,17 @@ class MainMenuController: UIViewController {
         view.addSubview(button)
         
         print("BUTTON")
+        
+        let button2 = UIButton(type: .custom)
+        button2.frame = CGRect(x: self.view.frame.size.width/2 - 150, y: self.view.frame.size.height/2 + 80, width: 130, height: 110)
+        button2.layer.cornerRadius = 0.5 * button2.bounds.size.width
+        button2.clipsToBounds = true
+        button2.backgroundColor = .systemBlue
+        button2.setTitle("How To Play", for: .normal)
+        button2.addTarget(self, action: #selector(HowToPlayButtonPressed), for: .touchUpInside)
+        view.addSubview(button2)
+        
+        print("BUTTON2")
         // Do any additional setup after loading the view.
     }
     
@@ -35,6 +46,10 @@ class MainMenuController: UIViewController {
         performSegue(withIdentifier: "toGameScene", sender: nil)
     }
     
+    @objc func HowToPlayButtonPressed() {
+        performSegue(withIdentifier: "ToTutorial", sender: nil)
+        print("hi")
+    }
     /*
     // MARK: - Navigation
 
