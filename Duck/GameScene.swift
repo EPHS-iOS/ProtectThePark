@@ -90,6 +90,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //Unique Duck Identifier
     var duckIDX = 0
+    
     //Unique Nest Identifier
     var nestIDX = 0
     
@@ -494,7 +495,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                                 let duckDmg = String(Int(self.currentDucks[i].damage))
                                 let duckUpCost = String(self.currentDucks[i].upgradeCost)
                                 let duckLvl = String(self.currentDucks[i].level)
-                                print ("Duck " + duckName + " is level " + duckLvl + ", deals " + duckDmg + " damage and costs " + duckUpCost + " to upgrade")
+                                print("Duck " + duckName + " is level " + duckLvl + ", deals " + duckDmg + " damage and costs " + duckUpCost + " to upgrade")
                                 } else {
                                     print("This duck is maximum level")
                                 }
@@ -705,9 +706,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
              SKAction.removeFromParent(),
              SKAction.run {
                 if self.remainingLives <= 0 {
+                   // let NewGameOver = self.storyboard?.instantiateViewController(withIdentifier: "NewGameOver") as! NewGameOver
+
+                  //  self.navigationController.pushViewController(NewGameOver, animated: true)
+                    //self.performSegueWithIdentifier("toGameOver", sender: nil)
                     let gameOverScene = SKScene(fileNamed: "GameOver")
-                    gameOverScene!.scaleMode = .aspectFill
-                    self.view?.presentScene(gameOverScene)
+                     gameOverScene!.scaleMode = .aspectFill
+                   self.view?.presentScene(gameOverScene)
                     
                 }
              }

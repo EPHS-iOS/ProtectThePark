@@ -7,6 +7,9 @@
 
 import Foundation
 import UIKit
-class NewGameOver: UIViewController {
+class NewGameOver: GameScene {
+    
+    
     
 }
+

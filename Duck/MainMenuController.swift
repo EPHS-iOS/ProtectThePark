@@ -30,7 +30,7 @@ class MainMenuController: UIViewController {
         print("BUTTON")
         
         let button2 = UIButton(type: .custom)
-        button2.frame = CGRect(x: self.view.frame.size.width/2 - 220, y: self.view.frame.size.height/2 + 80, width: 130, height: 110)
+        button2.frame = CGRect(x: self.view.frame.size.width/2 - 150, y: self.view.frame.size.height/2 + 80, width: 130, height: 110)
         button2.layer.cornerRadius = 0.5 * button2.bounds.size.width
         button2.clipsToBounds = true
         button2.backgroundColor = .systemBlue
