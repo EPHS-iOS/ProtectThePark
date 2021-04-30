@@ -125,6 +125,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     var variantLabels: [SKLabelNode] = []
     
+    var variantSprites: [SKSpriteNode] = []
+    
     var isSpecialized: [Bool] = [false, false, false, false, false]
     
     /* -------------------- FUNCTIONS -------------------- */
@@ -505,25 +507,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                             for duck in self.currentDucks {
                                 if duck.sprite.name?.suffix(1) == idNUM && !self.isSpecialized[idINT] {
                                     duck.sprite.removeFromParent()
-                                    self.isSpecialized[idINT] = true
-                                    self.addToaster(loc: CGPoint(x: node.position.x - self.frame.width/9 , y: node.position.y) , id: ("Toaster" + idNUM!))
+                                    //self.isSpecialized[idINT] = true
+                                    self.addToaster(loc: CGPoint(x: node.position.x - self.frame.width/9 , y: node.position.y - self.frame.height/9.5) , id: ("Toaster" + idNUM!))
                                     node.name! = "UpToast\(idNUM!)"
                                     
                                     for label in self.variantLabels {
-                                        if label.name == "LabelToaster\(duck.sprite.name!.suffix(1))" {
+                                        if label.name! == "LabelToaster\(duck.sprite.name!.suffix(1))" {
                                             self.updateLabel(label:  label, duck: duck)
                                             
                                         }
                                     var i = 0
                                     while i < self.upgradeLabels.count {
-                                                            if self.upgradeLabels[i].name!.suffix(1) == idNUM {
-                                                              self.upgradeLabels[i].removeFromParent()
-                                                            }
-                                                            if self.currentButtons[i].sprite.name!.prefix(7) == "Upgrade" && self.currentButtons[i].sprite.name!.suffix(1) == idNUM {
-                                                              self.currentButtons[i].sprite.removeFromParent()
-                                                            }
-                                                            i += 1
-                                                          }
+                                        if self.upgradeLabels[i].name!.suffix(1) == idNUM {
+                                            self.upgradeLabels[i].removeFromParent()
+                                        }
+                                        if self.currentButtons[i].sprite.name!.prefix(7) == "Upgrade" && self.currentButtons[i].sprite.name!.suffix(1) == idNUM {
+                                            self.currentButtons[i].sprite.removeFromParent()
+                                        }
+                                        i += 1
+                                    }
+                                        var j = 0
+                                            while j < self.variantSprites.count{
+                                                if self.variantSprites[j].name! == "VarBaguette\(idNUM!)" {
+                                                    self.variantSprites[j].removeFromParent()
+                                                    self.variantSprites.remove(at: j)
+                                                }
+                                                j += 1
+                                            }
                                    
                                         
                                     }
@@ -557,8 +567,76 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                             i += 1
                         }
                     }
+                } else if node.name?.prefix(11) == "VarBaguette" {
+                    if node.contains(location) {
+                        if self.currentMoney >= self.variantCost {
+                            let idNUM = node.name?.suffix(1)
+                            let idINT : Int = Int(idNUM ?? "")!
+                            for duck in self.currentDucks {
+                                if duck.sprite.name?.suffix(1) == idNUM && !self.isSpecialized[idINT] {
+                                    duck.sprite.removeFromParent()
+                                    //self.isSpecialized[idINT] = true
+                                    self.addBaguette(loc: CGPoint(x: node.position.x - self.frame.width/9 , y: node.position.y + self.frame.height/9.5) , id: ("Baguette" + idNUM!))
+                                    node.name! = "UpBaguette\(idNUM!)"
+                                    
+                                    for label in self.variantLabels {
+                                        if label.name! == "LabelToaster\(duck.sprite.name!.suffix(1))" {
+                                            self.updateLabel(label:  label, duck: duck)
+                                            
+                                        }
+                                    var i = 0
+                                    while i < self.upgradeLabels.count {
+                                        if self.upgradeLabels[i].name!.suffix(1) == idNUM {
+                                            self.upgradeLabels[i].removeFromParent()
+                                        }
+                                        if self.currentButtons[i].sprite.name!.prefix(7) == "Upgrade" && self.currentButtons[i].sprite.name!.suffix(1) == idNUM {
+                                            self.currentButtons[i].sprite.removeFromParent()
+                                        }
+                                        i += 1
+                                    }
+                                    var j = 0
+                                        while j < self.variantSprites.count{
+                                            if self.variantSprites[j].name! == "VarToast\(idNUM!)" {
+                                                self.variantSprites[j].removeFromParent()
+                                                self.variantSprites.remove(at: j)
+                                            }
+                                            j += 1
+                                        }
+                                        
+                                        
+                                    }
+                                    
+                                    
+                                }
+                            }
+                        }
+                    }
+                } else if node.name?.prefix(10) == "UpBaguette" {
+                    if node.contains(location) {
+                        
+                        let nodeIDNum = node.name!.suffix(1)
+                        var i = 0
+                        while i < self.currentDucks.count {
+                            if self.currentDucks[i].sprite.name?.suffix(1) == nodeIDNum {
+                                var j = 0
+                                var labelIndex = 0
+                                while j < self.variantLabels.count {
+                                    if self.variantLabels[j].name?.suffix(1) == nodeIDNum {
+                                        labelIndex = j
+                                    }
+                                    
+                                    j += 1
+                                }
+                                print (node.name!)
+                                print (self.currentDucks[i].sprite.name! + " leveled up")
+                                self.currentDucks[i] = self.upgradeDuck(duck: self.currentDucks[i], label: self.variantLabels[labelIndex])
+                            }
+                            
+                            
+                            i += 1
+                        }
+                    }
                 }
-                
                 
             })
             
@@ -647,23 +725,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     func addVariantBranch(loc: CGPoint, id: String) {
         let toast = SKSpriteNode(imageNamed: "toastIcon")
-        let heightScale: CGFloat = 900
-        toast.name = id
-        toast.position = loc
+        let toastScale: CGFloat = 900
+        toast.name = "VarToast" + id
+        toast.position = CGPoint(x: loc.x, y: loc.y + 40)
         toast.zPosition = 2
         toast.alpha = 1
-        toast.size = CGSize(width: toast.size.width/(self.frame.width/heightScale), height: toast.size.height/(self.frame.width/heightScale))
+        toast.size = CGSize(width: toast.size.width/(self.frame.width/toastScale), height: toast.size.height/(self.frame.width/toastScale))
+        
+        let baguette = SKSpriteNode(imageNamed: "baguetteIcon")
+        let bagScale: CGFloat = 900
+        baguette.name = "VarBaguette" + id
+        baguette.position = CGPoint(x: loc.x, y: loc.y - 20)
+        baguette.zPosition = 2
+        baguette.alpha = 1
+        baguette.size = CGSize(width: baguette.size.width/(self.frame.width/bagScale), height: baguette.size.height/(self.frame.width/bagScale))
+        
         
         let label = SKLabelNode()
         label.fontColor = .black
-        label.text = "$1750"
-        label.name = "LabelToast\(id.suffix(1))"
-        label.position = CGPoint(x: loc.x, y: loc.y + 20)
+        label.text = "$" + String(variantCost)
+        label.name = "LabelVariant\(id.suffix(1))"
+        label.position = CGPoint(x: loc.x, y: loc.y)
         label.fontSize = CGFloat(20)
         
         addChild(toast)
         addChild(label)
+        addChild(baguette)
         
+        variantSprites.append(toast)
+        variantSprites.append(baguette)
         variantLabels.append(label)
     }
     
@@ -749,6 +839,44 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         while j < variantLabels.count {
             if variantLabels[j].name?.suffix(1) == toaster.name?.suffix(1) {
                 updateLabel(label: variantLabels[j], duck: newToaster)
+            }
+            j += 1
+        }
+    }
+    
+    func addBaguette (loc: CGPoint, id: String) {
+        if (self.currentMoney >= variantCost) {
+            self.currentMoney -= variantCost
+            self.moneyLabel.text = "$: " + String(self.currentMoney)
+        } else {
+            return
+        }
+        
+        let sizeScale: CGFloat = 600
+        let baguette = SKSpriteNode (imageNamed: "BaguetteDuck")
+        baguette.size = CGSize(width: baguette.size.width/(self.frame.width/sizeScale), height: baguette.size.height/(self.frame.width/sizeScale))
+        baguette.position = loc
+        baguette.name = id
+        baguette.zPosition = 3
+        baguette.alpha = 1
+        
+        
+        addChild(baguette)
+        let newBaguette = Ducks(canFire: true, sprite: baguette, damage: damageCalc(currentLvl: 4, duckType: "Baguette"), level: 4, upgradeCost: upgradeCostCalc(currentLvl: 4, duckType: "Baguette"), cooldownDelay: 1.5, duckType: "Baguette")
+        
+        var i = 0
+        while i < currentDucks.count {
+            if currentDucks[i].sprite.name?.suffix(1) == baguette.name?.suffix(1) {
+                currentDucks[i] = newBaguette
+            }
+            
+            i += 1
+        }
+        
+        var j = 0
+        while j < variantLabels.count {
+            if variantLabels[j].name?.suffix(1) == baguette.name?.suffix(1) {
+                updateLabel(label: variantLabels[j], duck: newBaguette)
             }
             j += 1
         }
@@ -880,6 +1008,66 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
 
       demon.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
     }
+    
+    func addTuff(hp: CGFloat) {
+        let tuff = SKSpriteNode(imageNamed: "TuffGoose2")
+        tuff.size = CGSize(width: tuff.size.width/(self.frame.width/150), height: tuff.size.height/(self.frame.width/150))
+        tuff.physicsBody = SKPhysicsBody(circleOfRadius: tuff.size.width - 25)
+        tuff.zPosition = 1
+        tuff.physicsBody?.affectedByGravity = false
+        
+        tuff.name = "enemy"
+        tuff.physicsBody?.isDynamic = true
+
+        //Collisions
+        tuff.physicsBody?.categoryBitMask = PhysicsCategory.enemy //Goose is a type of enemy
+        tuff.physicsBody?.collisionBitMask = PhysicsCategory.none //We want the breadcrumb to look like it's bouncing off of the goose, so we put projectile in for collisionBitMask
+        tuff.physicsBody?.contactTestBitMask = PhysicsCategory.projectile | PhysicsCategory.detection// We also want the goose to detect if it has been hit by a breadcrumb, not only just bouncing it off. In addition, we want the detection circle to detect if a goose is in its radius, so we add that too.
+
+        tuff.position = CGPoint(x: self.frame.width/8.75, y: self.frame.height/1.05)
+        
+        addChild(tuff)
+        let newTuff = Gooses(health : hp, sprite: tuff)
+        currentGeese.append(newTuff)
+        
+        
+        let gooseSpeed = 0.5
+        
+        let firstMove = SKAction.sequence([
+            SKAction.move(to: CGPoint(x: self.frame.width/8.75, y: self.frame.height/2.82),duration: TimeInterval((320.0/250.0)/gooseSpeed)),
+            SKAction.run {tuff.zRotation = CGFloat(Double.pi/2.0)}
+        ])
+            
+        let secondMove = SKAction.sequence([
+            SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/2.82), duration: TimeInterval((250.0/250.0)/gooseSpeed)),
+            SKAction.run {tuff.zRotation = CGFloat(Double.pi)}])
+        
+        let thirdMove = SKAction.sequence([
+            SKAction.move(to: CGPoint(x: self.frame.width/3.3, y: self.frame.height/1.30), duration: TimeInterval((245.0/250.0)/gooseSpeed)),
+            SKAction.run {tuff.zRotation = CGFloat(Double.pi/2.0)}])
+        
+        let fourthMove = SKAction.sequence([ SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/1.30), duration: TimeInterval((685.0/250.0)/gooseSpeed)),
+            SKAction.run {tuff.zRotation = CGFloat(Double.pi * 0)}])
+        
+        let fifthMove = SKAction.move(to: CGPoint(x: self.frame.width/1.08, y: self.frame.height/5), duration: TimeInterval((320.0/250.0)/gooseSpeed))
+        
+        let finalAction = SKAction.sequence(
+            [SKAction.run {self.remainingLives -= 3},
+             SKAction.run{self.healthLabel.text = "Remaining Lives:  " + String(self.remainingLives)},
+             SKAction.removeFromParent(),
+             SKAction.run {
+                if self.remainingLives <= 0 {
+                  
+                    
+                    let gameOverScene = SKScene(fileNamed: "GameOver")
+                    self.view?.presentScene(gameOverScene)
+                    
+                }
+             }
+            ])
+
+        tuff.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
+    }
 
     /* -------------------- ACTIONS -------------------- */
     func launchBreadcrumb (startPoint: CGPoint, endPoint: CGPoint, duck: Ducks) -> breadcrumb {
@@ -915,9 +1103,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     func upgradeCostCalc(currentLvl: Int, duckType: String) -> Int{
         if duckType == "Crumb" {
-        return (100 * currentLvl) + (50 * currentLvl * currentLvl)
+            return (100 * currentLvl) + (50 * currentLvl * currentLvl)
         } else if duckType == "Toast" {
-        return (50 * currentLvl) + (50 * currentLvl * currentLvl)
+            return (50 * currentLvl) + (50 * currentLvl * currentLvl)
+        } else if duckType == "Baguette" {
+            return (200 * currentLvl) + (5 * currentLvl * currentLvl * currentLvl)
         }
         
         return 0
@@ -928,6 +1118,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             return CGFloat((10 * currentLvl) + (20 * currentLvl * currentLvl))
         } else if duckType == "Toast" {
             return CGFloat((5 * currentLvl) + (20 * currentLvl * currentLvl))
+        } else if duckType == "Baguette" {
+            return CGFloat((25 * currentLvl) + (10 * currentLvl * currentLvl * currentLvl))
         }
         
         return 0
@@ -939,7 +1131,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 label.text = "$\(duck.upgradeCost)"
             } else {
                 label.text = "Max level"
-                addVariantBranch(loc: CGPoint(x: duck.sprite.position.x + 75, y: duck.sprite.position.y), id: "VarToast\(duck.sprite.name!.suffix(1))")
+                addVariantBranch(loc: CGPoint(x: duck.sprite.position.x + 75, y: duck.sprite.position.y), id: String(duck.sprite.name!.suffix(1)))
             }
         } else {
             if duck.level < 10{
@@ -997,7 +1189,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         //Cooldown
         var i = 0
         while i < currentDucks.count {
-             print(i)
+             //print(i)
             //Check for the duck that is associated with the detection circle that was triggered.
             if currentDucks[i].sprite.name!.suffix(1) == duck.name!.suffix(1) {
                 //print(currentDucks[i].sprite.name! + " canFire = " + String(currentDucks[i].canFire))
@@ -1047,7 +1239,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         SKAction.sequence([
         
             SKAction.run{
-                print(self.currentDucks[i].sprite.name! + " is firing")
+                //print(self.currentDucks[i].sprite.name! + " is firing")
                 //print("i is: " + String(i))
                 self.currentCrumb = self.launchBreadcrumb(startPoint: circle.position, endPoint: goose.position, duck: self.currentDucks[i])
             //print(self.currentDucks[Int(duck.name!.suffix(1))!].name + " is going to be set to false")
@@ -1125,11 +1317,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 1"
             },
-            gooseSeries(amt: 10, gap: 1.5, hp: 10, spd: 1.0),
+            gooseSeries(amt: 1, gap: 1.5, hp: 10, spd: 1.0),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 16, gap: 1.0, hp : 10, spd: 1.1),
+            gooseSeries(amt: 1, gap: 1.0, hp : 10, spd: 1.1),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 0.4, hp : 50, spd: 1.3)
+            gooseSeries(amt: 2, gap: 0.4, hp : 50, spd: 1.3)
         ])
     }
     
@@ -1139,11 +1331,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 2"
             },
-            gooseSeries(amt: 17, gap: 1.0, hp: 75, spd: 1.0),
+            gooseSeries(amt: 1, gap: 1.0, hp: 75, spd: 1.0),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 28, gap: 1.0, hp : 100, spd: 1.3),
+            gooseSeries(amt: 2, gap: 1.0, hp : 100, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 13, gap: 0.5, hp : 200, spd: 1.5)
+            gooseSeries(amt: 1, gap: 0.5, hp : 200, spd: 1.5)
         ])
     }
     
@@ -1153,11 +1345,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 3"
             },
-            gooseSeries(amt: 10, gap: 0.7, hp: 100, spd: 1.3),
+            gooseSeries(amt: 1, gap: 0.7, hp: 100, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 23, gap: 0.7, hp : 300, spd: 1.3),
+            gooseSeries(amt: 2, gap: 0.7, hp : 300, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 1.0, hp : 275, spd: 1.5)
+            gooseSeries(amt: 2, gap: 1.0, hp : 275, spd: 1.5)
         ])
     }
     
@@ -1167,11 +1359,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 4"
             },
-            gooseSeries(amt: 12, gap: 0.5, hp: 400, spd: 1.3),
+            gooseSeries(amt: 1, gap: 0.5, hp: 400, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 13, gap: 0.8, hp : 550, spd: 1.3),
+            gooseSeries(amt: 1, gap: 0.8, hp : 550, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 1.0, hp : 675, spd: 1.0)
+            gooseSeries(amt: 2, gap: 1.0, hp : 675, spd: 1.0)
         ])
     }
     
@@ -1181,13 +1373,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.run {
                 self.waveLabel.text = "Wave 5"
             },
-            gooseSeries(amt: 10, gap: 0.4, hp: 700, spd: 1.3),
+            gooseSeries(amt: 1, gap: 0.4, hp: 700, spd: 1.3),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 0.6, hp : 775, spd: 1.7),
+            gooseSeries(amt: 2, gap: 0.6, hp : 775, spd: 1.7),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 0.5, hp : 850, spd: 1.5),
+            gooseSeries(amt: 2, gap: 0.5, hp : 850, spd: 1.5),
             SKAction.wait(forDuration: 0.1),
-            SKAction.run{self.addDemon(hp: 1200)}
+            SKAction.run{self.addTuff(hp: 1200)}
         ])
     }
     
