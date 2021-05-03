@@ -96,9 +96,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"gooseForest")
     
-    public var remainingLives = 10
+    public var remainingLives = 1000000
     public var healthLabel = SKLabelNode()
-    public var currentMoney = 150000
+    public var currentMoney = 150
     public var moneyLabel = SKLabelNode()
     public var waveLabel = SKLabelNode()
     public var currentCrumb: breadcrumb = breadcrumb(damage: 0, sprite: SKSpriteNode())
@@ -196,7 +196,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         addChild(portal)
  
-        run(waveSequence())
+        endlessMode()
 
         }
     
@@ -1318,6 +1318,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         ])
     }
+    
+    func endlessMode() {
+        var i = 3
+        let waveDelay : TimeInterval = 3.0
+        run (SKAction.sequence([
+            wave1(),
+            SKAction.wait(forDuration: waveDelay),
+            addMoney(money: 75),
+        ]))
+        while i < 21 {
+            run(SKAction.sequence([
+                SKAction.wait(forDuration: 3.0),
+                waveGenerator(difficulty: 1 + i/5, waveNum: i)
+            
+            ]))
+            i += 1
+        }
+        
+        //run (victoryScreen())
+    }
+    
+    func annoyingBureaucracy (wait: TimeInterval) -> Void {
+        run(SKAction.wait(forDuration: wait))
+    }
     //The individual geese spawn commands for each wave for easy customization
     func wave1() -> SKAction{
         SKAction.sequence([
@@ -1326,7 +1350,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             },
             gooseSeries(amt: 1, gap: 1.5, hp: 10, spd: 1.0),
             SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 1, gap: 1.0, hp : 10, spd: 1.1),
+            gooseSeries(amt: 3, gap: 1.0, hp : 10, spd: 1.1),
             SKAction.wait(forDuration: 0.1),
             gooseSeries(amt: 2, gap: 0.4, hp : 50, spd: 1.3)
         ])
@@ -1401,6 +1425,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             SKAction.wait(forDuration: 0.1),
             gooseSeries(amt: 30, gap: 0.3, hp : 1200, spd: 1.5),
         ])
+    }
+    
+    func waveGenerator(difficulty: Int, waveNum: Int) -> SKAction {
+        SKAction.sequence([
+            SKAction.wait(forDuration: 3.0),
+            SKAction.run {
+                self.waveLabel.text = "Wave \(waveNum)"
+            },
+            SKAction.repeat(
+                gooseSeries(amt: difficulty * Int(random(min: 5, max: 10)), gap: Double(random(min: 0.3, max: 1.0)), hp: difficulty * difficulty * Int(random(min: 20, max: 30)), spd: Double(random(min: 0.9, max: 1.7)))
+                ,count: Int(random(min: 3, max: 6))),
+            addMoney(money: 25 + (50 * difficulty)),
+            SKAction.wait(forDuration: 3.0)
+            
+    
+    ])
     }
     
     func victoryScreen() -> SKAction{
