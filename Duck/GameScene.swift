@@ -657,7 +657,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
       // Create sprite
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
-        goose.size = CGSize(width: goose.size.width/(self.frame.width/65), height: goose.size.height/(self.frame.width/65))
+        goose.size = CGSize(width: goose.size.width/(self.frame.width/65), height: goose.size.height/(self.frame.width/0))
         goose.physicsBody = SKPhysicsBody(circleOfRadius: goose.size.width - 25)
         goose.zPosition = 1
         goose.physicsBody?.affectedByGravity = false
