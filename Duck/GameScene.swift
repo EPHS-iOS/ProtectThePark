@@ -196,7 +196,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         addChild(portal)
  
-        endlessMode()
+        run(endlessMode())
 
         }
     
@@ -630,8 +630,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                                     
                                     j += 1
                                 }
-                                print (node.name!)
-                                print (self.currentDucks[i].sprite.name! + " leveled up")
+                               // print (node.name!)
+                                //print (self.currentDucks[i].sprite.name! + " leveled up")
                                 self.currentDucks[i] = self.upgradeDuck(duck: self.currentDucks[i], label: self.variantLabels[labelIndex])
                             }
                             
@@ -753,6 +753,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         addChild(toast)
         addChild(label)
+        print(label.name!)
         addChild(baguette)
         
         variantSprites.append(toast)
@@ -956,7 +957,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     
-    func addDemon(hp: CGFloat) {
+    func addDemon(hp: CGFloat){
         let demon = SKSpriteNode(imageNamed: "DemonGoose")
         demon.size = CGSize(width: demon.size.width/(self.frame.width/75), height: demon.size.height/(self.frame.width/75))
         demon.physicsBody = SKPhysicsBody(circleOfRadius: demon.size.width - 25)
@@ -1016,7 +1017,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
       demon.run(SKAction.sequence([firstMove,secondMove,thirdMove, fourthMove, fifthMove, finalAction]))
     }
     
-    func addTuff(hp: CGFloat) {
+    func addTuff(hp: CGFloat){
         let tuff = SKSpriteNode(imageNamed: "TuffGoose2")
         tuff.size = CGSize(width: tuff.size.width/(self.frame.width/150), height: tuff.size.height/(self.frame.width/150))
         tuff.physicsBody = SKPhysicsBody(circleOfRadius: tuff.size.width - 25)
@@ -1290,7 +1291,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         },
         SKAction.wait(forDuration: gap),
         ])
-        return SKAction.repeat(gooseWait, count: amt)
+        return SKAction.sequence([
+            SKAction.repeat(gooseWait, count: amt),
+            SKAction.wait(forDuration: 0.1)
+        
+        ])
+            
     }
     //Puts all waves in order with a set delay between each one
     func waveSequence() -> SKAction{
@@ -1319,29 +1325,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         ])
     }
     
-    func endlessMode() {
-        var i = 3
-        let waveDelay : TimeInterval = 3.0
-        run (SKAction.sequence([
+    func endlessMode() -> SKAction{
+         SKAction.sequence([
             wave1(),
-            SKAction.wait(forDuration: waveDelay),
+            SKAction.wait(forDuration: 3.0),
             addMoney(money: 75),
-        ]))
-        while i < 21 {
-            run(SKAction.sequence([
-                SKAction.wait(forDuration: 3.0),
-                waveGenerator(difficulty: 1 + i/5, waveNum: i)
-            
-            ]))
-            i += 1
-        }
+            multiWave(i: 2),
+            multiWave(i: 3),
+            multiWave(i: 4),
+            multiWave(i: 5),
+            SKAction.run{self.addTuff(hp: 500)},
+            multiWave(i: 6),
+            multiWave(i: 7),
+            multiWave(i: 8),
+            multiWave(i: 9),
+            multiWave(i: 10),
+            SKAction.run{self.addDemon(hp: 1000)},
+            SKAction.wait(forDuration: 30.0),
+            victoryScreen()
+        ])
         
-        //run (victoryScreen())
+        
+   
     }
     
-    func annoyingBureaucracy (wait: TimeInterval) -> Void {
-        run(SKAction.wait(forDuration: wait))
+    func multiWave(i: Int) -> SKAction{
+        SKAction.sequence([
+            SKAction.wait(forDuration: 3.0),
+            waveGenerator(difficulty: 1 + i/5, waveNum: i)
+            
+        ])
     }
+    
     //The individual geese spawn commands for each wave for easy customization
     func wave1() -> SKAction{
         SKAction.sequence([
@@ -1429,13 +1444,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     func waveGenerator(difficulty: Int, waveNum: Int) -> SKAction {
         SKAction.sequence([
-            SKAction.wait(forDuration: 3.0),
             SKAction.run {
                 self.waveLabel.text = "Wave \(waveNum)"
+                print("Wave \(waveNum)" + " \(difficulty)")
             },
-            SKAction.repeat(
-                gooseSeries(amt: difficulty * Int(random(min: 5, max: 10)), gap: Double(random(min: 0.3, max: 1.0)), hp: difficulty * difficulty * Int(random(min: 20, max: 30)), spd: Double(random(min: 0.9, max: 1.7)))
-                ,count: Int(random(min: 3, max: 6))),
+            SKAction.repeat(gooseSeries(amt: difficulty * Int(random(min: 5, max: 10)), gap: Double(random(min: 0.3, max: 1.0)), hp: difficulty * difficulty * Int(random(min: 40, max: 60)), spd: Double(random(min: 0.9, max: 1.7))), count: 2 + difficulty)
+            ,
             addMoney(money: 25 + (50 * difficulty)),
             SKAction.wait(forDuration: 3.0)
             

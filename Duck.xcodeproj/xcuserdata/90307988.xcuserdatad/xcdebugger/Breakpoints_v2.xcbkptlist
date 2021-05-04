@@ -14,8 +14,8 @@
             filePath = "Duck/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1430"
-            endingLineNumber = "1430"
+            startingLineNumber = "1445"
+            endingLineNumber = "1445"
             landmarkName = "waveGenerator(difficulty:waveNum:)"
             landmarkType = "7">
          </BreakpointContent>
