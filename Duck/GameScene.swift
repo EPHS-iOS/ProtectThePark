@@ -99,7 +99,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     public var remainingLives = 10
     public var healthLabel = SKLabelNode()
-    public var currentMoney = 150
+    public var currentMoney = 1500000
     public var moneyLabel = SKLabelNode()
     public var waveLabel = SKLabelNode()
     public var currentCrumb: breadcrumb = breadcrumb(damage: 0, sprite: SKSpriteNode())
@@ -657,7 +657,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
       // Create sprite
       let goose = SKSpriteNode(imageNamed: "BasicGooseFullBody")
-        goose.size = CGSize(width: goose.size.width/(self.frame.width/65), height: goose.size.height/(self.frame.width/0))
+        goose.size = CGSize(width: goose.size.width/(self.frame.width/65), height: goose.size.height/(self.frame.width/65))
         goose.physicsBody = SKPhysicsBody(circleOfRadius: goose.size.width - 25)
         goose.zPosition = 1
         goose.physicsBody?.affectedByGravity = false

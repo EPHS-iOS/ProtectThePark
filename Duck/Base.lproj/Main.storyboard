@@ -212,34 +212,74 @@
                         <rect key="frame" x="0.0" y="0.0" width="736" height="414"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="-300" translatesAutoresizingMaskIntoConstraints="NO" id="sYN-uJ-udc">
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="5R7-u7-LUe">
                                 <rect key="frame" x="0.0" y="0.0" width="736" height="414"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MX0-nX-3mv">
-                                        <rect key="frame" x="0.0" y="0.0" width="445.33333333333331" height="414"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Once your Ducks have reached level 5 you will be given the option to upgrade them" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xk5-ac-TU9">
+                                        <rect key="frame" x="0.0" y="0.0" width="736" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" title="Back To Main Screen">
-                                            <color key="titleColor" systemColor="systemIndigoColor"/>
-                                        </state>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nhb-A1-MJZ">
-                                        <rect key="frame" x="145.33333333333334" y="0.0" width="445.33333333333326" height="414"/>
-                                        <state key="normal" title="Previous Page">
-                                            <color key="titleColor" systemColor="systemIndigoColor"/>
-                                        </state>
-                                        <connections>
-                                            <segue destination="qfd-Re-HDr" kind="show" id="q0t-XP-wVe"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="04x-jc-zJc">
-                                        <rect key="frame" x="290.66666666666674" y="0.0" width="445.33333333333326" height="414"/>
-                                        <state key="normal" title="Next Page">
-                                            <color key="titleColor" systemColor="systemIndigoColor"/>
-                                        </state>
-                                        <connections>
-                                            <segue destination="YYy-9H-bEC" kind="show" id="Glp-7b-oFu"/>
-                                        </connections>
-                                    </button>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="These new upgrades will change the type of Duck you have" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dk3-SJ-Qdj">
+                                        <rect key="frame" x="0.0" y="18" width="736" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="MS5-BY-fme">
+                                        <rect key="frame" x="0.0" y="36" width="736" height="139"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="BuyIcon" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UJH-el-HcN">
+                                                <rect key="frame" x="0.0" y="0.0" width="614" height="139"/>
+                                            </imageView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="BuyIcon" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wjO-GI-M2E">
+                                                <rect key="frame" x="614" y="0.0" width="122" height="139"/>
+                                            </imageView>
+                                        </subviews>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="As you progress the geese will become stronger." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rFo-4h-hd3">
+                                        <rect key="frame" x="0.0" y="175" width="736" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Occasionally you will encounter a boss goose. These will be stronger than the rest of the geese" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o9N-vu-PEu">
+                                        <rect key="frame" x="0.0" y="193" width="736" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="-300" translatesAutoresizingMaskIntoConstraints="NO" id="sYN-uJ-udc">
+                                        <rect key="frame" x="0.0" y="211" width="736" height="203"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MX0-nX-3mv">
+                                                <rect key="frame" x="0.0" y="0.0" width="445.33333333333331" height="203"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <state key="normal" title="Back To Main Screen">
+                                                    <color key="titleColor" systemColor="systemIndigoColor"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nhb-A1-MJZ">
+                                                <rect key="frame" x="145.33333333333334" y="0.0" width="445.33333333333326" height="203"/>
+                                                <state key="normal" title="Previous Page">
+                                                    <color key="titleColor" systemColor="systemIndigoColor"/>
+                                                </state>
+                                                <connections>
+                                                    <segue destination="qfd-Re-HDr" kind="show" id="q0t-XP-wVe"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="04x-jc-zJc">
+                                                <rect key="frame" x="290.66666666666674" y="0.0" width="445.33333333333326" height="203"/>
+                                                <state key="normal" title="Next Page">
+                                                    <color key="titleColor" systemColor="systemIndigoColor"/>
+                                                </state>
+                                                <connections>
+                                                    <segue destination="YYy-9H-bEC" kind="show" id="Glp-7b-oFu"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -279,6 +319,7 @@
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="systemPurpleColor"/>
     <resources>
+        <image name="BuyIcon" width="122" height="139"/>
         <image name="CroppedGameOver" width="1161" height="676"/>
         <image name="redPointBasicNest" width="93" height="98"/>
         <image name="redPointMap" width="634" height="258"/>
