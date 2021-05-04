@@ -14,21 +14,8 @@ class GameOverController : SKScene {
     
     func createButtons(){
         
-        let mainButton = SKShapeNode(rectOf: CGSize(width: self.frame.width/6 + 60, height: self.frame.height/12 + 30), cornerRadius: CGFloat(15))
-        mainButton.position = CGPoint(x: -self.frame.width/10 - 100, y: -self.frame.width/10 - 30)
-        mainButton.fillColor = .red
-        mainButton.alpha = 0.4
-        mainButton.name = "main"
-        
-        let mainLabel = SKLabelNode()
-        mainLabel.position = CGPoint(x: mainButton.position.x, y: mainButton.position.y - 5)
-        mainLabel.fontSize = 18
-        mainLabel.fontName = "HelveticaNeue-Bold"
-        mainLabel.alpha = 0.7
-        mainLabel.text = "Return to Main Menu"
-        
-        let retryButton = SKShapeNode(rectOf: CGSize(width: self.frame.width/6 + 60, height: self.frame.height/12 + 30), cornerRadius: CGFloat(15))
-        retryButton.position = CGPoint(x: self.frame.width/10 + 100, y: -self.frame.width/10 - 30)
+        let retryButton = SKShapeNode(rectOf: CGSize(width: self.frame.width/4 + 60, height: self.frame.height/10 + 30), cornerRadius: CGFloat(15))
+        retryButton.position = CGPoint(x: 0, y: -self.frame.width/10 - 30)
         retryButton.fillColor = .blue
         retryButton.alpha = 0.4
         retryButton.name = "retry"
@@ -36,12 +23,10 @@ class GameOverController : SKScene {
         let retryLabel = SKLabelNode()
         retryLabel.position = CGPoint(x: retryButton.position.x, y: retryButton.position.y - 5)
         retryLabel.fontName = "HelveticaNeue-Bold"
-        retryLabel.fontSize = 18
+        retryLabel.fontSize = 25
         retryLabel.alpha = 0.7
         retryLabel.text = "Retry"
-        
-        addChild(mainButton)
-        addChild(mainLabel)
+
         addChild(retryButton)
         addChild(retryLabel)
         
@@ -51,10 +36,10 @@ class GameOverController : SKScene {
         
         print("Game Over!")
         
-        let gameOverImage = SKSpriteNode(imageNamed:"CroppedGameOver")
+        let gameOverImage = SKSpriteNode(imageNamed:"GameOver")
         gameOverImage.size = CGSize(width: self.frame.width, height: self.frame.height)
         gameOverImage.zPosition = -1
-        
+
         addChild(gameOverImage)
         
         createButtons()
@@ -72,12 +57,7 @@ class GameOverController : SKScene {
             if name == "retry" {
 
                 switchScreen(scene: "GameScene")
-
-            } else if name == "main" {
-
-                print("Transferring to Main Menu.")
-
-
+                
             }
 
         }
