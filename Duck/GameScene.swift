@@ -1341,7 +1341,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             multiWave(i: 9),
             multiWave(i: 10),
             SKAction.run{self.addDemon(hp: 1000)},
-            SKAction.wait(forDuration: 30.0),
+            SKAction.wait(forDuration: 15.0),
             victoryScreen()
         ])
         
@@ -1352,7 +1352,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     func multiWave(i: Int) -> SKAction{
         SKAction.sequence([
             SKAction.wait(forDuration: 3.0),
-            waveGenerator(difficulty: 1 + i/5, waveNum: i)
+            waveGenerator(difficulty: 1 + i/4, waveNum: i)
             
         ])
     }
