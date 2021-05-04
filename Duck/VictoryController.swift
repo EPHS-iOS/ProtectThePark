@@ -16,7 +16,7 @@ class VictoryController : SKScene {
     
     func createButtons(){
         
-        let mainButton = SKShapeNode(rectOf: CGSize(width: self.frame.width/3 + 50, height: self.frame.height/10 + 60), cornerRadius: CGFloat(15))
+        let mainButton = SKShapeNode(rectOf: CGSize(width: self.frame.width/3 + 80, height: self.frame.height/12 + 20), cornerRadius: CGFloat(15))
         mainButton.position = CGPoint(x: -self.frame.width/10 - 100, y: -self.frame.width/10 - 15)
         mainButton.fillColor = .red
         mainButton.alpha = 0.7
@@ -27,7 +27,7 @@ class VictoryController : SKScene {
         mainLabel.fontName = "HelveticaNeue-Bold"
         mainLabel.text = "Return to Main Menu"
         
-        let retryButton = SKShapeNode(rectOf: CGSize(width: self.frame.width/3 + 50, height: self.frame.height/10 + 60), cornerRadius: CGFloat(15))
+        let retryButton = SKShapeNode(rectOf: CGSize(width: self.frame.width/3 + 80, height: self.frame.height/12 + 20), cornerRadius: CGFloat(15))
         retryButton.position = CGPoint(x: self.frame.width/10 + 100, y: -self.frame.width/10 - 15)
         retryButton.fillColor = .blue
         retryButton.alpha = 0.7
@@ -73,7 +73,7 @@ class VictoryController : SKScene {
 
             } else if name == "main" {
 
-                print("Trasnferring to Main Menu.")
+                print("Transferring to Main Menu.")
 
 
             }

@@ -97,7 +97,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var currentMap = SKSpriteNode(imageNamed: "flowerMap")
     var portal = SKSpriteNode(imageNamed:"portal")
     
-    public var remainingLives = 10
+    public var remainingLives = 1
     public var healthLabel = SKLabelNode()
     public var currentMoney = 9999999
     public var moneyLabel = SKLabelNode()
@@ -715,9 +715,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
 
                   //  self.navigationController.pushViewController(NewGameOver, animated: true)
                     //self.performSegueWithIdentifier("toGameOver", sender: nil)
-                    let gameOverScene = SKScene(fileNamed: "GameOver")
-                     gameOverScene!.scaleMode = .aspectFill
-                   self.view?.presentScene(gameOverScene)
+                    self.view?.presentScene(GameScene(fileNamed: "GameOver"))
                     
                 }
              }
