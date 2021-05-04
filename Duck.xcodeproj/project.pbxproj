@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A32CBD4263B129900F19ED7 /* Victory.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0A32CBD3263B129900F19ED7 /* Victory.sks */; };
+		0A32CBD7263B12A900F19ED7 /* VictoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A32CBD6263B12A900F19ED7 /* VictoryController.swift */; };
+		0A32CBDB263B12BC00F19ED7 /* GameOver.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0A32CBDA263B12BC00F19ED7 /* GameOver.sks */; };
+		0A32CBDE263B12C800F19ED7 /* GameOverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A32CBDD263B12C800F19ED7 /* GameOverController.swift */; };
 		0AD2AE2F25DEDA96004F9D1E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD2AE2E25DEDA96004F9D1E /* AppDelegate.swift */; };
 		0AD2AE3125DEDA96004F9D1E /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0AD2AE3025DEDA96004F9D1E /* GameScene.sks */; };
 		0AD2AE3325DEDA96004F9D1E /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0AD2AE3225DEDA96004F9D1E /* Actions.sks */; };
@@ -14,14 +18,16 @@
 		0AD2AE3725DEDA96004F9D1E /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD2AE3625DEDA96004F9D1E /* GameViewController.swift */; };
 		0AD2AE3A25DEDA96004F9D1E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AD2AE3825DEDA96004F9D1E /* Main.storyboard */; };
 		0AD2AE3C25DEDA9B004F9D1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AD2AE3B25DEDA9B004F9D1E /* Assets.xcassets */; };
-		76C3D7E725F2A88200ECC6A2 /* GameOver.sks in Resources */ = {isa = PBXBuildFile; fileRef = 76C3D7E625F2A88200ECC6A2 /* GameOver.sks */; };
 		76ED51EC25EFFC610090268B /* MainMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76ED51EB25EFFC610090268B /* MainMenuController.swift */; };
-		DFE1A1962624AF2D0049F770 /* Victory.sks in Resources */ = {isa = PBXBuildFile; fileRef = DFE1A1952624AF2D0049F770 /* Victory.sks */; };
 		DFF6340E262DF2020043D49E /* TutorialController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF6340D262DF2020043D49E /* TutorialController.swift */; };
 		DFF63411262F416E0043D49E /* NewGameOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF63410262F416E0043D49E /* NewGameOver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A32CBD3263B129900F19ED7 /* Victory.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Victory.sks; sourceTree = "<group>"; };
+		0A32CBD6263B12A900F19ED7 /* VictoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VictoryController.swift; sourceTree = "<group>"; };
+		0A32CBDA263B12BC00F19ED7 /* GameOver.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOver.sks; sourceTree = "<group>"; };
+		0A32CBDD263B12C800F19ED7 /* GameOverController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverController.swift; sourceTree = "<group>"; };
 		0AD2AE2B25DEDA95004F9D1E /* Duck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Duck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AD2AE2E25DEDA96004F9D1E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0AD2AE3025DEDA96004F9D1E /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -31,9 +37,7 @@
 		0AD2AE3925DEDA96004F9D1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0AD2AE3B25DEDA9B004F9D1E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0AD2AE3D25DEDA9B004F9D1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		76C3D7E625F2A88200ECC6A2 /* GameOver.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOver.sks; sourceTree = "<group>"; };
 		76ED51EB25EFFC610090268B /* MainMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuController.swift; sourceTree = "<group>"; };
-		DFE1A1952624AF2D0049F770 /* Victory.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Victory.sks; sourceTree = "<group>"; };
 		DFF6340D262DF2020043D49E /* TutorialController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialController.swift; sourceTree = "<group>"; };
 		DFF63410262F416E0043D49E /* NewGameOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameOver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,10 +74,12 @@
 			children = (
 				0AD2AE2E25DEDA96004F9D1E /* AppDelegate.swift */,
 				0AD2AE3025DEDA96004F9D1E /* GameScene.sks */,
-				76C3D7E625F2A88200ECC6A2 /* GameOver.sks */,
 				DFF63410262F416E0043D49E /* NewGameOver.swift */,
-				DFE1A1952624AF2D0049F770 /* Victory.sks */,
 				0AD2AE3225DEDA96004F9D1E /* Actions.sks */,
+				0A32CBDA263B12BC00F19ED7 /* GameOver.sks */,
+				0A32CBD3263B129900F19ED7 /* Victory.sks */,
+				0A32CBDD263B12C800F19ED7 /* GameOverController.swift */,
+				0A32CBD6263B12A900F19ED7 /* VictoryController.swift */,
 				0AD2AE3425DEDA96004F9D1E /* GameScene.swift */,
 				0AD2AE3625DEDA96004F9D1E /* GameViewController.swift */,
 				0AD2AE3825DEDA96004F9D1E /* Main.storyboard */,
@@ -142,11 +148,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76C3D7E725F2A88200ECC6A2 /* GameOver.sks in Resources */,
 				0AD2AE3A25DEDA96004F9D1E /* Main.storyboard in Resources */,
-				DFE1A1962624AF2D0049F770 /* Victory.sks in Resources */,
+				0A32CBDB263B12BC00F19ED7 /* GameOver.sks in Resources */,
 				0AD2AE3125DEDA96004F9D1E /* GameScene.sks in Resources */,
 				0AD2AE3C25DEDA9B004F9D1E /* Assets.xcassets in Resources */,
+				0A32CBD4263B129900F19ED7 /* Victory.sks in Resources */,
 				0AD2AE3325DEDA96004F9D1E /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -158,10 +164,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A32CBD7263B12A900F19ED7 /* VictoryController.swift in Sources */,
 				DFF63411262F416E0043D49E /* NewGameOver.swift in Sources */,
 				0AD2AE3525DEDA96004F9D1E /* GameScene.swift in Sources */,
 				76ED51EC25EFFC610090268B /* MainMenuController.swift in Sources */,
 				0AD2AE3725DEDA96004F9D1E /* GameViewController.swift in Sources */,
+				0A32CBDE263B12C800F19ED7 /* GameOverController.swift in Sources */,
 				DFF6340E262DF2020043D49E /* TutorialController.swift in Sources */,
 				0AD2AE2F25DEDA96004F9D1E /* AppDelegate.swift in Sources */,
 			);

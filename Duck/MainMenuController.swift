@@ -48,7 +48,6 @@ class MainMenuController: UIViewController {
     
     @objc func HowToPlayButtonPressed() {
         performSegue(withIdentifier: "ToTutorial", sender: nil)
-        print("hi")
     }
     /*
     // MARK: - Navigation
