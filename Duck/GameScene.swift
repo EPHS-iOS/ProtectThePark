@@ -92,7 +92,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //Unique Nest Identifier
     var nestIDX = 0
-    
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"gooseForest")
     
@@ -147,6 +146,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        
+        
     }
     
    
@@ -154,6 +155,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         physicsWorld.contactDelegate = self
 
+        self.anchorPoint = CGPoint(x: 0, y: 0)
+        
         //Adding nest to appropriate spots
         addNest(location: CGPoint(x: self.frame.width/12, y: self.frame.height/8.5), isWater: false)
         addNest(location: CGPoint(x: self.frame.width/4.9, y: self.frame.height/1.8), isWater: false)
@@ -491,6 +494,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                         let nodeIDNum = node.name!.suffix(1)
                         var i = 0
                         while i < self.currentDucks.count {
+
                             if self.currentDucks[i].sprite.name?.suffix(1) == nodeIDNum {
                                 self.currentDucks[i] = self.upgradeDuck(duck: self.currentDucks[i], label: self.upgradeLabels[Int(nodeIDNum)!])
                             }
@@ -961,9 +965,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
 
                   //  self.navigationController.pushViewController(NewGameOver, animated: true)
                     //self.performSegueWithIdentifier("toGameOver", sender: nil)
-                    let gameOverScene = SKScene(fileNamed: "GameOver")
-                     gameOverScene!.scaleMode = .aspectFill
-                   self.view?.presentScene(gameOverScene)
+                    self.view?.presentScene(GameScene(fileNamed: "GameOver"))
                     
                 }
              }
@@ -1215,6 +1217,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         //Cooldown
         var i = 0
         while i < currentDucks.count {
+
              //print(i)
             //Check for the duck that is associated with the detection circle that was triggered.
             if currentDucks[i].sprite.name!.suffix(1) == duck.name!.suffix(1) {
@@ -1238,6 +1241,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             i += 1
         }
         i = 0
+            
         
     }
     
@@ -1312,6 +1316,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         return SKAction.sequence([
             SKAction.repeat(gooseWait, count: amt),
             SKAction.wait(forDuration: 0.1)
+
         
         ])
             
@@ -1365,6 +1370,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 self.waveLabel.text = "Wave \(waveNum)"
                 print("Wave \(waveNum)" + " \(difficulty)")
             },
+
             SKAction.repeat(gooseSeries(amt: difficulty * Int(random(min: 5, max: 10)),
                                         gap: Double(random(min: 0.25, max: 0.4)),
                                         hp: difficulty * difficulty * Int(random(min: 60, max: 100)),
