@@ -98,7 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     public var remainingLives = 10000000
     public var healthLabel = SKLabelNode()
-    public var currentMoney = 150
+    public var currentMoney = 1500000
     public var moneyLabel = SKLabelNode()
     public var waveLabel = SKLabelNode()
     public var currentCrumb: breadcrumb = breadcrumb(damage: 0, sprite: SKSpriteNode())
