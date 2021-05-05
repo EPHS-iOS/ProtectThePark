@@ -96,7 +96,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"gooseForest")
     
-    public var remainingLives = 1000000
+    public var remainingLives = 10000000
     public var healthLabel = SKLabelNode()
     public var currentMoney = 150
     public var moneyLabel = SKLabelNode()
@@ -105,7 +105,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //How much 1 duck costs and how much money you get per goose
     var duckCost = 100
-    var gooseReward = 600
+    var gooseReward = 50
     var variantCost = 1750
     
     //Stores Information on Ducks and their corresponding detection radiuses in an array
@@ -130,6 +130,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var variantSprites: [SKSpriteNode] = []
     
     var isSpecialized: [Bool] = [false, false, false, false, false]
+    
+    var varLabelAdded: [Bool] = [false, false, false, false, false]
+    
+   
     
     /* -------------------- FUNCTIONS -------------------- */
     
@@ -206,6 +210,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let firstBody = contact.bodyA
         let secondBody = contact.bodyB
         
+        if secondBody.node == nil || firstBody.node == nil {
+            return
+        }
+        
         if (firstBody.categoryBitMask == PhysicsCategory.enemy) && (secondBody.categoryBitMask == PhysicsCategory.detection) {
         
             var aDuck : SKSpriteNode
@@ -236,6 +244,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         }else if (secondBody.categoryBitMask == PhysicsCategory.enemy) && (firstBody.categoryBitMask == PhysicsCategory.projectile) {
            
             collisionHandler(proj: firstBody.node as! SKSpriteNode, enemy: secondBody.node as! SKSpriteNode, dmg: currentCrumb.damage)
+            
         }else{
             return
         }
@@ -245,12 +254,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     func showOptions(nn: SKSpriteNode) {
         
         if currentMoney < duckCost {
-            print("Could not purchase duck: Insufficient Costs")
+            //print("Could not purchase duck: Insufficient Costs")
             return
         }
         
         if nn.name?.suffix(4) == "true" {
-            print("Could not purchase duck: Duck is already there!")
+            //print("Could not purchase duck: Duck is already there!")
         }
         
         if nn.name?.suffix(1) == "0" {
@@ -445,7 +454,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     if node.contains(touch.location(in: self)){
                         
                         if node.alpha == 0 {
-                            print("Button does not exist yet...")
+                            //print("Button does not exist yet...")
                             return
                             
                         }
@@ -476,7 +485,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 else if node.name?.prefix(7) == "Upgrade" {
                     if node.contains(location) {
                         if node.alpha == 0 {
-                            print("Upgrade button does not exist")
+                         //   print("Upgrade button does not exist")
                             return
                         }
                         let nodeIDNum = node.name!.suffix(1)
@@ -752,13 +761,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         label.fontSize = CGFloat(20)
         
         addChild(toast)
-        addChild(label)
-        print(label.name!)
         addChild(baguette)
         
         variantSprites.append(toast)
         variantSprites.append(baguette)
-        variantLabels.append(label)
+        
+        let idINT = Int(id)!
+        
+        if varLabelAdded[idINT] == false {
+            addChild(label)
+          //  print(label.name!)
+            variantLabels.append(label)
+        }
+        varLabelAdded[idINT] = true
+       
+        
     }
     
     func addDuck(loc: CGPoint, id: String) {
@@ -1140,6 +1157,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             } else {
                 label.text = "Max level"
                 addVariantBranch(loc: CGPoint(x: duck.sprite.position.x + 75, y: duck.sprite.position.y), id: String(duck.sprite.name!.suffix(1)))
+                
             }
         } else {
             if duck.level < 10{
@@ -1159,10 +1177,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     func upgradeDuck(duck: Ducks, label: SKLabelNode) -> Ducks{
         if self.currentMoney < duck.upgradeCost{
-            print ("Not enough money to upgrade.")
+        //    print ("Not enough money to upgrade.")
             return duck
         } else if (duck.duckType == "Crumb" && duck.level >= 5) || (duck.level >= 10){
-            print ("This duck is max level")
+           // print ("This duck is max level")
             return duck
         } else {
             self.currentMoney -= duck.upgradeCost
@@ -1299,32 +1317,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             
     }
     //Puts all waves in order with a set delay between each one
-    func waveSequence() -> SKAction{
-        let waveDelay : TimeInterval = 3.0
-           return SKAction.sequence([
-           wave1(),
-           SKAction.wait(forDuration: waveDelay),
-           addMoney(money: 75),
-           wave2(),
-           SKAction.wait(forDuration: waveDelay),
-           addMoney(money: 75),
-           wave3(),
-           SKAction.wait(forDuration: waveDelay),
-           addMoney(money: 75),
-           wave4(),
-           SKAction.wait(forDuration: waveDelay),
-           addMoney(money: 75),
-           wave5(),
-           SKAction.wait(forDuration: waveDelay),
-           addMoney(money: 100),
-           wave6(),
-           SKAction.wait(forDuration: 15.0),
-           victoryScreen()
-           
-        
-        ])
-    }
-    
     func endlessMode() -> SKAction{
          SKAction.sequence([
             wave1(),
@@ -1334,26 +1326,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             multiWave(i: 3),
             multiWave(i: 4),
             multiWave(i: 5),
-            SKAction.run{self.addTuff(hp: 500)},
+            SKAction.run{self.addTuff(hp: 1250)},
             multiWave(i: 6),
             multiWave(i: 7),
             multiWave(i: 8),
             multiWave(i: 9),
             multiWave(i: 10),
-            SKAction.run{self.addDemon(hp: 1000)},
+            SKAction.run{self.addDemon(hp: 3500)},
             SKAction.wait(forDuration: 15.0),
             victoryScreen()
         ])
-        
-        
-   
     }
     
     func multiWave(i: Int) -> SKAction{
         SKAction.sequence([
             SKAction.wait(forDuration: 3.0),
-            waveGenerator(difficulty: 1 + i/4, waveNum: i)
-            
+            waveGenerator(difficulty: 1 + i/3, waveNum: i)
         ])
     }
     
@@ -1371,88 +1359,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         ])
     }
     
-    func wave2() -> SKAction{
-       
-        SKAction.sequence([
-            SKAction.run {
-                self.waveLabel.text = "Wave 2"
-            },
-            gooseSeries(amt: 1, gap: 1.0, hp: 75, spd: 1.0),
-            SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 2, gap: 1.0, hp : 100, spd: 1.3),
-            SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 1, gap: 0.5, hp : 200, spd: 1.5)
-        ])
-    }
-    
-    func wave3() -> SKAction{
-       
-        SKAction.sequence([
-            SKAction.run {
-                self.waveLabel.text = "Wave 3"
-            },
-            gooseSeries(amt: 1, gap: 0.7, hp: 100, spd: 1.3),
-            SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 2, gap: 0.7, hp : 300, spd: 1.3),
-            SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 2, gap: 1.0, hp : 275, spd: 1.5)
-        ])
-    }
-    
-    func wave4() -> SKAction{
-       
-        SKAction.sequence([
-            SKAction.run {
-                self.waveLabel.text = "Wave 4"
-            },
-            gooseSeries(amt: 1, gap: 0.5, hp: 400, spd: 1.3),
-            SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 1, gap: 0.8, hp : 550, spd: 1.3),
-            SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 2, gap: 1.0, hp : 675, spd: 1.0)
-        ])
-    }
-    
-    func wave5() -> SKAction{
-       
-        SKAction.sequence([
-            SKAction.run {
-                self.waveLabel.text = "Wave 5"
-            },
-            gooseSeries(amt: 1, gap: 0.4, hp: 700, spd: 1.3),
-            SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 2, gap: 0.6, hp : 775, spd: 1.7),
-            SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 2, gap: 0.5, hp : 850, spd: 1.5),
-            SKAction.wait(forDuration: 0.1),
-            SKAction.run{self.addTuff(hp: 1200)}
-        ])
-    }
-    
-    func wave6() -> SKAction{
-        SKAction.sequence([
-            SKAction.run {
-                self.waveLabel.text = "Wave 6"
-            },
-            gooseSeries(amt: 10, gap: 0.4, hp: 1000, spd: 1.3),
-            SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 20, gap: 0.6, hp : 1200, spd: 1.7),
-            SKAction.wait(forDuration: 0.1),
-            gooseSeries(amt: 30, gap: 0.3, hp : 1200, spd: 1.5),
-        ])
-    }
-    
     func waveGenerator(difficulty: Int, waveNum: Int) -> SKAction {
         SKAction.sequence([
             SKAction.run {
                 self.waveLabel.text = "Wave \(waveNum)"
                 print("Wave \(waveNum)" + " \(difficulty)")
             },
-            SKAction.repeat(gooseSeries(amt: difficulty * Int(random(min: 5, max: 10)), gap: Double(random(min: 0.3, max: 1.0)), hp: difficulty * difficulty * Int(random(min: 40, max: 60)), spd: Double(random(min: 0.9, max: 1.7))), count: 2 + difficulty)
+            SKAction.repeat(gooseSeries(amt: difficulty * Int(random(min: 5, max: 10)),
+                                        gap: Double(random(min: 0.25, max: 0.4)),
+                                        hp: difficulty * difficulty * Int(random(min: 60, max: 100)),
+                                        spd: Double(random(min: 0.9, max: 1.7))),
+                            count: 2 + difficulty)
             ,
-            addMoney(money: 25 + (50 * difficulty)),
-            SKAction.wait(forDuration: 3.0)
-            
+            //SKAction.wait(forDuration: 3.0),
+            addMoney(money: 25 + (50 * difficulty))
     
     ])
     }
