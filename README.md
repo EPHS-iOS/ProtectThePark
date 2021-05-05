@@ -3,6 +3,7 @@
 
 Protect The Park is a ducky themed tower defense game where you protect your stash of bread from an incoming flock of geese! Upgrade ducks to make them stronger to be able to stop the evil geese, but watch out, the geese get stronger too!
 
+<a href="privacy_policy.html" target="blank"> Privacy Policy</a>
 Privacy Policy: This app will not collect any information or store any information from our users.
 
 > CURRENT VERSION: v0.4
