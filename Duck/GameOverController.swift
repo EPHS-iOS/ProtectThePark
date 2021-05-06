@@ -14,17 +14,16 @@ class GameOverController : SKScene {
     
     func createButtons(){
         
-        let retryButton = SKShapeNode(rectOf: CGSize(width: self.frame.width/4 + 60, height: self.frame.height/10 + 30), cornerRadius: CGFloat(15))
-        retryButton.position = CGPoint(x: 0, y: -self.frame.width/10 - 30)
-        retryButton.fillColor = .blue
-        retryButton.alpha = 0.4
+        let retryButton = SKShapeNode(rectOf: CGSize(width: self.frame.width/2 + 60, height: self.frame.height/10 + 30), cornerRadius: CGFloat(15))
+        retryButton.position = CGPoint(x: 0, y: -self.frame.width/10 - 50)
+        retryButton.fillColor = .red
         retryButton.name = "retry"
         
         let retryLabel = SKLabelNode()
-        retryLabel.position = CGPoint(x: retryButton.position.x, y: retryButton.position.y - 5)
+        retryLabel.position = CGPoint(x: retryButton.position.x, y: retryButton.position.y - 10)
         retryLabel.fontName = "HelveticaNeue-Bold"
         retryLabel.fontSize = 25
-        retryLabel.alpha = 0.7
+        retryLabel.fontColor = .white
         retryLabel.text = "Retry"
 
         addChild(retryButton)
