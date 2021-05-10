@@ -17,6 +17,7 @@
                     <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3se-qz-xqx" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="736" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z5e-tV-BkM">
                                 <rect key="frame" x="229" y="339" width="206" height="39"/>
@@ -38,6 +39,7 @@
                                 </connections>
                             </button>
                         </subviews>
+
                         <viewLayoutGuide key="safeArea" id="4qk-I5-YsI"/>
                         <color key="backgroundColor" systemColor="systemGreenColor"/>
                     </view>
@@ -296,7 +298,8 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="vCn-j0-Pov"/>
-        <segue reference="ykY-Vj-MK1"/>
+
+        <segue reference="Zft-YP-1gK"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="systemPurpleColor"/>
     <resources>
