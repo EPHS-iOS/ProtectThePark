@@ -33,7 +33,11 @@ class VictoryController : SKScene {
     
     override func didMove(to view: SKView) {
         
-        view.backgroundColor = .green
+        let victoryImage = SKSpriteNode(imageNamed:"Victory")
+        victoryImage.size = CGSize(width: self.frame.width, height: self.frame.height - 950)
+        victoryImage.zPosition = -1
+
+        addChild(victoryImage)
         
         label1.text = "YOU BEAT THE GEESE!!!"
         label1.fontName = "HelveticaNeue-Bold"

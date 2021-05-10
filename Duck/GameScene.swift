@@ -95,7 +95,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"gooseForest")
     
+
     public var remainingLives = 10
+
     public var healthLabel = SKLabelNode()
     public var currentMoney = 150
     public var moneyLabel = SKLabelNode()
@@ -1109,7 +1111,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         } else if duck.duckType == "Baguette"{
              crumb = SKSpriteNode (imageNamed: "baguette")
         } else {
-             crumb = SKSpriteNode (imageNamed: "breadcrumb")
+             crumb = SKSpriteNode (imageNamed: "Breadcrumb")
         }
         crumb.size = CGSize(width: 30, height: 30)
         crumb.position = startPoint
