@@ -12,6 +12,7 @@ Protect The Park is a ducky themed tower defense game where you protect your sta
 - Added Tuff goose as a miniboss
 - Upon reaching level 5, basic ducks can be specialized into either Toaster or Baguette Launcher variants
 - Added How to Play section to explain mechanics and buttons
+- Increased total wave count to 20
 - Added retry button upon winning or losing the game
 - Added art to victory screen to maximize satisfaction 
 - Changed portal image to dark and spooky forest 
