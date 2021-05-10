@@ -34,7 +34,7 @@ class VictoryController : SKScene {
     override func didMove(to view: SKView) {
         
         let victoryImage = SKSpriteNode(imageNamed:"Victory")
-        victoryImage.size = CGSize(width: self.frame.width, height: self.frame.height)
+        victoryImage.size = CGSize(width: self.frame.width, height: self.frame.height - 950)
         victoryImage.zPosition = -1
 
         addChild(victoryImage)
