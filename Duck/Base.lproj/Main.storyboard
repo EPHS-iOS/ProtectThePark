@@ -34,7 +34,7 @@
                                     </attributedString>
                                 </state>
                                 <connections>
-                                    <segue destination="qfd-Re-HDr" kind="show" id="Iy5-EV-Umr"/>
+                                    <segue destination="qfd-Re-HDr" kind="show" identifier="toReturnToMenu" id="Iy5-EV-Umr"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -130,7 +130,7 @@
                                                     <color key="titleColor" systemColor="systemIndigoColor"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="qfd-Re-HDr" kind="show" id="vCn-j0-Pov"/>
+                                                    <segue destination="qfd-Re-HDr" kind="show" identifier="goToMainMenu" id="vCn-j0-Pov"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hwE-eI-pHT">
@@ -139,7 +139,7 @@
                                                     <color key="titleColor" systemColor="systemIndigoColor"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="u7Y-Te-WQN" kind="show" id="9Bp-yB-y43"/>
+                                                    <segue destination="u7Y-Te-WQN" kind="show" identifier="goToNextScreen" id="9Bp-yB-y43"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -246,7 +246,7 @@
                                                     <color key="titleColor" systemColor="systemIndigoColor"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="qfd-Re-HDr" kind="show" id="GfX-q1-xo9"/>
+                                                    <segue destination="qfd-Re-HDr" kind="show" identifier="goToMainScreen" id="GfX-q1-xo9"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nhb-A1-MJZ">
@@ -255,7 +255,7 @@
                                                     <color key="titleColor" systemColor="systemIndigoColor"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="YYy-9H-bEC" kind="show" id="Zft-YP-1gK"/>
+                                                    <segue destination="YYy-9H-bEC" kind="show" identifier="goToPreviousPage" id="Zft-YP-1gK"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -295,8 +295,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="GfX-q1-xo9"/>
-        <segue reference="Zft-YP-1gK"/>
+        <segue reference="vCn-j0-Pov"/>
+        <segue reference="ykY-Vj-MK1"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="systemPurpleColor"/>
     <resources>
