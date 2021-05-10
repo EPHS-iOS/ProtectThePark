@@ -95,7 +95,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var currentMap = SKSpriteNode(imageNamed: "TestMap")
     var portal = SKSpriteNode(imageNamed:"gooseForest")
     
-    public var remainingLives = 10000000
+    public var remainingLives = 1
     public var healthLabel = SKLabelNode()
     public var currentMoney = 1500000
     public var moneyLabel = SKLabelNode()
@@ -1104,7 +1104,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         } else if duck.duckType == "Baguette"{
              crumb = SKSpriteNode (imageNamed: "baguette")
         } else {
-             crumb = SKSpriteNode (imageNamed: "breadcrumb")
+             crumb = SKSpriteNode (imageNamed: "Breadcrumb")
         }
         crumb.size = CGSize(width: 30, height: 30)
         crumb.position = startPoint
@@ -1325,20 +1325,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     func endlessMode() -> SKAction{
          SKAction.sequence([
             wave1(),
-            SKAction.wait(forDuration: 3.0),
-            addMoney(money: 75),
-            multiWave(i: 2),
-            multiWave(i: 3),
-            multiWave(i: 4),
-            multiWave(i: 5),
-            SKAction.run{self.addTuff(hp: 1250)},
-            multiWave(i: 6),
-            multiWave(i: 7),
-            multiWave(i: 8),
-            multiWave(i: 9),
-            multiWave(i: 10),
-            SKAction.run{self.addDemon(hp: 3500)},
-            SKAction.wait(forDuration: 15.0),
+//            SKAction.wait(forDuration: 3.0),
+//            addMoney(money: 75),
+//            multiWave(i: 2),
+//            multiWave(i: 3),
+//            multiWave(i: 4),
+//            multiWave(i: 5),
+//            SKAction.run{self.addTuff(hp: 1250)},
+//            multiWave(i: 6),
+//            multiWave(i: 7),
+//            multiWave(i: 8),
+//            multiWave(i: 9),
+//            multiWave(i: 10),
+//            SKAction.run{self.addDemon(hp: 3500)},
+//            SKAction.wait(forDuration: 15.0),
             victoryScreen()
         ])
     }
