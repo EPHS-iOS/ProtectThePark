@@ -6,7 +6,15 @@ Protect The Park is a ducky themed tower defense game where you protect your sta
 <a href="privacy_policy.html" target="blank"> Privacy Policy</a>
 : This app will not collect any information or store any information from our users.
 
-> CURRENT VERSION: v0.4
+> CURRENT VERSION: v0.5
+
+**VERSION v0.5**
+- Added Tuff goose as a miniboss
+- Upon reaching level 5, basic ducks can be specialized into either Toaster or Baguette Launcher variants
+- Added How to Play section to explain mechanics and buttons
+- Added retry button upon winning or losing the game
+- Added art to victory screen to maximize satisfaction 
+- Changed portal image to dark and spooky forest 
 
 **VERSION v0.4**
 - Added demonic miniboss at the end of wave 5
