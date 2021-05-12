@@ -524,7 +524,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                                 if duck.sprite.name?.suffix(1) == idNUM && !self.isSpecialized[idINT] {
                                     duck.sprite.removeFromParent()
                                     //self.isSpecialized[idINT] = true
-                                    self.addToaster(loc: CGPoint(x: node.position.x - self.frame.width/9 , y: node.position.y - self.frame.height/9.5) , id: ("Toaster" + idNUM!))
+                                    self.addToaster(loc: CGPoint(x: (node.position.x + 26) - self.frame.width/9 , y: node.position.y - self.frame.height/9.5) , id: ("Toaster" + idNUM!))
                                     node.name! = "UpToast\(idNUM!)"
                                     
                                     for label in self.variantLabels {
@@ -592,7 +592,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                                 if duck.sprite.name?.suffix(1) == idNUM && !self.isSpecialized[idINT] {
                                     duck.sprite.removeFromParent()
                                     //self.isSpecialized[idINT] = true
-                                    self.addBaguette(loc: CGPoint(x: node.position.x - self.frame.width/9 , y: node.position.y + self.frame.height/9.5) , id: ("Baguette" + idNUM!))
+                                    self.addBaguette(loc: CGPoint(x: (node.position.x + 26) - self.frame.width/9 , y: (node.position.y - 10) + self.frame.height/9.5) , id: ("Baguette" + idNUM!))
                                     node.name! = "UpBaguette\(idNUM!)"
                                     
                                     for label in self.variantLabels {
@@ -884,7 +884,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         baguette.name = id
         baguette.zPosition = 3
         baguette.alpha = 1
-        
+        baguette.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         addChild(baguette)
         let newBaguette = Ducks(canFire: true, sprite: baguette, damage: damageCalc(currentLvl: 4, duckType: "Baguette"), level: 4, upgradeCost: upgradeCostCalc(currentLvl: 4, duckType: "Baguette"), cooldownDelay: 1.5, duckType: "Baguette")
@@ -1104,7 +1104,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         } else if duck.duckType == "Baguette"{
              crumb = SKSpriteNode (imageNamed: "baguette")
         } else {
-             crumb = SKSpriteNode (imageNamed: "Breadcrumb")
+             crumb = SKSpriteNode (imageNamed: "breadcrumb")
         }
         crumb.size = CGSize(width: 30, height: 30)
         crumb.position = startPoint
@@ -1325,20 +1325,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     func endlessMode() -> SKAction{
          SKAction.sequence([
             wave1(),
-//            SKAction.wait(forDuration: 3.0),
-//            addMoney(money: 75),
-//            multiWave(i: 2),
-//            multiWave(i: 3),
-//            multiWave(i: 4),
-//            multiWave(i: 5),
-//            SKAction.run{self.addTuff(hp: 1250)},
-//            multiWave(i: 6),
-//            multiWave(i: 7),
-//            multiWave(i: 8),
-//            multiWave(i: 9),
-//            multiWave(i: 10),
-//            SKAction.run{self.addDemon(hp: 3500)},
-//            SKAction.wait(forDuration: 15.0),
+            SKAction.wait(forDuration: 3.0),
+            addMoney(money: 75),
+            multiWave(i: 2),
+            multiWave(i: 3),
+            multiWave(i: 4),
+            multiWave(i: 5),
+            SKAction.run{self.addTuff(hp: 1250)},
+            multiWave(i: 6),
+            multiWave(i: 7),
+            multiWave(i: 8),
+            multiWave(i: 9),
+            multiWave(i: 10),
+            SKAction.run{self.addDemon(hp: 3500)},
+            SKAction.wait(forDuration: 15.0),
             victoryScreen()
         ])
     }

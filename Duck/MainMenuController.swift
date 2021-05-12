@@ -27,8 +27,6 @@ class MainMenuController: UIViewController {
         button.addTarget(self, action: #selector(startButtonPressed), for: .touchUpInside)
         view.addSubview(button)
         
-        print("BUTTON")
-        
         let button2 = UIButton(type: .custom)
         button2.frame = CGRect(x: self.view.frame.size.width/2 - 150, y: self.view.frame.size.height/2 + 80, width: 130, height: 110)
         button2.layer.cornerRadius = 0.5 * button2.bounds.size.width
@@ -37,8 +35,6 @@ class MainMenuController: UIViewController {
         button2.setTitle("How To Play", for: .normal)
         button2.addTarget(self, action: #selector(HowToPlayButtonPressed), for: .touchUpInside)
         view.addSubview(button2)
-        
-        print("BUTTON2")
         // Do any additional setup after loading the view.
     }
     

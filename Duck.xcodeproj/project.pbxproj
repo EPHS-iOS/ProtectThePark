@@ -20,7 +20,6 @@
 		0AD2AE3C25DEDA9B004F9D1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AD2AE3B25DEDA9B004F9D1E /* Assets.xcassets */; };
 		76ED51EC25EFFC610090268B /* MainMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76ED51EB25EFFC610090268B /* MainMenuController.swift */; };
 		DFF6340E262DF2020043D49E /* TutorialController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF6340D262DF2020043D49E /* TutorialController.swift */; };
-		DFF63411262F416E0043D49E /* NewGameOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF63410262F416E0043D49E /* NewGameOver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +38,6 @@
 		0AD2AE3D25DEDA9B004F9D1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		76ED51EB25EFFC610090268B /* MainMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuController.swift; sourceTree = "<group>"; };
 		DFF6340D262DF2020043D49E /* TutorialController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialController.swift; sourceTree = "<group>"; };
-		DFF63410262F416E0043D49E /* NewGameOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameOver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +72,6 @@
 			children = (
 				0AD2AE2E25DEDA96004F9D1E /* AppDelegate.swift */,
 				0AD2AE3025DEDA96004F9D1E /* GameScene.sks */,
-				DFF63410262F416E0043D49E /* NewGameOver.swift */,
 				0AD2AE3225DEDA96004F9D1E /* Actions.sks */,
 				0A32CBDA263B12BC00F19ED7 /* GameOver.sks */,
 				0A32CBD3263B129900F19ED7 /* Victory.sks */,
@@ -165,7 +162,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A32CBD7263B12A900F19ED7 /* VictoryController.swift in Sources */,
-				DFF63411262F416E0043D49E /* NewGameOver.swift in Sources */,
 				0AD2AE3525DEDA96004F9D1E /* GameScene.swift in Sources */,
 				76ED51EC25EFFC610090268B /* MainMenuController.swift in Sources */,
 				0AD2AE3725DEDA96004F9D1E /* GameViewController.swift in Sources */,
