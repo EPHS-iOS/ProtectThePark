@@ -1,7 +1,7 @@
 
 # Protect The Park 🐥 
 
-<img src = "gameplay1.PNG" alt = "gameplay1" width = "200" height = "200">
+<img src = "gameplay1.PNG" alt = "gameplay1" width = "1000" height = "500">
 
 Protect The Park is a ducky themed tower defense game where you protect your stash of bread from an incoming flock of geese! Upgrade ducks to make them stronger to be able to stop the evil geese, but watch out, the geese get stronger too!
 
