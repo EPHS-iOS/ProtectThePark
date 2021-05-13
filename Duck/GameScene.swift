@@ -262,12 +262,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     func showOptions(nn: SKSpriteNode) {
         
         if currentMoney < duckCost {
-            //print("Could not purchase duck: Insufficient Costs")
             return
         }
         
         if nn.name?.suffix(4) == "true" {
-            //print("Could not purchase duck: Duck is already there!")
         }
         
         if nn.name?.suffix(1) == "0" {
@@ -335,7 +333,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func showUpgrades (duck: Ducks) {
-        //print(duck.sprite.name!)
+        
         let idNum = duck.sprite.name!.suffix(1)
         for label in upgradeLabels {
             if label.name!.suffix(1) == idNum {
@@ -462,9 +460,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     if node.contains(touch.location(in: self)){
                         
                         if node.alpha == 0 {
-                            //print("Button does not exist yet...")
                             return
-                            
                         }
                         
                         let upDown : CGFloat = -60
@@ -493,7 +489,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                 else if node.name?.prefix(7) == "Upgrade" {
                     if node.contains(location) {
                         if node.alpha == 0 {
-                         //   print("Upgrade button does not exist")
                             return
                         }
                         let nodeIDNum = node.name!.suffix(1)
@@ -648,8 +643,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                                     
                                     j += 1
                                 }
-                               // print (node.name!)
-                                //print (self.currentDucks[i].sprite.name! + " leveled up")
                                 self.currentDucks[i] = self.upgradeDuck(duck: self.currentDucks[i], label: self.variantLabels[labelIndex])
                             }
                             
@@ -781,7 +774,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         if varLabelAdded[idINT] == false {
             addChild(label)
-          //  print(label.name!)
             variantLabels.append(label)
         }
         varLabelAdded[idINT] = true
@@ -1186,10 +1178,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     func upgradeDuck(duck: Ducks, label: SKLabelNode) -> Ducks{
         if self.currentMoney < duck.upgradeCost{
-        //    print ("Not enough money to upgrade.")
             return duck
         } else if (duck.duckType == "Crumb" && duck.level >= crumbMaxLevel) || (duck.level >= varMaxLevel){
-           // print ("This duck is max level")
             return duck
         } else {
             self.currentMoney -= duck.upgradeCost
@@ -1199,7 +1189,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             newDuck.upgradeCost = upgradeCostCalc(currentLvl: newDuck.level, duckType: duck.duckType)
             newDuck.damage = damageCalc(currentLvl: newDuck.level, duckType: duck.duckType)
             updateLabel(label: label, duck: newDuck)
-            print (newDuck.sprite.name! + " is now level " + String(newDuck.level))
             return newDuck
             
         }
@@ -1211,9 +1200,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
      //Used for the detection circle to indicate whether or not a goose has entered the "bread" zone
     //NOTE: This is where you can get the geese's position as well.
     func detectionHandler(circle: SKShapeNode, goose: SKSpriteNode, duck: SKSpriteNode){
-
-       // print (circle.name!)
-        //print (duck.name!)
         let distanceX = duck.position.x - goose.position.x
         let distanceY = duck.position.y - goose.position.y
         if distanceY >= 0 {
@@ -1223,37 +1209,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         }
         
         //Cooldown
-        /*
-        var i = 0
-        while i < currentDucks.count {
-
-             //print(i)
-            //Check for the duck that is associated with the detection circle that was triggered.
-            if currentDucks[i].sprite.name!.suffix(1) == duck.name!.suffix(1) {
-                //print(currentDucks[i].sprite.name! + " canFire = " + String(currentDucks[i].canFire))
-               // print(i)
-                
-                if currentDucks[i].canFire  == false {
-                    //If there is a cooldown, do nothing.
-                    return
-                }
-                       
-                else if currentDucks[i].canFire {
-                    //If there is not a cooldown, shoot the breadcrumb, wait for 2 seconds, and set cooldown back to false.
-                    //print("Firing cooldown sequence" + String(i))
-                    self.cooldownManager(i: i, circle: circle, duck: duck, goose: goose)
-                    
-                    
-                }
-                
-            }
-            
-            i += 1
-        }
-        i = 0
-            
-        
-        */
         for n in 0 ... currentDucks.count - 1 {
             
             if currentDucks[n].sprite.name!.suffix(1) == duck.name!.suffix(1) {
@@ -1278,7 +1233,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         while (i < currentGeese.count) {
             if currentGeese[i].sprite == enemy {
                 currentGeese[i].health -= dmg
-                //print ("Dealt " + String(Int(dmg)))
                 if currentGeese[i].health <= 0 {
                     enemy.removeFromParent()
                     self.currentMoney += gooseReward
@@ -1293,32 +1247,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     func cooldownManager(i: Int, circle: SKShapeNode, duck: SKSpriteNode, goose: SKSpriteNode) -> SKAction{
         SKAction.sequence([
-                            SKAction.run{
-           
-                //print(self.currentDucks[i].sprite.name! + " is firing")
-                //print("i is: " + String(i))
-        self.currentCrumb = self.launchBreadcrumb(startPoint: circle.position, endPoint: goose.position, duck: self.currentDucks[i])
+            SKAction.run{
+                self.currentCrumb = self.launchBreadcrumb(startPoint: circle.position, endPoint: goose.position, duck: self.currentDucks[i])
             
-        for j in 0 ... self.currentDucks.count - 1 {
-            if self.currentDucks[j].sprite.name!.suffix(1) == duck.name!.suffix(1) {
-                //print (self.currentDucks[j].sprite.name! + " fired")
-                self.currentDucks[j].canFire = false
-            }
-        }
-                            },
+                for j in 0 ... self.currentDucks.count - 1 {
+                    if self.currentDucks[j].sprite.name!.suffix(1) == duck.name!.suffix(1) {
+                        self.currentDucks[j].canFire = false
+                    }
+                }
+        },
         SKAction.wait(forDuration: self.currentDucks[i].cooldownDelay),
-                            SKAction.run{
-            
+        SKAction.run{
             for k in 0 ... self.currentDucks.count - 1 {
-            if self.currentDucks[k].sprite.name!.suffix(1) == duck.name!.suffix(1) {
-                //print (self.currentDucks[k].sprite.name! + " can fire again")
-                self.currentDucks[k].canFire = true
+                if self.currentDucks[k].sprite.name!.suffix(1) == duck.name!.suffix(1) {
+                    self.currentDucks[k].canFire = true
+                }
             }
         }
-                            }
-                
-                //self.currentDucks[Int(duck.name!.suffix(1))!].canFire = true
-                
      ])
         
     }
@@ -1411,12 +1356,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         ])
     }
     
-    
     func waveGenerator(difficulty: Int, waveNum: Int) -> SKAction {
         SKAction.sequence([
             SKAction.run {
                 self.waveLabel.text = "Wave \(waveNum)"
-                print("Wave \(waveNum)" + " \(difficulty)")
             },
             addMoney(money: 25 + (50 * difficulty)),
             SKAction.repeat(gooseSeries(amt: difficulty * Int(random(min: 5, max: 10)),
@@ -1424,9 +1367,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                                         hp: difficulty * difficulty * Int(random(min: 30, max: 40)),
                                         spd: Double(random(min: 0.9, max: 1.7))),
                             count: 2 + difficulty)
-            
-            //SKAction.wait(forDuration: 3.0),
-    
     ])
     }
     
@@ -1438,7 +1378,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
                     self.waveLabel.text = "The end"
                     let VictoryScene = SKScene(fileNamed: "Victory")
                     VictoryScene?.scaleMode = .aspectFill
-                    
                     self.view?.presentScene(VictoryScene)
                 },
                 ])
